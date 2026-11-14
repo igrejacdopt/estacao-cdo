@@ -1,7 +1,8 @@
 {
   "name": "Estação CDO",
   "short_name": "Estação CDO",
-  "start_url": "./index.html",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#070D1F",
   "theme_color": "#0B132B",
