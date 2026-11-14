@@ -1,0 +1,21 @@
+{
+  "name": "Estação CDO",
+  "short_name": "Estação CDO",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070D1F",
+  "theme_color": "#0B132B",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Estacao Cdo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "Estacao Cdo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
