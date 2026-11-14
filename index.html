@@ -64,8 +64,16 @@
             border: 1px solid rgba(212, 175, 55, 0.3);
             border-radius: 12px;
             padding: 25px;
-            margin-top: 30px;
+            margin-top: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .player-container {
+            margin-top: 20px;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            accent-color: var(--accent-gold);
         }
         .install-btn {
             background: var(--accent-gold);
@@ -79,6 +87,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             margin-top: 20px;
             transition: transform 0.2s;
+            width: 100%;
         }
         .install-btn:active {
             transform: scale(0.96);
@@ -94,11 +103,24 @@
     </header>
 
     <main>
+        <!-- Secção da Rádio -->
         <div class="card">
-            <h2>Bem-vindo à Estação CDO</h2>
-            <p>Comunhão, edificação e conteúdo cristão onde quer que esteja.</p>
+            <h2>Ao Vivo na Estação CDO</h2>
+            <p>Comunhão, edificação e conteúdo cristão em direto.</p>
             
-            <!-- Botão Sempre Visível -->
+            <div class="player-container">
+                <!-- Podes colocar aqui o link do teu stream de áudio ou Auto DJ -->
+                <audio controls preload="none">
+                    <source src="URL_DO_TEU_STREAM_AQUI" type="audio/mpeg">
+                    O seu navegador não suporta áudio ao vivo.
+                </audio>
+            </div>
+        </div>
+
+        <!-- Secção de Instalação -->
+        <div class="card">
+            <h3>Instalar Aplicativo</h3>
+            <p>Tenha a Estação CDO direto no ecran do seu telemóvel.</p>
             <div id="install-container">
                 <button id="btnInstall" class="install-btn">
                     📲 Instalar Estação CDO
@@ -111,8 +133,8 @@
         // Registo do Service Worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('./sw.js')
-                .then(() => console.log('Service Worker registado!'))
-                .catch((err) => console.log('Erro no SW:', err));
+                .then(() => console.log('Service Worker registado com sucesso!'))
+                .catch((err) => console.log('Erro no registo do SW:', err));
         }
 
         let deferredPrompt;
@@ -130,7 +152,7 @@
                 }
                 deferredPrompt = null;
             } else {
-                alert("Para instalar no Chrome/Brave, toque nos três pontinhos no canto superior direito do navegador e selecione 'Adicionar à tela inicial' ou 'Instalar aplicativo'.");
+                alert("Para instalar: toque nos três pontinhos no canto superior direito do Chrome/Brave e selecione 'Adicionar à tela inicial' ou 'Instalar aplicativo'.");
             }
         });
     </script>
