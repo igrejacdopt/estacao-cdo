@@ -35,26 +35,25 @@
       padding: 0;
     }
 
-    /* Container Centralizado com Proporção de App */
+    /* Container Principal — Fluido no telemóvel, expansivo no PC */
     .app-viewport {
       width: 100%;
-      max-width: 420px;
+      max-width: 100%;
       height: 100vh;
-      max-height: 900px;
       background-color: var(--bg-dark);
       display: flex;
       flex-direction: column;
       position: relative;
       box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       overflow: hidden;
-      border-radius: 0;
     }
 
-    @media (min-width: 480px) {
+    @media (min-width: 768px) {
       .app-viewport {
-        border-radius: 28px;
-        border: 4px solid #1C2541;
-        height: 88vh;
+        max-width: 750px;
+        height: 92vh;
+        border-radius: 24px;
+        border: 2px solid var(--border-color);
       }
     }
 
@@ -429,7 +428,8 @@
           </div>
           <h2>Louvor & Palavra</h2>
           
-          <audio id="radioStream" src="https://stream.zeno.fm/seu-link-aqui"></audio>
+          <!-- Elemento de áudio configurado para a Zeno.fm -->
+          <audio id="radioStream" preload="none"></audio>
           
           <div class="play-container">
             <div class="wave-sim">
@@ -529,6 +529,7 @@
             .catch((err) => console.log('Erro no registo do SW:', err));
     }
 
+    const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
     const audio = document.getElementById('radioStream');
     const playBtn = document.getElementById('playBtn');
     const statusText = document.getElementById('statusText');
@@ -536,14 +537,22 @@
 
     function togglePlay() {
       if (!isPlaying) {
-        audio.play().catch(() => {
-          statusText.innerText = "Aguardando link da Zeno.fm...";
+        statusText.innerText = "A sintonizar a Estação CDO...";
+        // Adiciona um parâmetro de tempo para evitar cache do browser
+        audio.src = streamUrl + "?t=" + new Date().getTime();
+        audio.load();
+
+        audio.play().then(() => {
+          playBtn.innerText = "⏸";
+          statusText.innerText = "🔴 AO VIVO — Estação CDO";
+          isPlaying = true;
+        }).catch((err) => {
+          console.error("Erro ao reproduzir:", err);
+          statusText.innerText = "Toque novamente para iniciar o áudio.";
         });
-        playBtn.innerText = "⏸";
-        statusText.innerText = "Tocando Estação CDO...";
-        isPlaying = true;
       } else {
         audio.pause();
+        audio.src = ""; // Liberta a ligação e poupa dados móveis
         playBtn.innerText = "▶";
         statusText.innerText = "Rádio pausada";
         isPlaying = false;
