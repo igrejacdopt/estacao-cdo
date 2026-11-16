@@ -201,9 +201,24 @@
     }
 
     .radio-card h2 {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--text-light);
-      margin-bottom: 4px;
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    /* Display da Música Atual */
+    .now-playing {
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      background: rgba(245, 158, 11, 0.1);
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px dashed var(--accent-gold);
+      margin: 10px 0 15px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .play-container {
@@ -211,7 +226,7 @@
       align-items: center;
       justify-content: center;
       gap: 15px;
-      margin: 18px 0;
+      margin: 14px 0;
     }
 
     .wave-sim {
@@ -256,9 +271,40 @@
       transform: scale(0.94);
     }
 
+    /* Controlo de Volume Otimizado para Mobile */
+    .volume-control-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 14px;
+      background: rgba(28, 37, 65, 0.6);
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .volume-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-gold);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .volume-slider {
+      width: 180px;
+      height: 8px;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
     .status-text {
       font-size: 0.8rem;
       color: var(--text-muted);
+      margin-top: 8px;
     }
 
     .section-title {
@@ -498,6 +544,11 @@
           </div>
 
           <h2>Louvor & Palavra</h2>
+
+          <!-- DISPLAY DA MÚSICA EM DIRETO -->
+          <div class="now-playing" id="nowPlayingText">
+            🎵 A carregar música atual...
+          </div>
           
           <audio id="radioStream" preload="none"></audio>
           
@@ -513,13 +564,13 @@
             </div>
           </div>
 
-          <!-- BARRA DE VOLUME E MUTE -->
-          <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
-            <button id="muteBtn" onclick="toggleMute()" style="background: transparent; border: none; color: var(--accent-gold); font-size: 1.1rem; cursor: pointer;">🔊</button>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" style="width: 120px; accent-color: var(--accent-gold); cursor: pointer;">
+          <!-- BARRA DE VOLUME AMPLIADA PARA MOBILE -->
+          <div class="volume-control-box">
+            <button class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
           </div>
           
-          <p class="status-text" id="statusText" style="margin-top: 10px;">Toque para ouvir a Estação CDO</p>
+          <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
         </div>
 
         <div class="invite-card">
@@ -614,7 +665,7 @@
       }
     }
 
-    // CONTROLO DE VOLUME E MUTE
+    // CONTROLO DE VOLUME E MUTE (MOBILE FRIENDLY)
     function setVolume(value) {
       audio.volume = value;
       const muteBtn = document.getElementById('muteBtn');
@@ -638,6 +689,27 @@
         volumeSlider.value = 0;
       }
     }
+
+    // BUSCAR MÚSICA ATUAL EM DIRETO DA ZENO.FM
+    function updateCurrentSong() {
+      // Endpoint público de metadados da Zeno.fm para streams
+      fetch('https://api.zeno.fm/mounts/metadata/x44ldfhxjghvv')
+        .then(response => response.json())
+        .then(data => {
+          const songEl = document.getElementById('nowPlayingText');
+          if (data && data.title) {
+            songEl.innerText = "🎶 " + data.title;
+          } else {
+            songEl.innerText = "🎶 Estação CDO - Louvor & Palavra";
+          }
+        })
+        .catch(() => {
+          // Fallback se a rede bloquear temporariamente o pedido externo
+          document.getElementById('nowPlayingText').innerText = "🎶 Estação CDO - No Ar 24h";
+        });
+    }
+    updateCurrentSong();
+    setInterval(updateCurrentSong, 15000); // Atualiza a cada 15 segundos
 
     // CONTADOR DE OUVINTES EM DIRETO
     function updateListeners() {
