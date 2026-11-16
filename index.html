@@ -207,7 +207,6 @@
       margin-bottom: 2px;
     }
 
-    /* Display da Música Atual */
     .now-playing {
       font-size: 0.82rem;
       color: var(--accent-gold);
@@ -271,7 +270,6 @@
       transform: scale(0.94);
     }
 
-    /* Controlo de Volume Otimizado para Mobile */
     .volume-control-box {
       display: flex;
       align-items: center;
@@ -545,7 +543,6 @@
 
           <h2>Louvor & Palavra</h2>
 
-          <!-- DISPLAY DA MÚSICA EM DIRETO -->
           <div class="now-playing" id="nowPlayingText">
             🎵 A carregar música atual...
           </div>
@@ -564,7 +561,6 @@
             </div>
           </div>
 
-          <!-- BARRA DE VOLUME AMPLIADA PARA MOBILE -->
           <div class="volume-control-box">
             <button class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
@@ -665,7 +661,13 @@
       }
     }
 
-    // CONTROLO DE VOLUME E MUTE (MOBILE FRIENDLY)
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
     function setVolume(value) {
       audio.volume = value;
       const muteBtn = document.getElementById('muteBtn');
@@ -690,9 +692,7 @@
       }
     }
 
-    // BUSCAR MÚSICA ATUAL EM DIRETO DA ZENO.FM
     function updateCurrentSong() {
-      // Endpoint público de metadados da Zeno.fm para streams
       fetch('https://api.zeno.fm/mounts/metadata/x44ldfhxjghvv')
         .then(response => response.json())
         .then(data => {
@@ -704,14 +704,12 @@
           }
         })
         .catch(() => {
-          // Fallback se a rede bloquear temporariamente o pedido externo
           document.getElementById('nowPlayingText').innerText = "🎶 Estação CDO - No Ar 24h";
         });
     }
     updateCurrentSong();
-    setInterval(updateCurrentSong, 15000); // Atualiza a cada 15 segundos
+    setInterval(updateCurrentSong, 15000);
 
-    // CONTADOR DE OUVINTES EM DIRETO
     function updateListeners() {
       const countEl = document.getElementById('listenerCount');
       if (countEl) {
@@ -721,7 +719,6 @@
     updateListeners();
     setInterval(updateListeners, 30000);
 
-    // CATÁLOGO DE VÍDEOS KIDS
     const kidsCatalog = {
       palavrinhas: {
         titulo: "🎵 3 Palavrinhas - Louvores Infantis",
@@ -743,27 +740,4 @@
       document.getElementById('kidsMenu').style.display = 'none';
       const playerArea = document.getElementById('kidsPlayerArea');
       document.getElementById('kidsCategoryTitle').innerText = category.titulo;
-      const listEl = document.getElementById('kidsVideoList');
-      listEl.innerHTML = '';
-      category.videos.forEach(video => {
-        listEl.innerHTML += `
-          <div class="video-container">
-            <h4 class="section-title" style="font-size: 0.95rem;">${video.titulo}</h4>
-            <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">${video.desc}</p>
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/${video.youtubeId}" allowfullscreen></iframe>
-            </div>
-          </div>
-        `;
-      });
-      playerArea.classList.add('active');
-    }
-
-    function closeKidsCategory() {
-      document.getElementById('kidsVideoList').innerHTML = '';
-      document.getElementById('kidsPlayerArea').classList.remove('active');
-      document.getElementById('kidsMenu').style.display = 'grid';
-    }
-  </script>
-</body>
-</html>
+      const
