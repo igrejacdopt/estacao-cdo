@@ -330,6 +330,12 @@
       position: relative;
       overflow: hidden;
       border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .carousel-item:active {
+      transform: scale(0.98);
     }
 
     .carousel-item::after {
@@ -345,6 +351,56 @@
       font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* Modal de Fotos */
+    #photoModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 13, 31, 0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #modalImg {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 16px;
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    #modalCaption {
+      color: var(--text-light);
+      margin-top: 15px;
+      font-size: 0.95rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .invite-card {
@@ -496,6 +552,13 @@
 </head>
 <body>
 
+  <!-- MODAL DE VISUALIZAÇÃO DE FOTOS -->
+  <div id="photoModal">
+    <button class="modal-close" onclick="closePhotoModal()">✕</button>
+    <img id="modalImg" src="" alt="Momento CDO Ampliado">
+    <p id="modalCaption"></p>
+  </div>
+
   <div class="app-viewport">
     <header>
       <div class="brand-container">
@@ -561,19 +624,19 @@
         </div>
 
         <div>
-          <h3 class="section-title">📸 Momentos CDO</h3>
+          <h3 class="section-title">📸 Momentos CDO (Toque na foto para ampliar)</h3>
           <div class="carousel" style="margin-top: 8px;">
-            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Culto de Celebração - Domingo</span>
+            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1000&q=80', 'Culto de Celebração - Domingo')" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Culto de Celebração - Domingo 🔍</span>
             </div>
-            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Encontro de Jovens CDO</span>
+            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80', 'Encontro de Jovens CDO')" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Encontro de Jovens CDO 🔍</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Aba 2: Vídeos (Com múltiplos vídeos restaurados) -->
+      <!-- Aba 2: Vídeos (Com os 3 vídeos ativos) -->
       <div id="videos" class="tab-pane">
         <div class="video-container">
           <h3 class="section-title">🎧 Rádio Lo-Fi Cristã</h3>
@@ -583,9 +646,16 @@
         </div>
 
         <div class="video-container">
-          <h3 class="section-title">📖 Mensagem e Louvor em Destaque</h3>
+          <h3 class="section-title">📖 Mensagem e Louvor em Destaque 1</h3>
           <div class="video-wrapper">
             <iframe src="https://www.youtube.com/embed/l47v4r2vC9o" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="video-container">
+          <h3 class="section-title">✨ Mensagem e Louvor em Destaque 2</h3>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
           </div>
         </div>
       </div>
@@ -681,6 +751,21 @@
         muteBtn.innerText = "🔇";
         if(volumeSlider) volumeSlider.value = 0;
       }
+    }
+
+    // VISUALIZADOR DE FOTOS (MODAL)
+    function openPhotoModal(imgSrc, caption) {
+      const modal = document.getElementById('photoModal');
+      const modalImg = document.getElementById('modalImg');
+      const modalCaption = document.getElementById('modalCaption');
+      
+      modalImg.src = imgSrc;
+      modalCaption.innerText = caption;
+      modal.style.display = 'flex';
+    }
+
+    function closePhotoModal() {
+      document.getElementById('photoModal').style.display = 'none';
     }
 
     function updateListeners() {
