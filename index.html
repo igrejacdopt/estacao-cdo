@@ -250,4 +250,493 @@
       transition: transform 0.2s, background 0.2s;
       display: flex;
       align-items: center;
-      justify-content: center
+      justify-content: center;
+    }
+
+    .play-btn:active {
+      transform: scale(0.94);
+    }
+
+    .volume-control-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 14px;
+      background: rgba(28, 37, 65, 0.6);
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    .volume-btn {
+      background: transparent;
+      border: none;
+      color: var(--accent-gold);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .volume-slider {
+      width: 190px;
+      height: 10px;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .status-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .section-title {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
+    }
+
+    .carousel::-webkit-scrollbar {
+      height: 4px;
+    }
+    .carousel::-webkit-scrollbar-thumb {
+      background: var(--accent-gold);
+      border-radius: 10px;
+    }
+
+    .carousel-item {
+      min-width: 230px;
+      height: 135px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .carousel-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,19,43,0.95), transparent 60%);
+    }
+
+    .carousel-caption {
+      position: relative;
+      z-index: 1;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .invite-card {
+      background: var(--card-gradient);
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed var(--accent-gold);
+    }
+
+    .invite-btn {
+      background: #25D366;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .video-container {
+      background: var(--card-gradient);
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 12px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
+      margin-top: 10px;
+      background: #000;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ABA KIDS */
+    .kids-header-card {
+      background: linear-gradient(145deg, #1C2541, #1A103C);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--kids-purple);
+    }
+
+    .kids-badge {
+      display: inline-block;
+      background: rgba(168, 85, 247, 0.2);
+      color: var(--kids-light);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .kids-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .kids-cat-btn {
+      position: relative;
+      height: 160px;
+      border-radius: 16px;
+      border: 2px solid rgba(168, 85, 247, 0.45);
+      background-color: #1a103c;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .kids-cat-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11, 19, 43, 0.95) 20%, rgba(11, 19, 43, 0.2) 100%);
+      z-index: 1;
+    }
+
+    .kids-cat-info {
+      position: relative;
+      z-index: 2;
+    }
+
+    .kids-cat-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+
+    .kids-cat-sub {
+      font-size: 0.7rem;
+      color: var(--kids-light);
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .kids-player-area {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .kids-player-area.active {
+      display: flex;
+    }
+
+    .kids-back-btn {
+      align-self: flex-start;
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid var(--kids-purple);
+      color: var(--text-light);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+    <header>
+      <div class="brand-container">
+        <img src="logo.jpg" alt="Estação CDO" class="brand-logo">
+        <div class="brand">
+          <h1>Estação CDO</h1>
+          <p>Casa de Oração para Todos os Povos</p>
+        </div>
+      </div>
+      <div class="points-badge">⭐ 150 pts</div>
+    </header>
+
+    <div class="app-content">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('radio', this)">🎙️ Rádio</button>
+        <button class="tab-btn" onclick="switchTab('videos', this)">📺 Vídeos</button>
+        <button class="tab-btn" onclick="switchTab('kids', this)">👶 Kids</button>
+      </div>
+
+      <!-- Aba 1: Rádio -->
+      <div id="radio" class="tab-pane active">
+        <div class="radio-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div class="live-indicator">
+              <span class="live-dot"></span> NO AR 24H
+            </div>
+            
+            <div id="listenerBadge" style="font-size: 0.75rem; color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 5px; font-weight: 600;">
+              👥 <span id="listenerCount">...</span> ouvintes
+            </div>
+          </div>
+
+          <h2>Louvor & Palavra</h2>
+          
+          <audio id="radioStream" preload="none"></audio>
+          
+          <div class="play-container">
+            <div class="wave-sim">
+              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+            
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            
+            <div class="wave-sim">
+              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+          </div>
+
+          <div class="volume-control-box">
+            <button class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
+          </div>
+          
+          <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
+        </div>
+
+        <div class="invite-card">
+          <div>
+            <strong style="font-size: 0.85rem; color: var(--accent-gold);">Convide Irmãos</strong>
+            <p style="font-size: 0.7rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
+          </div>
+          <button class="invite-btn" onclick="alert('Link de convite copiado para o WhatsApp!')">💬 Compartilhar</button>
+        </div>
+
+        <div>
+          <h3 class="section-title">📸 Momentos CDO</h3>
+          <div class="carousel" style="margin-top: 8px;">
+            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Culto de Celebração - Domingo</span>
+            </div>
+            <div class="carousel-item" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Encontro de Jovens CDO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 2: Vídeos -->
+      <div id="videos" class="tab-pane">
+        <div class="video-container">
+          <h3 class="section-title">🎧 Rádio Lo-Fi Cristã</h3>
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Kids -->
+      <div id="kids" class="tab-pane">
+        <div class="kids-header-card">
+          <span class="kids-badge">⭐ CANTINHO INFANTIL</span>
+          <h3 style="font-size: 1rem; color: var(--kids-light); margin-bottom: 4px;">O que vamos assistir hoje?</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha uma categoria abaixo:</p>
+        </div>
+
+        <div id="kidsMenu" class="kids-grid">
+          <button class="kids-cat-btn" onclick="openKidsCategory('palavrinhas')" style="background-image: url('3palavrinhas.jpg');">
+            <div class="kids-cat-info">
+              <div class="kids-cat-title">🎵 3 Palavrinhas</div>
+              <div class="kids-cat-sub">Louvores e alegria</div>
+            </div>
+          </button>
+
+          <button class="kids-cat-btn" onclick="openKidsCategory('desenhos')" style="background-image: url('jesus.jpg');">
+            <div class="kids-cat-info">
+              <div class="kids-cat-title">🎬 Desenhos Bíblicos</div>
+              <div class="kids-cat-sub">Clássicos de Richard Rich</div>
+            </div>
+          </button>
+        </div>
+
+        <div id="kidsPlayerArea" class="kids-player-area">
+          <button class="kids-back-btn" onclick="closeKidsCategory()">← Voltar às Categorias</button>
+          <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
+          <div id="kidsVideoList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
+    const audio = document.getElementById('radioStream');
+    const playBtn = document.getElementById('playBtn');
+    const statusText = document.getElementById('statusText');
+    let isPlaying = false;
+
+    function togglePlay() {
+      if (!isPlaying) {
+        statusText.innerText = "A sintonizar a Estação CDO...";
+        audio.src = streamUrl;
+        audio.play().then(() => {
+          playBtn.innerText = "⏸";
+          statusText.innerText = "🔴 AO VIVO — Estação CDO";
+          isPlaying = true;
+        }).catch((err) => {
+          console.error("Erro ao reproduzir:", err);
+          statusText.innerText = "Toque novamente para iniciar o áudio.";
+        });
+      } else {
+        audio.pause();
+        audio.src = "";
+        playBtn.innerText = "▶";
+        statusText.innerText = "Rádio pausada";
+        isPlaying = false;
+      }
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const targetPane = document.getElementById(tabId);
+      if (targetPane) targetPane.classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+
+    function setVolume(value) {
+      audio.volume = value;
+      const muteBtn = document.getElementById('muteBtn');
+      if (value == 0) {
+        muteBtn.innerText = "🔇";
+      } else {
+        muteBtn.innerText = "🔊";
+      }
+    }
+
+    function toggleMute() {
+      const volumeSlider = document.getElementById('volumeSlider');
+      const muteBtn = document.getElementById('muteBtn');
+      if (audio.muted) {
+        audio.muted = false;
+        muteBtn.innerText = "🔊";
+        if(volumeSlider) volumeSlider.value = audio.volume;
+      } else {
+        audio.muted = true;
+        muteBtn.innerText = "🔇";
+        if(volumeSlider) volumeSlider.value = 0;
+      }
+    }
+
+    function updateListeners() {
+      const countEl = document.getElementById('listenerCount');
+      if (countEl) {
+        countEl.innerText = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
+      }
+    }
+    updateListeners();
+    setInterval(updateListeners, 30000);
+
+    const kidsCatalog = {
+      palavrinhas: {
+        titulo: "🎵 3 Palavrinhas - Louvores Infantis",
+        videos: [
+          { titulo: "3 Palavrinhas - Deus é Tão Bom", desc: "Louvor para cantar em família", youtubeId: "l47v4r2vC9o" }
+        ]
+      },
+      desenhos: {
+        titulo: "🎬 Desenhos Bíblicos (Clássicos Richard Rich)",
+        videos: [
+          { titulo: "A História de Moisés", desc: "Clássico animado", youtubeId: "zLZ6-pSSwUo" }
+        ]
+      }
+    };
+
+    function openKidsCategory(categoryKey) {
+      const category = kidsCatalog[categoryKey];
+      if (!category) return;
+      const menu = document.getElementById('kidsMenu');
+      const playerArea = document.getElementById('kidsPlayerArea');
+      const titleEl = document.getElementById('kidsCategoryTitle');
+      const listEl = document.getElementById('kidsVideoList');
+
+      if (menu) menu.style.display = 'none';
+      if (titleEl) titleEl.innerText = category.titulo;
+      
+      if (listEl) {
+        listEl.innerHTML = '';
+        category.videos.forEach(video => {
+          listEl.innerHTML += `
+            <div class="video-container">
+              <h4 class="section-title" style="font-size: 0.95rem;">${video.titulo}</h4>
+              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">${video.desc}</p>
+              <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/${video.youtubeId}" allowfullscreen></iframe>
+              </div>
+            </div>
+          `;
+        });
+      }
+      if (playerArea) playerArea.classList.add('active');
+    }
+
+    function closeKidsCategory() {
+      const listEl = document.getElementById('kidsVideoList');
+      const playerArea = document.getElementById('kidsPlayerArea');
+      const menu = document.getElementById('kidsMenu');
+
+      if (listEl) listEl.innerHTML = '';
+      if (playerArea) playerArea.classList.remove('active');
+      if (menu) menu.style.display = 'grid';
+    }
+  </script>
+</body>
+</html>
