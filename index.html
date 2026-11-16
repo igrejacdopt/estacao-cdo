@@ -487,13 +487,11 @@
       <!-- Aba 1: Rádio -->
       <div id="radio" class="tab-pane active">
         <div class="radio-card">
-          <!-- Cabeçalho do Card com Indicador e Contador de Ouvintes -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <div class="live-indicator">
               <span class="live-dot"></span> NO AR 24H
             </div>
             
-            <!-- Contador de Audiência -->
             <div id="listenerBadge" style="font-size: 0.75rem; color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 5px; font-weight: 600;">
               👥 <span id="listenerCount">...</span> ouvintes
             </div>
@@ -514,8 +512,14 @@
               <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
             </div>
           </div>
+
+          <!-- BARRA DE VOLUME E MUTE -->
+          <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;">
+            <button id="muteBtn" onclick="toggleMute()" style="background: transparent; border: none; color: var(--accent-gold); font-size: 1.1rem; cursor: pointer;">🔊</button>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" style="width: 120px; accent-color: var(--accent-gold); cursor: pointer;">
+          </div>
           
-          <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
+          <p class="status-text" id="statusText" style="margin-top: 10px;">Toque para ouvir a Estação CDO</p>
         </div>
 
         <div class="invite-card">
@@ -610,16 +614,32 @@
       }
     }
 
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      btn.classList.add('active');
+    // CONTROLO DE VOLUME E MUTE
+    function setVolume(value) {
+      audio.volume = value;
+      const muteBtn = document.getElementById('muteBtn');
+      if (value == 0) {
+        muteBtn.innerText = "🔇";
+      } else {
+        muteBtn.innerText = "🔊";
+      }
     }
 
-    // =========================================
+    function toggleMute() {
+      const volumeSlider = document.getElementById('volumeSlider');
+      const muteBtn = document.getElementById('muteBtn');
+      if (audio.muted) {
+        audio.muted = false;
+        muteBtn.innerText = "🔊";
+        volumeSlider.value = audio.volume;
+      } else {
+        audio.muted = true;
+        muteBtn.innerText = "🔇";
+        volumeSlider.value = 0;
+      }
+    }
+
     // CONTADOR DE OUVINTES EM DIRETO
-    // =========================================
     function updateListeners() {
       const countEl = document.getElementById('listenerCount');
       if (countEl) {
@@ -629,9 +649,7 @@
     updateListeners();
     setInterval(updateListeners, 30000);
 
-    // =========================================
     // CATÁLOGO DE VÍDEOS KIDS
-    // =========================================
     const kidsCatalog = {
       palavrinhas: {
         titulo: "🎵 3 Palavrinhas - Louvores Infantis",
