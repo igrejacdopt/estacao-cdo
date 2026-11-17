@@ -34,18 +34,15 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 0;
     }
 
     .app-viewport {
       width: 100%;
-      max-width: 100%;
       height: 100vh;
       background-color: var(--bg-dark);
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       overflow: hidden;
     }
 
@@ -58,7 +55,6 @@
       }
     }
 
-    /* TOPO LIMPO */
     header {
       display: flex;
       justify-content: space-between;
@@ -81,13 +77,11 @@
       border: 1.5px solid var(--accent-color);
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .brand h1 {
       font-size: 1.15rem;
       color: var(--accent-color);
-      letter-spacing: 0.5px;
       line-height: 1.1;
     }
 
@@ -104,12 +98,8 @@
       border-radius: 20px;
       font-size: 0.8rem;
       font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
-    /* ÁREA DE CONTEÚDO */
     .app-content {
       flex: 1;
       overflow-y: auto;
@@ -119,30 +109,21 @@
       gap: 16px;
     }
 
-    .app-content::-webkit-scrollbar { width: 4px; }
-    .app-content::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
-
     .tab-pane {
       display: none;
       flex-direction: column;
       gap: 16px;
-      animation: fadeIn 0.25s ease-in-out;
     }
 
-    .tab-pane.active { display: flex; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+    .tab-pane.active {
+      display: flex;
     }
 
-    /* CARD DO RÁDIO */
     .radio-card {
       background: var(--card-gradient);
       padding: 20px 16px;
       border-radius: 20px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       border: 1px solid var(--border-color);
     }
 
@@ -151,7 +132,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-      gap: 8px;
     }
 
     .live-indicator {
@@ -172,14 +152,6 @@
       height: 7px;
       background-color: #EF4444;
       border-radius: 50%;
-      box-shadow: 0 0 8px #EF4444;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(0.95); opacity: 0.8; }
     }
 
     .listener-badge {
@@ -189,19 +161,14 @@
       padding: 4px 10px;
       border-radius: 12px;
       border: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 5px;
       font-weight: 600;
     }
 
     .radio-card h2 {
       font-size: 1.15rem;
-      color: var(--text-light);
       margin-bottom: 10px;
     }
 
-    /* SELETOR DE SKIN (MODERNO VS ANOS 90) */
     .skin-toggle {
       display: inline-flex;
       background: rgba(11, 19, 43, 0.85);
@@ -209,8 +176,6 @@
       border-radius: 22px;
       border: 1px solid var(--border-color);
       margin-bottom: 14px;
-      position: relative;
-      z-index: 5;
     }
 
     .skin-btn {
@@ -222,16 +187,13 @@
       font-weight: 700;
       border-radius: 18px;
       cursor: pointer;
-      transition: 0.2s;
     }
 
     .skin-btn.active {
       background: var(--accent-color);
       color: #0B132B;
-      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
-    /* VISUALIZADORES E BOTÃO PLAY */
     .play-container {
       display: flex;
       align-items: center;
@@ -254,14 +216,13 @@
 
     .wave-bar {
       width: 4px;
-      height: 8px;
+      height: 10px;
       background: var(--accent-color);
       border-radius: 3px;
-      transition: height 0.2s;
     }
 
     .playing .wave-bar {
-      animation: wave 0.9s ease-in-out infinite alternate;
+      animation: wave 0.8s ease-in-out infinite alternate;
     }
     .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
     .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
@@ -272,7 +233,6 @@
       100% { height: 34px; opacity: 1; }
     }
 
-    /* MEDIDORES ANALÓGICOS ANOS 90 (VU METERS) */
     .vu-meter {
       display: none;
       width: 82px;
@@ -282,7 +242,6 @@
       border-radius: 8px;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.45), 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .play-container.analog-mode .vu-meter {
@@ -300,7 +259,7 @@
     }
 
     .vu-scale::after {
-      content: 'VU dB';
+      content: 'VU';
       position: absolute;
       bottom: -15px;
       left: 50%;
@@ -343,27 +302,20 @@
       font-size: 1.7rem;
       cursor: pointer;
       box-shadow: 0 0 22px var(--accent-glow);
-      transition: transform 0.15s, background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      position: relative;
-      z-index: 5;
     }
 
-    .play-btn:active {
-      transform: scale(0.92);
-    }
-
-    /* EQUALIZADOR VERTICAL DE 3 BANDAS (BASS, MID, HIGH) */
+    /* EQUALIZADOR VERTICAL COMPACTO */
     .eq-panel {
       background: rgba(11, 19, 43, 0.7);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 12px 14px;
+      padding: 12px 16px;
       margin: 12px auto 0 auto;
-      max-width: 260px;
+      display: inline-block;
     }
 
     .eq-title {
@@ -379,7 +331,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 22px;
+      gap: 24px;
     }
 
     .eq-band {
@@ -391,34 +343,18 @@
 
     .eq-slider-wrap {
       height: 85px;
-      width: 28px;
+      width: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .eq-band input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
       width: 80px;
       height: 6px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 4px;
-      outline: none;
       transform: rotate(-90deg);
       cursor: pointer;
       accent-color: var(--accent-color);
-    }
-
-    .eq-band input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--accent-color);
-      cursor: pointer;
-      box-shadow: 0 0 6px var(--accent-glow);
     }
 
     .eq-band label {
@@ -428,12 +364,11 @@
     }
 
     .eq-val {
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       font-weight: 600;
     }
 
-    /* CONTROLO DE VOLUME */
     .volume-control-box {
       display: flex;
       align-items: center;
@@ -465,16 +400,11 @@
       font-size: 0.82rem;
       color: var(--text-muted);
       margin-top: 10px;
-      font-weight: 500;
     }
 
-    /* CARDS GERAIS */
     .section-title {
       font-size: 0.95rem;
       color: var(--text-light);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .card-box {
@@ -503,17 +433,12 @@
       font-weight: bold;
       font-size: 0.75rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
     }
 
-    /* CARROSSEL FOTOS */
     .carousel {
       display: flex;
       overflow-x: auto;
       gap: 12px;
-      scroll-snap-type: x mandatory;
       padding-bottom: 6px;
     }
 
@@ -522,7 +447,6 @@
       height: 130px;
       background: var(--card-bg);
       border-radius: 12px;
-      scroll-snap-align: start;
       display: flex;
       align-items: flex-end;
       padding: 12px;
@@ -546,11 +470,8 @@
       z-index: 1;
       font-size: 0.78rem;
       font-weight: 600;
-      color: var(--text-light);
-      width: 100%;
     }
 
-    /* MODAL FOTOS */
     #photoModal {
       display: none;
       position: fixed;
@@ -571,11 +492,9 @@
     }
 
     #modalCaption {
-      color: var(--text-light);
       margin-top: 15px;
       font-size: 0.95rem;
       text-align: center;
-      font-weight: 600;
     }
 
     .modal-close {
@@ -592,7 +511,6 @@
       cursor: pointer;
     }
 
-    /* VÍDEOS & KIDS */
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
@@ -666,7 +584,6 @@
       cursor: pointer;
     }
 
-    /* AGENDA / CALENDÁRIO */
     .event-item {
       display: flex;
       align-items: center;
@@ -691,10 +608,8 @@
     .event-date span {
       display: block;
       font-size: 0.65rem;
-      text-transform: uppercase;
     }
 
-    /* QUIZ INTERATIVO */
     .quiz-option {
       width: 100%;
       text-align: left;
@@ -706,15 +621,8 @@
       color: var(--text-light);
       font-size: 0.85rem;
       cursor: pointer;
-      transition: 0.2s;
     }
 
-    .quiz-option:hover {
-      border-color: var(--accent-color);
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    /* CONFIGURAÇÕES & CORES */
     .color-swatches {
       display: flex;
       gap: 12px;
@@ -728,12 +636,8 @@
       border-radius: 50%;
       border: 2px solid #fff;
       cursor: pointer;
-      transition: transform 0.2s;
     }
 
-    .color-swatch:active { transform: scale(0.9); }
-
-    /* DOCK INFERIOR FIXO */
     .bottom-dock {
       position: absolute;
       bottom: 0;
@@ -747,7 +651,6 @@
       align-items: center;
       padding: 4px 2px;
       z-index: 100;
-      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5);
     }
 
     .dock-item {
@@ -762,18 +665,177 @@
       gap: 3px;
       cursor: pointer;
       padding: 6px 2px;
-      transition: 0.2s;
     }
 
-    .dock-icon {
-      font-size: 1.25rem;
-      transition: transform 0.2s;
-    }
-
-    .dock-label {
-      font-size: 0.65rem;
-      font-weight: 600;
-    }
-
+    .dock-icon { font-size: 1.25rem; }
+    .dock-label { font-size: 0.65rem; font-weight: 600; }
     .dock-item.active { color: var(--accent-color); }
-    .dock-item.active .dock-icon { transform:
+  </style>
+</head>
+<body>
+
+  <div id="photoModal">
+    <button type="button" class="modal-close" onclick="closePhotoModal()">✕</button>
+    <img id="modalImg" src="" alt="Momento CDO">
+    <p id="modalCaption"></p>
+  </div>
+
+  <div class="app-viewport">
+    <header>
+      <div class="brand-container">
+        <img src="logo.jpg" alt="Estação CDO" class="brand-logo">
+        <div class="brand">
+          <h1>Estação CDO</h1>
+          <p>Casa de Oração para Todos os Povos</p>
+        </div>
+      </div>
+      <div class="points-badge">⭐ <span id="userPoints">150</span> pts</div>
+    </header>
+
+    <div class="app-content">
+      <!-- RÁDIO -->
+      <div id="radio" class="tab-pane active">
+        <div class="radio-card">
+          <div class="radio-top-bar">
+            <div class="live-indicator"><span class="live-dot"></span> NO AR 24H</div>
+            <div class="listener-badge">👥 <span id="listenerCount">8</span> ouvintes</div>
+          </div>
+
+          <h2>Louvor & Palavra</h2>
+
+          <div class="skin-toggle">
+            <button type="button" class="skin-btn active" id="btnSkinEq" onclick="setRadioSkin('eq')">📊 Equalizador</button>
+            <button type="button" class="skin-btn" id="btnSkinAnalog" onclick="setRadioSkin('analog')">📻 Rádio 90s</button>
+          </div>
+          
+          <audio id="radioStream" preload="none"></audio>
+          
+          <div class="play-container" id="playContainer">
+            <div class="wave-sim">
+              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+
+            <div class="vu-meter">
+              <div class="vu-scale"></div>
+              <div class="vu-needle" id="needleLeft"></div>
+              <div class="vu-pivot"></div>
+            </div>
+            
+            <button type="button" class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            
+            <div class="wave-sim">
+              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+
+            <div class="vu-meter">
+              <div class="vu-scale"></div>
+              <div class="vu-needle" id="needleRight"></div>
+              <div class="vu-pivot"></div>
+            </div>
+          </div>
+
+          <!-- Equalizador Vertical Agrupado -->
+          <div class="eq-panel">
+            <div class="eq-title">🎛️ Equalizador</div>
+            <div class="eq-bands">
+              <div class="eq-band">
+                <span class="eq-val" id="valBass">+2</span>
+                <div class="eq-slider-wrap">
+                  <input type="range" min="-10" max="10" value="2" oninput="updateEq('bass', this.value)">
+                </div>
+                <label>BASS</label>
+              </div>
+              <div class="eq-band">
+                <span class="eq-val" id="valMid">0</span>
+                <div class="eq-slider-wrap">
+                  <input type="range" min="-10" max="10" value="0" oninput="updateEq('mid', this.value)">
+                </div>
+                <label>MID</label>
+              </div>
+              <div class="eq-band">
+                <span class="eq-val" id="valHigh">+3</span>
+                <div class="eq-slider-wrap">
+                  <input type="range" min="-10" max="10" value="3" oninput="updateEq('high', this.value)">
+                </div>
+                <label>HIGH</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="volume-control-box">
+            <button type="button" class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
+          </div>
+          
+          <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
+        </div>
+
+        <div class="invite-card">
+          <div>
+            <strong style="font-size: 0.85rem; color: var(--accent-color);">Convide Irmãos</strong>
+            <p style="font-size: 0.7rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
+          </div>
+          <button type="button" class="invite-btn" onclick="shareApp()">💬 Compartilhar</button>
+        </div>
+
+        <div>
+          <h3 class="section-title">📸 Momentos CDO</h3>
+          <div class="carousel" style="margin-top: 8px;">
+            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1000&q=80', 'Culto de Celebração - Domingo')" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Culto de Celebração 🔍</span>
+            </div>
+            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80', 'Encontro de Jovens CDO')" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
+              <span class="carousel-caption">Encontro de Jovens 🔍</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VÍDEOS -->
+      <div id="videos" class="tab-pane">
+        <div class="card-box">
+          <h3 class="section-title">🎧 Rádio Lo-Fi Cristã</h3>
+          <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe></div>
+        </div>
+        <div class="card-box">
+          <h3 class="section-title">📖 Mensagem e Louvor</h3>
+          <div class="video-wrapper"><iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe></div>
+        </div>
+      </div>
+
+      <!-- KIDS -->
+      <div id="kids" class="tab-pane">
+        <div class="card-box" style="border-color: var(--kids-purple);">
+          <h3 style="font-size: 1rem; color: var(--kids-light);">⭐ Cantinho Infantil</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha uma categoria:</p>
+        </div>
+
+        <div id="kidsMenu" class="kids-grid">
+          <button type="button" class="kids-cat-btn" onclick="openKidsCategory('palavrinhas')" style="background-image: url('3palavrinhas.jpg');">
+            <div class="kids-cat-info">
+              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎵 3 Palavrinhas</div>
+              <div style="font-size: 0.7rem; color: var(--kids-light);">Louvores e alegria</div>
+            </div>
+          </button>
+
+          <button type="button" class="kids-cat-btn" onclick="openKidsCategory('desenhos')" style="background-image: url('jesus.jpg');">
+            <div class="kids-cat-info">
+              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎬 Desenhos Bíblicos</div>
+              <div style="font-size: 0.7rem; color: var(--kids-light);">Clássicos animados</div>
+            </div>
+          </button>
+        </div>
+
+        <div id="kidsPlayerArea" class="kids-player-area">
+          <button type="button" class="kids-back-btn" onclick="closeKidsCategory()">← Voltar</button>
+          <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
+          <div id="kidsVideoList"></div>
+        </div>
+      </div>
+
+      <!-- AGENDA -->
+      <div id="calendar" class="tab-pane">
+        <div class="card-box">
+          <h3 class="section-title">📅 Agenda da Comunidade</h3>
+          <div class="event-item">
+            <div class="event-date">DOM<span>18:
