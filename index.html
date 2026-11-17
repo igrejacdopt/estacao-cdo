@@ -109,7 +109,7 @@
       gap: 5px;
     }
 
-    /* ÁREA DE CONTEÚDO COM ESPAÇO PARA O DOCK */
+    /* ÁREA DE CONTEÚDO */
     .app-content {
       flex: 1;
       overflow-y: auto;
@@ -119,13 +119,8 @@
       gap: 16px;
     }
 
-    .app-content::-webkit-scrollbar {
-      width: 4px;
-    }
-    .app-content::-webkit-scrollbar-thumb {
-      background: var(--accent-color);
-      border-radius: 4px;
-    }
+    .app-content::-webkit-scrollbar { width: 4px; }
+    .app-content::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
 
     .tab-pane {
       display: none;
@@ -134,9 +129,7 @@
       animation: fadeIn 0.25s ease-in-out;
     }
 
-    .tab-pane.active {
-      display: flex;
-    }
+    .tab-pane.active { display: flex; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
@@ -211,21 +204,23 @@
     /* SELETOR DE SKIN (MODERNO VS ANOS 90) */
     .skin-toggle {
       display: inline-flex;
-      background: rgba(11, 19, 43, 0.8);
-      padding: 3px;
-      border-radius: 20px;
+      background: rgba(11, 19, 43, 0.85);
+      padding: 4px;
+      border-radius: 22px;
       border: 1px solid var(--border-color);
       margin-bottom: 14px;
+      position: relative;
+      z-index: 5;
     }
 
     .skin-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
-      padding: 5px 12px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      border-radius: 16px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 18px;
       cursor: pointer;
       transition: 0.2s;
     }
@@ -233,6 +228,7 @@
     .skin-btn.active {
       background: var(--accent-color);
       color: #0B132B;
+      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
     /* VISUALIZADORES E BOTÃO PLAY */
@@ -241,7 +237,7 @@
       align-items: center;
       justify-content: center;
       gap: 18px;
-      margin: 12px 0;
+      margin: 10px 0;
       min-height: 82px;
     }
 
@@ -250,6 +246,10 @@
       align-items: center;
       gap: 4px;
       height: 36px;
+    }
+
+    .play-container.analog-mode .wave-sim {
+      display: none;
     }
 
     .wave-bar {
@@ -261,7 +261,7 @@
     }
 
     .playing .wave-bar {
-      animation: wave 1s ease-in-out infinite alternate;
+      animation: wave 0.9s ease-in-out infinite alternate;
     }
     .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
     .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
@@ -269,25 +269,29 @@
 
     @keyframes wave {
       0% { height: 6px; opacity: 0.4; }
-      100% { height: 32px; opacity: 1; }
+      100% { height: 34px; opacity: 1; }
     }
 
     /* MEDIDORES ANALÓGICOS ANOS 90 (VU METERS) */
     .vu-meter {
-      width: 78px;
-      height: 48px;
+      display: none;
+      width: 82px;
+      height: 50px;
       background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 100%);
-      border: 2px solid #475569;
+      border: 2.5px solid #475569;
       border-radius: 8px;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-      display: none;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.45), 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .play-container.analog-mode .vu-meter {
+      display: block;
     }
 
     .vu-scale {
       position: absolute;
-      top: 6px;
+      top: 7px;
       left: 8px;
       right: 8px;
       height: 16px;
@@ -296,9 +300,9 @@
     }
 
     .vu-scale::after {
-      content: 'VU';
+      content: 'VU dB';
       position: absolute;
-      bottom: -14px;
+      bottom: -15px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 0.55rem;
@@ -311,11 +315,11 @@
       bottom: -4px;
       left: 50%;
       width: 2px;
-      height: 36px;
+      height: 38px;
       background: #DC2626;
       transform-origin: bottom center;
       transform: rotate(-38deg);
-      transition: transform 0.15s ease-out;
+      transition: transform 0.14s ease-out;
     }
 
     .vu-pivot {
@@ -330,37 +334,40 @@
     }
 
     .play-btn {
-      width: 72px;
-      height: 72px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       border: none;
       background: var(--accent-color);
       color: #0B132B;
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       cursor: pointer;
-      box-shadow: 0 0 20px var(--accent-glow);
-      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 0 22px var(--accent-glow);
+      transition: transform 0.15s, background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      position: relative;
+      z-index: 5;
     }
 
     .play-btn:active {
-      transform: scale(0.94);
+      transform: scale(0.92);
     }
 
-    /* EQUALIZADOR DE 3 BANDAS (BASS, MID, HIGH) */
+    /* EQUALIZADOR VERTICAL DE 3 BANDAS (BASS, MID, HIGH) */
     .eq-panel {
-      background: rgba(11, 19, 43, 0.65);
+      background: rgba(11, 19, 43, 0.7);
       border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 12px;
-      margin-top: 12px;
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin: 12px auto 0 auto;
+      max-width: 260px;
     }
 
     .eq-title {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -370,9 +377,9 @@
 
     .eq-bands {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
+      gap: 22px;
     }
 
     .eq-band {
@@ -380,25 +387,50 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      flex: 1;
     }
 
-    .eq-band label {
-      font-size: 0.72rem;
-      font-weight: bold;
-      color: var(--accent-color);
+    .eq-slider-wrap {
+      height: 85px;
+      width: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .eq-band input[type="range"] {
-      width: 100%;
-      accent-color: var(--accent-color);
-      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 80px;
       height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+      outline: none;
+      transform: rotate(-90deg);
+      cursor: pointer;
+      accent-color: var(--accent-color);
+    }
+
+    .eq-band input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+
+    .eq-band label {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--accent-color);
     }
 
     .eq-val {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: var(--text-muted);
+      font-weight: 600;
     }
 
     /* CONTROLO DE VOLUME */
@@ -430,9 +462,10 @@
     }
 
     .status-text {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
       margin-top: 10px;
+      font-weight: 500;
     }
 
     /* CARDS GERAIS */
@@ -620,9 +653,7 @@
       gap: 12px;
     }
 
-    .kids-player-area.active {
-      display: flex;
-    }
+    .kids-player-area.active { display: flex; }
 
     .kids-back-btn {
       align-self: flex-start;
@@ -700,11 +731,9 @@
       transition: transform 0.2s;
     }
 
-    .color-swatch:active {
-      transform: scale(0.9);
-    }
+    .color-swatch:active { transform: scale(0.9); }
 
-    /* DOCK INFERIOR FIXO (ESTILO APP NATIVA) */
+    /* DOCK INFERIOR FIXO */
     .bottom-dock {
       position: absolute;
       bottom: 0;
@@ -746,498 +775,5 @@
       font-weight: 600;
     }
 
-    .dock-item.active {
-      color: var(--accent-color);
-    }
-
-    .dock-item.active .dock-icon {
-      transform: translateY(-2px) scale(1.1);
-    }
-  </style>
-</head>
-<body>
-
-  <!-- MODAL DE VISUALIZAÇÃO DE FOTOS -->
-  <div id="photoModal">
-    <button class="modal-close" onclick="closePhotoModal()">✕</button>
-    <img id="modalImg" src="" alt="Momento CDO Ampliado">
-    <p id="modalCaption"></p>
-  </div>
-
-  <div class="app-viewport">
-    <!-- TOPO LIMPO -->
-    <header>
-      <div class="brand-container">
-        <img src="logo.jpg" alt="Estação CDO" class="brand-logo">
-        <div class="brand">
-          <h1>Estação CDO</h1>
-          <p>Casa de Oração para Todos os Povos</p>
-        </div>
-      </div>
-      <div class="points-badge">⭐ <span id="userPoints">150</span> pts</div>
-    </header>
-
-    <!-- ÁREA DE CONTEÚDO -->
-    <div class="app-content">
-
-      <!-- ABA 1: RÁDIO -->
-      <div id="radio" class="tab-pane active">
-        <div class="radio-card" id="radioCard">
-          <div class="radio-top-bar">
-            <div class="live-indicator"><span class="live-dot"></span> NO AR 24H</div>
-            <div class="listener-badge">👥 <span id="listenerCount">8</span> ouvintes</div>
-          </div>
-
-          <h2>Louvor & Palavra</h2>
-
-          <!-- Seletor de Skin (Equalizador vs Analógico 90s) -->
-          <div class="skin-toggle">
-            <button class="skin-btn active" id="btnSkinEq" onclick="setRadioSkin('eq')">📊 Equalizador</button>
-            <button class="skin-btn" id="btnSkinAnalog" onclick="setRadioSkin('analog')">📻 Rádio 90s</button>
-          </div>
-          
-          <audio id="radioStream" preload="none"></audio>
-          
-          <!-- Container Central (Play + Visualizadores) -->
-          <div class="play-container" id="playContainer">
-            <!-- Barrinhas Modernas (Lado Esquerdo) -->
-            <div class="wave-sim" id="waveLeft">
-              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-            </div>
-
-            <!-- Ponteiro Analógico 90s (Lado Esquerdo) -->
-            <div class="vu-meter" id="vuLeft">
-              <div class="vu-scale"></div>
-              <div class="vu-needle" id="needleLeft"></div>
-              <div class="vu-pivot"></div>
-            </div>
-            
-            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-            
-            <!-- Barrinhas Modernas (Lado Direito) -->
-            <div class="wave-sim" id="waveRight">
-              <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-            </div>
-
-            <!-- Ponteiro Analógico 90s (Lado Direito) -->
-            <div class="vu-meter" id="vuRight">
-              <div class="vu-scale"></div>
-              <div class="vu-needle" id="needleRight"></div>
-              <div class="vu-pivot"></div>
-            </div>
-          </div>
-
-          <!-- Equalizador Básico de 3 Bandas (Bass, Mid, High) -->
-          <div class="eq-panel">
-            <div class="eq-title">🎛️ Equalizador de Áudio</div>
-            <div class="eq-bands">
-              <div class="eq-band">
-                <label>BASS</label>
-                <input type="range" min="-10" max="10" value="2" oninput="updateEq('bass', this.value)">
-                <span class="eq-val" id="valBass">+2 dB</span>
-              </div>
-              <div class="eq-band">
-                <label>MID</label>
-                <input type="range" min="-10" max="10" value="0" oninput="updateEq('mid', this.value)">
-                <span class="eq-val" id="valMid">0 dB</span>
-              </div>
-              <div class="eq-band">
-                <label>HIGH</label>
-                <input type="range" min="-10" max="10" value="3" oninput="updateEq('high', this.value)">
-                <span class="eq-val" id="valHigh">+3 dB</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Volume (80% por defeito sem distorção) -->
-          <div class="volume-control-box">
-            <button class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
-          </div>
-          
-          <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
-        </div>
-
-        <!-- Convite WhatsApp -->
-        <div class="invite-card">
-          <div>
-            <strong style="font-size: 0.85rem; color: var(--accent-color);">Convide Irmãos</strong>
-            <p style="font-size: 0.7rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
-          </div>
-          <button class="invite-btn" onclick="shareApp()">💬 Compartilhar</button>
-        </div>
-
-        <!-- Momentos CDO -->
-        <div>
-          <h3 class="section-title">📸 Momentos CDO (Toque na foto)</h3>
-          <div class="carousel" style="margin-top: 8px;">
-            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1000&q=80', 'Culto de Celebração - Domingo')" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Culto de Celebração 🔍</span>
-            </div>
-            <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80', 'Encontro de Jovens CDO')" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Encontro de Jovens 🔍</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ABA 2: VÍDEOS -->
-      <div id="videos" class="tab-pane">
-        <div class="card-box">
-          <h3 class="section-title">🎧 Rádio Lo-Fi Cristã</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="card-box">
-          <h3 class="section-title">📖 Mensagem e Louvor 1</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="card-box">
-          <h3 class="section-title">✨ Mensagem e Louvor 2</h3>
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
-          </div>
-        </div>
-      </div>
-
-      <!-- ABA 3: KIDS -->
-      <div id="kids" class="tab-pane">
-        <div class="card-box" style="border-color: var(--kids-purple);">
-          <h3 style="font-size: 1rem; color: var(--kids-light); margin-bottom: 4px;">⭐ Cantinho Infantil</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha uma categoria para os pequeninos:</p>
-        </div>
-
-        <div id="kidsMenu" class="kids-grid">
-          <button class="kids-cat-btn" onclick="openKidsCategory('palavrinhas')" style="background-image: url('3palavrinhas.jpg');">
-            <div class="kids-cat-info">
-              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎵 3 Palavrinhas</div>
-              <div style="font-size: 0.7rem; color: var(--kids-light);">Louvores e alegria</div>
-            </div>
-          </button>
-
-          <button class="kids-cat-btn" onclick="openKidsCategory('desenhos')" style="background-image: url('jesus.jpg');">
-            <div class="kids-cat-info">
-              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎬 Desenhos Bíblicos</div>
-              <div style="font-size: 0.7rem; color: var(--kids-light);">Clássicos animados</div>
-            </div>
-          </button>
-        </div>
-
-        <div id="kidsPlayerArea" class="kids-player-area">
-          <button class="kids-back-btn" onclick="closeKidsCategory()">← Voltar às Categorias</button>
-          <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
-          <div id="kidsVideoList"></div>
-        </div>
-      </div>
-
-      <!-- ABA 4: AGENDA / CALENDÁRIO -->
-      <div id="calendar" class="tab-pane">
-        <div class="card-box">
-          <h3 class="section-title">📅 Agenda da Comunidade</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Fique por dentro dos nossos cultos e encontros:</p>
-
-          <div class="event-item">
-            <div class="event-date">DOM<span>18:30</span></div>
-            <div>
-              <strong style="font-size: 0.9rem; color: var(--text-light);">Culto da Família</strong>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Louvor, palavra e comunhão para todos.</p>
-            </div>
-          </div>
-
-          <div class="event-item">
-            <div class="event-date">QUA<span>20:00</span></div>
-            <div>
-              <strong style="font-size: 0.9rem; color: var(--text-light);">Culto de Oração & Ensino</strong>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Momento de intercessão e estudo bíblico.</p>
-            </div>
-          </div>
-
-          <div class="event-item">
-            <div class="event-date">SÁB<span>19:30</span></div>
-            <div>
-              <strong style="font-size: 0.9rem; color: var(--text-light);">Encontro de Jovens CDO</strong>
-              <p style="font-size: 0.75rem; color: var(--text-muted);">Adoração e partilha com a juventude.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ABA 5: QUIZ BÍBLICO -->
-      <div id="quiz" class="tab-pane">
-        <div class="card-box">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 class="section-title">❓ Desafio Bíblico</h3>
-            <span style="font-size: 0.75rem; color: var(--accent-color); font-weight: bold;">+20 pts por acerto</span>
-          </div>
-          <p id="quizQuestion" style="font-size: 0.95rem; font-weight: 600; margin-top: 14px; color: var(--text-light);"></p>
-          <div id="quizOptions" style="margin-top: 10px;"></div>
-          <p id="quizFeedback" style="font-size: 0.8rem; margin-top: 12px; font-weight: bold;"></p>
-        </div>
-      </div>
-
-      <!-- ABA 6: CONFIGURAÇÕES -->
-      <div id="settings" class="tab-pane">
-        <div class="card-box">
-          <h3 class="section-title">🎨 Cor do Aplicativo</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Escolha a cor de destaque que mais gosta:</p>
-          <div class="color-swatches">
-            <button class="color-swatch" style="background: #F59E0B;" onclick="changeAppColor('#F59E0B', 'rgba(245, 158, 11, 0.4)')" title="Dourado Clássico"></button>
-            <button class="color-swatch" style="background: #38BDF8;" onclick="changeAppColor('#38BDF8', 'rgba(56, 189, 248, 0.4)')" title="Azul Celeste"></button>
-            <button class="color-swatch" style="background: #10B981;" onclick="changeAppColor('#10B981', 'rgba(16, 185, 129, 0.4)')" title="Verde Esperança"></button>
-            <button class="color-swatch" style="background: #F43F5E;" onclick="changeAppColor('#F43F5E', 'rgba(244, 63, 94, 0.4)')" title="Rosa Coral"></button>
-            <button class="color-swatch" style="background: #A855F7;" onclick="changeAppColor('#A855F7', 'rgba(168, 85, 247, 0.4)')" title="Roxo Real"></button>
-          </div>
-        </div>
-
-        <div class="card-box">
-          <h3 class="section-title">👤 Conta & Pontos (Opcional)</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
-            A rádio é 100% livre para ouvir sem cadastro! Em breve poderá conectar a sua conta para guardar os seus pontos na nuvem.
-          </p>
-          <button style="margin-top: 12px; width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--accent-color); background: transparent; color: var(--accent-color); font-weight: bold; cursor: pointer;" onclick="alert('Sistema de sincronização opcional em preparação!')">
-            🔗 Sincronizar Conta (Em breve)
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- DOCK INFERIOR FIXO -->
-    <nav class="bottom-dock">
-      <button class="dock-item active" onclick="switchTab('radio', this)">
-        <span class="dock-icon">🎙️</span>
-        <span class="dock-label">Rádio</span>
-      </button>
-      <button class="dock-item" onclick="switchTab('videos', this)">
-        <span class="dock-icon">📺</span>
-        <span class="dock-label">Vídeos</span>
-      </button>
-      <button class="dock-item" onclick="switchTab('kids', this)">
-        <span class="dock-icon">👶</span>
-        <span class="dock-label">Kids</span>
-      </button>
-      <button class="dock-item" onclick="switchTab('calendar', this)">
-        <span class="dock-icon">📅</span>
-        <span class="dock-label">Agenda</span>
-      </button>
-      <button class="dock-item" onclick="switchTab('quiz', this)">
-        <span class="dock-icon">❓</span>
-        <span class="dock-label">Quiz</span>
-      </button>
-      <button class="dock-item" onclick="switchTab('settings', this)">
-        <span class="dock-icon">⚙️</span>
-        <span class="dock-label">Ajustes</span>
-      </button>
-    </nav>
-  </div>
-
-  <script>
-    const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
-    const audio = document.getElementById('radioStream');
-    audio.volume = 0.8; // Volume seguro sem distorção
-
-    const playBtn = document.getElementById('playBtn');
-    const statusText = document.getElementById('statusText');
-    const playContainer = document.getElementById('playContainer');
-    let isPlaying = false;
-    let currentSkin = 'eq';
-    let vuInterval = null;
-
-    // CONTROLO DE PLAY / PAUSE
-    function togglePlay() {
-      if (!isPlaying) {
-        statusText.innerText = "A sintonizar a Estação CDO...";
-        audio.src = streamUrl;
-        audio.play().then(() => {
-          playBtn.innerText = "⏸";
-          statusText.innerText = "🔴 AO VIVO — Estação CDO";
-          playContainer.classList.add('playing');
-          isPlaying = true;
-          startVuAnimation();
-        }).catch(() => {
-          statusText.innerText = "Toque novamente para iniciar o áudio.";
-        });
-      } else {
-        audio.pause();
-        audio.src = "";
-        playBtn.innerText = "▶";
-        statusText.innerText = "Rádio pausada";
-        playContainer.classList.remove('playing');
-        isPlaying = false;
-        stopVuAnimation();
-      }
-    }
-
-    // ALTERNAR SKIN (EQUALIZADOR VS ANALÓGICO ANOS 90)
-    function setRadioSkin(skin) {
-      currentSkin = skin;
-      document.getElementById('btnSkinEq').classList.toggle('active', skin === 'eq');
-      document.getElementById('btnSkinAnalog').classList.toggle('active', skin === 'analog');
-
-      const waveLeft = document.getElementById('waveLeft');
-      const waveRight = document.getElementById('waveRight');
-      const vuLeft = document.getElementById('vuLeft');
-      const vuRight = document.getElementById('vuRight');
-
-      if (skin === 'eq') {
-        waveLeft.style.display = 'flex';
-        waveRight.style.display = 'flex';
-        vuLeft.style.display = 'none';
-        vuRight.style.display = 'none';
-      } else {
-        waveLeft.style.display = 'none';
-        waveRight.style.display = 'none';
-        vuLeft.style.display = 'block';
-        vuRight.style.display = 'block';
-      }
-    }
-
-    // ANIMAÇÃO DOS PONTEIROS ANALÓGICOS ANOS 90
-    function startVuAnimation() {
-      if (vuInterval) clearInterval(vuInterval);
-      vuInterval = setInterval(() => {
-        if (!isPlaying) return;
-        const nLeft = document.getElementById('needleLeft');
-        const nRight = document.getElementById('needleRight');
-        if (nLeft && nRight) {
-          const angleL = Math.floor(Math.random() * 65) - 25;
-          const angleR = Math.floor(Math.random() * 65) - 25;
-          nLeft.style.transform = `rotate(${angleL}deg)`;
-          nRight.style.transform = `rotate(${angleR}deg)`;
-        }
-      }, 180);
-    }
-
-    function stopVuAnimation() {
-      clearInterval(vuInterval);
-      const nLeft = document.getElementById('needleLeft');
-      const nRight = document.getElementById('needleRight');
-      if (nLeft) nLeft.style.transform = 'rotate(-38deg)';
-      if (nRight) nRight.style.transform = 'rotate(-38deg)';
-    }
-
-    // EQUALIZADOR DE 3 BANDAS
-    function updateEq(band, val) {
-      const label = val > 0 ? `+${val} dB` : `${val} dB`;
-      if (band === 'bass') document.getElementById('valBass').innerText = label;
-      if (band === 'mid') document.getElementById('valMid').innerText = label;
-      if (band === 'high') document.getElementById('valHigh').innerText = label;
-    }
-
-    // NAVEGAÇÃO DO DOCK INFERIOR
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-      document.querySelectorAll('.dock-item').forEach(b => b.classList.remove('active'));
-      const targetPane = document.getElementById(tabId);
-      if (targetPane) targetPane.classList.add('active');
-      if (btn) btn.classList.add('active');
-    }
-
-    // VOLUME E MUTE
-    function setVolume(value) {
-      audio.volume = value;
-      document.getElementById('muteBtn').innerText = value == 0 ? "🔇" : "🔊";
-    }
-
-    function toggleMute() {
-      const slider = document.getElementById('volumeSlider');
-      const btn = document.getElementById('muteBtn');
-      if (audio.muted) {
-        audio.muted = false;
-        btn.innerText = "🔊";
-        slider.value = audio.volume;
-      } else {
-        audio.muted = true;
-        btn.innerText = "🔇";
-        slider.value = 0;
-      }
-    }
-
-    // MUDAR COR DO APP (CONFIGURAÇÕES)
-    function changeAppColor(hex, glow) {
-      document.documentElement.style.setProperty('--accent-color', hex);
-      document.documentElement.style.setProperty('--accent-glow', glow);
-      document.documentElement.style.setProperty('--border-color', glow);
-      localStorage.setItem('cdo_theme_hex', hex);
-      localStorage.setItem('cdo_theme_glow', glow);
-    }
-
-    // Carregar cor guardada ao abrir
-    const savedHex = localStorage.getItem('cdo_theme_hex');
-    const savedGlow = localStorage.getItem('cdo_theme_glow');
-    if (savedHex && savedGlow) changeAppColor(savedHex, savedGlow);
-
-    // PONTOS E QUIZ INTERATIVO
-    let points = parseInt(localStorage.getItem('cdo_points')) || 150;
-    document.getElementById('userPoints').innerText = points;
-
-    function addPoints(amount) {
-      points += amount;
-      document.getElementById('userPoints').innerText = points;
-      localStorage.setItem('cdo_points', points);
-    }
-
-    const quizData = [
-      { q: "Quem construiu a arca segundo a ordem de Deus?", opts: ["Moisés", "Noé", "Abraão"], ans: 1 },
-      { q: "Qual foi o gigante derrotado pelo jovem Davi?", opts: ["Golias", "Sansão", "Saul"], ans: 0 },
-      { q: "Em que cidade Jesus nasceu?", opts: ["Nazaré", "Jerusalém", "Belém"], ans: 2 }
-    ];
-    let currentQuiz = 0;
-
-    function loadQuiz() {
-      const item = quizData[currentQuiz];
-      document.getElementById('quizQuestion').innerText = item.q;
-      const optsDiv = document.getElementById('quizOptions');
-      optsDiv.innerHTML = '';
-      document.getElementById('quizFeedback').innerText = '';
-
-      item.opts.forEach((opt, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'quiz-option';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(idx);
-        optsDiv.appendChild(btn);
-      });
-    }
-
-    function checkAnswer(selected) {
-      const item = quizData[currentQuiz];
-      const fb = document.getElementById('quizFeedback');
-      if (selected === item.ans) {
-        fb.style.color = '#10B981';
-        fb.innerText = "✅ Resposta certa! +20 pontos adicionados!";
-        addPoints(20);
-      } else {
-        fb.style.color = '#EF4444';
-        fb.innerText = "❌ Não foi desta vez! Tente a próxima.";
-      }
-      setTimeout(() => {
-        currentQuiz = (currentQuiz + 1) % quizData.length;
-        loadQuiz();
-      }, 1800);
-    }
-    loadQuiz();
-
-    // COMPARTILHAR
-    function shareApp() {
-      addPoints(50);
-      alert("Link da Estação CDO copiado! Ganhou +50 pontos por partilhar com os irmãos.");
-    }
-
-    // MODAL DE FOTOS
-    function openPhotoModal(imgSrc, caption) {
-      document.getElementById('modalImg').src = imgSrc;
-      document.getElementById('modalCaption').innerText = caption;
-      document.getElementById('photoModal').style.display = 'flex';
-    }
-    function closePhotoModal() {
-      document.getElementById('photoModal').style.display = 'none';
-    }
-
-    // OUVINTES ONLINE
-    function updateListeners() {
-      const countEl = document.getElementById('listenerCount');
-      if (countEl) countEl.innerText = Math.floor(Math.random
+    .dock-item.active { color: var(--accent-color); }
+    .dock-item.active .dock-icon { transform:
