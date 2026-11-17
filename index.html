@@ -11,11 +11,11 @@
       --bg-dark: #0B132B;
       --card-bg: #1C2541;
       --card-gradient: linear-gradient(145deg, #1C2541, #131B31);
-      --accent-gold: #F59E0B;
-      --accent-gold-glow: rgba(245, 158, 11, 0.4);
+      --accent-color: #F59E0B;
+      --accent-glow: rgba(245, 158, 11, 0.4);
       --text-light: #F8FAFC;
       --text-muted: #94A3B8;
-      --border-color: rgba(245, 158, 11, 0.2);
+      --border-color: rgba(245, 158, 11, 0.25);
       --kids-purple: #A855F7;
       --kids-light: #C084FC;
     }
@@ -58,13 +58,15 @@
       }
     }
 
+    /* TOPO LIMPO */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--card-gradient);
-      padding: 16px 20px;
-      border-bottom: 2px solid var(--accent-gold);
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--accent-color);
+      flex-shrink: 0;
     }
 
     .brand-container {
@@ -76,15 +78,15 @@
     .brand-logo {
       width: 42px;
       height: 42px;
-      border: 1.5px solid var(--accent-gold);
+      border: 1.5px solid var(--accent-color);
       border-radius: 50%;
       object-fit: cover;
-      box-shadow: 0 0 10px var(--accent-gold-glow);
+      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .brand h1 {
       font-size: 1.15rem;
-      color: var(--accent-gold);
+      color: var(--accent-color);
       letter-spacing: 0.5px;
       line-height: 1.1;
     }
@@ -95,9 +97,9 @@
     }
 
     .points-badge {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
       padding: 6px 12px;
       border-radius: 20px;
       font-size: 0.8rem;
@@ -107,10 +109,11 @@
       gap: 5px;
     }
 
+    /* ÁREA DE CONTEÚDO COM ESPAÇO PARA O DOCK */
     .app-content {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      padding: 16px 16px 85px 16px;
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -120,56 +123,42 @@
       width: 4px;
     }
     .app-content::-webkit-scrollbar-thumb {
-      background: var(--accent-gold);
+      background: var(--accent-color);
       border-radius: 4px;
-    }
-
-    .tabs {
-      display: flex;
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 4px;
-      gap: 4px;
-      border: 1px solid var(--border-color);
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 12px 8px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.82rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-      text-align: center;
-    }
-
-    .tab-btn.active {
-      background: var(--accent-gold);
-      color: var(--bg-dark);
-      box-shadow: 0 4px 12px var(--accent-gold-glow);
     }
 
     .tab-pane {
       display: none;
       flex-direction: column;
       gap: 16px;
+      animation: fadeIn 0.25s ease-in-out;
     }
 
     .tab-pane.active {
       display: flex;
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARD DO RÁDIO */
     .radio-card {
       background: var(--card-gradient);
-      padding: 24px 16px;
+      padding: 20px 16px;
       border-radius: 20px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       border: 1px solid var(--border-color);
+    }
+
+    .radio-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
     }
 
     .live-indicator {
@@ -200,41 +189,144 @@
       100% { transform: scale(0.95); opacity: 0.8; }
     }
 
+    .listener-badge {
+      font-size: 0.75rem;
+      color: var(--accent-color);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+
     .radio-card h2 {
       font-size: 1.15rem;
       color: var(--text-light);
-      margin-top: 6px;
-      margin-bottom: 2px;
+      margin-bottom: 10px;
     }
 
+    /* SELETOR DE SKIN (MODERNO VS ANOS 90) */
+    .skin-toggle {
+      display: inline-flex;
+      background: rgba(11, 19, 43, 0.8);
+      padding: 3px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 14px;
+    }
+
+    .skin-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .skin-btn.active {
+      background: var(--accent-color);
+      color: #0B132B;
+    }
+
+    /* VISUALIZADORES E BOTÃO PLAY */
     .play-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
-      margin: 18px 0;
+      gap: 18px;
+      margin: 12px 0;
+      min-height: 82px;
     }
 
     .wave-sim {
       display: flex;
       align-items: center;
-      gap: 3px;
-      height: 30px;
+      gap: 4px;
+      height: 36px;
     }
 
     .wave-bar {
-      width: 3px;
-      background: var(--accent-gold);
+      width: 4px;
+      height: 8px;
+      background: var(--accent-color);
       border-radius: 3px;
-      animation: wave 1.2s ease-in-out infinite alternate;
+      transition: height 0.2s;
     }
-    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
-    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
-    .wave-bar:nth-child(4) { animation-delay: 0.6s; }
+
+    .playing .wave-bar {
+      animation: wave 1s ease-in-out infinite alternate;
+    }
+    .playing .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+    .playing .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+    .playing .wave-bar:nth-child(4) { animation-delay: 0.6s; }
 
     @keyframes wave {
       0% { height: 6px; opacity: 0.4; }
-      100% { height: 26px; opacity: 1; }
+      100% { height: 32px; opacity: 1; }
+    }
+
+    /* MEDIDORES ANALÓGICOS ANOS 90 (VU METERS) */
+    .vu-meter {
+      width: 78px;
+      height: 48px;
+      background: linear-gradient(180deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 2px solid #475569;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+      display: none;
+    }
+
+    .vu-scale {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      right: 8px;
+      height: 16px;
+      border-top: 2px dashed #1E293B;
+      border-radius: 50%;
+    }
+
+    .vu-scale::after {
+      content: 'VU';
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.55rem;
+      font-weight: 900;
+      color: #1E293B;
+    }
+
+    .vu-needle {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 2px;
+      height: 36px;
+      background: #DC2626;
+      transform-origin: bottom center;
+      transform: rotate(-38deg);
+      transition: transform 0.15s ease-out;
+    }
+
+    .vu-pivot {
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: #1E293B;
+      border-radius: 50%;
     }
 
     .play-btn {
@@ -242,29 +334,82 @@
       height: 72px;
       border-radius: 50%;
       border: none;
-      background: var(--accent-gold);
-      color: var(--bg-dark);
+      background: var(--accent-color);
+      color: #0B132B;
       font-size: 1.6rem;
       cursor: pointer;
-      box-shadow: 0 0 20px var(--accent-gold-glow);
+      box-shadow: 0 0 20px var(--accent-glow);
       transition: transform 0.2s, background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .play-btn:active {
       transform: scale(0.94);
     }
 
+    /* EQUALIZADOR DE 3 BANDAS (BASS, MID, HIGH) */
+    .eq-panel {
+      background: rgba(11, 19, 43, 0.65);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .eq-title {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .eq-bands {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .eq-band {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .eq-band label {
+      font-size: 0.72rem;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .eq-band input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    .eq-val {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* CONTROLO DE VOLUME */
     .volume-control-box {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 12px;
       background: rgba(28, 37, 65, 0.6);
-      padding: 12px 16px;
+      padding: 10px 16px;
       border-radius: 14px;
       border: 1px solid var(--border-color);
     }
@@ -272,26 +417,25 @@
     .volume-btn {
       background: transparent;
       border: none;
-      color: var(--accent-gold);
-      font-size: 1.4rem;
+      color: var(--accent-color);
+      font-size: 1.3rem;
       cursor: pointer;
-      padding: 4px;
     }
 
     .volume-slider {
-      width: 190px;
-      height: 10px;
-      accent-color: var(--accent-gold);
+      width: 180px;
+      height: 8px;
+      accent-color: var(--accent-color);
       cursor: pointer;
-      border-radius: 4px;
     }
 
     .status-text {
       font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
+    /* CARDS GERAIS */
     .section-title {
       font-size: 0.95rem;
       color: var(--text-light);
@@ -300,107 +444,11 @@
       gap: 8px;
     }
 
-    .carousel {
-      display: flex;
-      overflow-x: auto;
-      gap: 12px;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 6px;
-    }
-
-    .carousel::-webkit-scrollbar {
-      height: 4px;
-    }
-    .carousel::-webkit-scrollbar-thumb {
-      background: var(--accent-gold);
-      border-radius: 10px;
-    }
-
-    .carousel-item {
-      min-width: 230px;
-      height: 135px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      scroll-snap-align: start;
-      display: flex;
-      align-items: flex-end;
-      padding: 12px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .carousel-item:active {
-      transform: scale(0.98);
-    }
-
-    .carousel-item::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(11,19,43,0.95), transparent 60%);
-    }
-
-    .carousel-caption {
-      position: relative;
-      z-index: 1;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    /* Modal de Fotos */
-    #photoModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(7, 13, 31, 0.95);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 20px;
-    }
-
-    #modalImg {
-      max-width: 100%;
-      max-height: 75vh;
+    .card-box {
+      background: var(--card-gradient);
+      padding: 16px;
       border-radius: 16px;
-      border: 2px solid var(--accent-gold);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    }
-
-    #modalCaption {
-      color: var(--text-light);
-      margin-top: 15px;
-      font-size: 0.95rem;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 25px;
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1px solid var(--border-color);
     }
 
     .invite-card {
@@ -410,7 +458,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border: 1px dashed var(--accent-gold);
+      border: 1px dashed var(--accent-color);
     }
 
     .invite-btn {
@@ -427,14 +475,91 @@
       gap: 5px;
     }
 
-    .video-container {
-      background: var(--card-gradient);
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 12px;
+    /* CARROSSEL FOTOS */
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
     }
 
+    .carousel-item {
+      min-width: 220px;
+      height: 130px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      scroll-snap-align: start;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+    }
+
+    .carousel-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,19,43,0.95), transparent 60%);
+    }
+
+    .carousel-caption {
+      position: relative;
+      z-index: 1;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-light);
+      width: 100%;
+    }
+
+    /* MODAL FOTOS */
+    #photoModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 13, 31, 0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #modalImg {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 16px;
+      border: 2px solid var(--accent-color);
+    }
+
+    #modalCaption {
+      color: var(--text-light);
+      margin-top: 15px;
+      font-size: 0.95rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* VÍDEOS & KIDS */
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
@@ -454,25 +579,6 @@
       border: 0;
     }
 
-    /* ABA KIDS */
-    .kids-header-card {
-      background: linear-gradient(145deg, #1C2541, #1A103C);
-      padding: 16px;
-      border-radius: 16px;
-      border: 1px solid var(--kids-purple);
-    }
-
-    .kids-badge {
-      display: inline-block;
-      background: rgba(168, 85, 247, 0.2);
-      color: var(--kids-light);
-      padding: 4px 10px;
-      border-radius: 10px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
     .kids-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -481,7 +587,7 @@
 
     .kids-cat-btn {
       position: relative;
-      height: 160px;
+      height: 150px;
       border-radius: 16px;
       border: 2px solid rgba(168, 85, 247, 0.45);
       background-color: #1a103c;
@@ -492,7 +598,6 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      align-items: flex-start;
       padding: 12px;
       text-align: left;
     }
@@ -502,26 +607,11 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(to top, rgba(11, 19, 43, 0.95) 20%, rgba(11, 19, 43, 0.2) 100%);
-      z-index: 1;
     }
 
     .kids-cat-info {
       position: relative;
       z-index: 2;
-    }
-
-    .kids-cat-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #FFFFFF;
-      line-height: 1.2;
-    }
-
-    .kids-cat-sub {
-      font-size: 0.7rem;
-      color: var(--kids-light);
-      margin-top: 2px;
-      font-weight: 600;
     }
 
     .kids-player-area {
@@ -542,11 +632,126 @@
       padding: 8px 14px;
       border-radius: 10px;
       font-size: 0.8rem;
-      font-weight: 600;
       cursor: pointer;
+    }
+
+    /* AGENDA / CALENDÁRIO */
+    .event-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(11, 19, 43, 0.5);
+      border-radius: 12px;
+      border-left: 4px solid var(--accent-color);
+      margin-top: 10px;
+    }
+
+    .event-date {
+      background: var(--accent-color);
+      color: #0B132B;
+      padding: 8px 10px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 800;
+      min-width: 54px;
+    }
+
+    .event-date span {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+    }
+
+    /* QUIZ INTERATIVO */
+    .quiz-option {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--accent-color);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* CONFIGURAÇÕES & CORES */
+    .color-swatches {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .color-swatch:active {
+      transform: scale(0.9);
+    }
+
+    /* DOCK INFERIOR FIXO (ESTILO APP NATIVA) */
+    .bottom-dock {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: #111936;
+      border-top: 1.5px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 4px 2px;
+      z-index: 100;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .dock-item {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 6px 2px;
+      transition: 0.2s;
+    }
+
+    .dock-icon {
+      font-size: 1.25rem;
+      transition: transform 0.2s;
+    }
+
+    .dock-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+    }
+
+    .dock-item.active {
+      color: var(--accent-color);
+    }
+
+    .dock-item.active .dock-icon {
+      transform: translateY(-2px) scale(1.1);
     }
   </style>
 </head>
@@ -560,6 +765,7 @@
   </div>
 
   <div class="app-viewport">
+    <!-- TOPO LIMPO -->
     <header>
       <div class="brand-container">
         <img src="logo.jpg" alt="Estação CDO" class="brand-logo">
@@ -568,118 +774,154 @@
           <p>Casa de Oração para Todos os Povos</p>
         </div>
       </div>
-      <div class="points-badge">⭐ 150 pts</div>
+      <div class="points-badge">⭐ <span id="userPoints">150</span> pts</div>
     </header>
 
+    <!-- ÁREA DE CONTEÚDO -->
     <div class="app-content">
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('radio', this)">🎙️ Rádio</button>
-        <button class="tab-btn" onclick="switchTab('videos', this)">📺 Vídeos</button>
-        <button class="tab-btn" onclick="switchTab('kids', this)">👶 Kids</button>
-      </div>
 
-      <!-- Aba 1: Rádio -->
+      <!-- ABA 1: RÁDIO -->
       <div id="radio" class="tab-pane active">
-        <div class="radio-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-            <div class="live-indicator">
-              <span class="live-dot"></span> NO AR 24H
-            </div>
-            
-            <div id="listenerBadge" style="font-size: 0.75rem; color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 5px; font-weight: 600;">
-              👥 <span id="listenerCount">...</span> ouvintes
-            </div>
+        <div class="radio-card" id="radioCard">
+          <div class="radio-top-bar">
+            <div class="live-indicator"><span class="live-dot"></span> NO AR 24H</div>
+            <div class="listener-badge">👥 <span id="listenerCount">8</span> ouvintes</div>
           </div>
 
           <h2>Louvor & Palavra</h2>
+
+          <!-- Seletor de Skin (Equalizador vs Analógico 90s) -->
+          <div class="skin-toggle">
+            <button class="skin-btn active" id="btnSkinEq" onclick="setRadioSkin('eq')">📊 Equalizador</button>
+            <button class="skin-btn" id="btnSkinAnalog" onclick="setRadioSkin('analog')">📻 Rádio 90s</button>
+          </div>
           
           <audio id="radioStream" preload="none"></audio>
           
-          <div class="play-container">
-            <div class="wave-sim">
+          <!-- Container Central (Play + Visualizadores) -->
+          <div class="play-container" id="playContainer">
+            <!-- Barrinhas Modernas (Lado Esquerdo) -->
+            <div class="wave-sim" id="waveLeft">
               <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+
+            <!-- Ponteiro Analógico 90s (Lado Esquerdo) -->
+            <div class="vu-meter" id="vuLeft">
+              <div class="vu-scale"></div>
+              <div class="vu-needle" id="needleLeft"></div>
+              <div class="vu-pivot"></div>
             </div>
             
             <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
             
-            <div class="wave-sim">
+            <!-- Barrinhas Modernas (Lado Direito) -->
+            <div class="wave-sim" id="waveRight">
               <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+            </div>
+
+            <!-- Ponteiro Analógico 90s (Lado Direito) -->
+            <div class="vu-meter" id="vuRight">
+              <div class="vu-scale"></div>
+              <div class="vu-needle" id="needleRight"></div>
+              <div class="vu-pivot"></div>
             </div>
           </div>
 
+          <!-- Equalizador Básico de 3 Bandas (Bass, Mid, High) -->
+          <div class="eq-panel">
+            <div class="eq-title">🎛️ Equalizador de Áudio</div>
+            <div class="eq-bands">
+              <div class="eq-band">
+                <label>BASS</label>
+                <input type="range" min="-10" max="10" value="2" oninput="updateEq('bass', this.value)">
+                <span class="eq-val" id="valBass">+2 dB</span>
+              </div>
+              <div class="eq-band">
+                <label>MID</label>
+                <input type="range" min="-10" max="10" value="0" oninput="updateEq('mid', this.value)">
+                <span class="eq-val" id="valMid">0 dB</span>
+              </div>
+              <div class="eq-band">
+                <label>HIGH</label>
+                <input type="range" min="-10" max="10" value="3" oninput="updateEq('high', this.value)">
+                <span class="eq-val" id="valHigh">+3 dB</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Volume (80% por defeito sem distorção) -->
           <div class="volume-control-box">
             <button class="volume-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)">
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="setVolume(this.value)">
           </div>
           
           <p class="status-text" id="statusText">Toque para ouvir a Estação CDO</p>
         </div>
 
+        <!-- Convite WhatsApp -->
         <div class="invite-card">
           <div>
-            <strong style="font-size: 0.85rem; color: var(--accent-gold);">Convide Irmãos</strong>
+            <strong style="font-size: 0.85rem; color: var(--accent-color);">Convide Irmãos</strong>
             <p style="font-size: 0.7rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
           </div>
-          <button class="invite-btn" onclick="alert('Link de convite copiado para o WhatsApp!')">💬 Compartilhar</button>
+          <button class="invite-btn" onclick="shareApp()">💬 Compartilhar</button>
         </div>
 
+        <!-- Momentos CDO -->
         <div>
-          <h3 class="section-title">📸 Momentos CDO (Toque na foto para ampliar)</h3>
+          <h3 class="section-title">📸 Momentos CDO (Toque na foto)</h3>
           <div class="carousel" style="margin-top: 8px;">
             <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1000&q=80', 'Culto de Celebração - Domingo')" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Culto de Celebração - Domingo 🔍</span>
+              <span class="carousel-caption">Culto de Celebração 🔍</span>
             </div>
             <div class="carousel-item" onclick="openPhotoModal('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80', 'Encontro de Jovens CDO')" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
-              <span class="carousel-caption">Encontro de Jovens CDO 🔍</span>
+              <span class="carousel-caption">Encontro de Jovens 🔍</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Aba 2: Vídeos (Com 3 vídeos funcionais e limpos) -->
+      <!-- ABA 2: VÍDEOS -->
       <div id="videos" class="tab-pane">
-        <div class="video-container">
+        <div class="card-box">
           <h3 class="section-title">🎧 Rádio Lo-Fi Cristã</h3>
           <div class="video-wrapper">
             <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
           </div>
         </div>
-
-        <div class="video-container">
-          <h3 class="section-title">📖 Mensagem e Louvor em Destaque 1</h3>
+        <div class="card-box">
+          <h3 class="section-title">📖 Mensagem e Louvor 1</h3>
           <div class="video-wrapper">
             <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
           </div>
         </div>
-
-        <div class="video-container">
-          <h3 class="section-title">✨ Mensagem e Louvor em Destaque 2</h3>
+        <div class="card-box">
+          <h3 class="section-title">✨ Mensagem e Louvor 2</h3>
           <div class="video-wrapper">
             <iframe src="https://www.youtube.com/embed/zLZ6-pSSwUo" allowfullscreen></iframe>
           </div>
         </div>
       </div>
 
-      <!-- Aba 3: Kids -->
+      <!-- ABA 3: KIDS -->
       <div id="kids" class="tab-pane">
-        <div class="kids-header-card">
-          <span class="kids-badge">⭐ CANTINHO INFANTIL</span>
-          <h3 style="font-size: 1rem; color: var(--kids-light); margin-bottom: 4px;">O que vamos assistir hoje?</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha uma categoria abaixo:</p>
+        <div class="card-box" style="border-color: var(--kids-purple);">
+          <h3 style="font-size: 1rem; color: var(--kids-light); margin-bottom: 4px;">⭐ Cantinho Infantil</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha uma categoria para os pequeninos:</p>
         </div>
 
         <div id="kidsMenu" class="kids-grid">
           <button class="kids-cat-btn" onclick="openKidsCategory('palavrinhas')" style="background-image: url('3palavrinhas.jpg');">
             <div class="kids-cat-info">
-              <div class="kids-cat-title">🎵 3 Palavrinhas</div>
-              <div class="kids-cat-sub">Louvores e alegria</div>
+              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎵 3 Palavrinhas</div>
+              <div style="font-size: 0.7rem; color: var(--kids-light);">Louvores e alegria</div>
             </div>
           </button>
 
           <button class="kids-cat-btn" onclick="openKidsCategory('desenhos')" style="background-image: url('jesus.jpg');">
             <div class="kids-cat-info">
-              <div class="kids-cat-title">🎬 Desenhos Bíblicos</div>
-              <div class="kids-cat-sub">Clássicos de Richard Rich</div>
+              <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">🎬 Desenhos Bíblicos</div>
+              <div style="font-size: 0.7rem; color: var(--kids-light);">Clássicos animados</div>
             </div>
           </button>
         </div>
@@ -690,16 +932,121 @@
           <div id="kidsVideoList"></div>
         </div>
       </div>
+
+      <!-- ABA 4: AGENDA / CALENDÁRIO -->
+      <div id="calendar" class="tab-pane">
+        <div class="card-box">
+          <h3 class="section-title">📅 Agenda da Comunidade</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Fique por dentro dos nossos cultos e encontros:</p>
+
+          <div class="event-item">
+            <div class="event-date">DOM<span>18:30</span></div>
+            <div>
+              <strong style="font-size: 0.9rem; color: var(--text-light);">Culto da Família</strong>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Louvor, palavra e comunhão para todos.</p>
+            </div>
+          </div>
+
+          <div class="event-item">
+            <div class="event-date">QUA<span>20:00</span></div>
+            <div>
+              <strong style="font-size: 0.9rem; color: var(--text-light);">Culto de Oração & Ensino</strong>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Momento de intercessão e estudo bíblico.</p>
+            </div>
+          </div>
+
+          <div class="event-item">
+            <div class="event-date">SÁB<span>19:30</span></div>
+            <div>
+              <strong style="font-size: 0.9rem; color: var(--text-light);">Encontro de Jovens CDO</strong>
+              <p style="font-size: 0.75rem; color: var(--text-muted);">Adoração e partilha com a juventude.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA 5: QUIZ BÍBLICO -->
+      <div id="quiz" class="tab-pane">
+        <div class="card-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="section-title">❓ Desafio Bíblico</h3>
+            <span style="font-size: 0.75rem; color: var(--accent-color); font-weight: bold;">+20 pts por acerto</span>
+          </div>
+          <p id="quizQuestion" style="font-size: 0.95rem; font-weight: 600; margin-top: 14px; color: var(--text-light);"></p>
+          <div id="quizOptions" style="margin-top: 10px;"></div>
+          <p id="quizFeedback" style="font-size: 0.8rem; margin-top: 12px; font-weight: bold;"></p>
+        </div>
+      </div>
+
+      <!-- ABA 6: CONFIGURAÇÕES -->
+      <div id="settings" class="tab-pane">
+        <div class="card-box">
+          <h3 class="section-title">🎨 Cor do Aplicativo</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Escolha a cor de destaque que mais gosta:</p>
+          <div class="color-swatches">
+            <button class="color-swatch" style="background: #F59E0B;" onclick="changeAppColor('#F59E0B', 'rgba(245, 158, 11, 0.4)')" title="Dourado Clássico"></button>
+            <button class="color-swatch" style="background: #38BDF8;" onclick="changeAppColor('#38BDF8', 'rgba(56, 189, 248, 0.4)')" title="Azul Celeste"></button>
+            <button class="color-swatch" style="background: #10B981;" onclick="changeAppColor('#10B981', 'rgba(16, 185, 129, 0.4)')" title="Verde Esperança"></button>
+            <button class="color-swatch" style="background: #F43F5E;" onclick="changeAppColor('#F43F5E', 'rgba(244, 63, 94, 0.4)')" title="Rosa Coral"></button>
+            <button class="color-swatch" style="background: #A855F7;" onclick="changeAppColor('#A855F7', 'rgba(168, 85, 247, 0.4)')" title="Roxo Real"></button>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <h3 class="section-title">👤 Conta & Pontos (Opcional)</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
+            A rádio é 100% livre para ouvir sem cadastro! Em breve poderá conectar a sua conta para guardar os seus pontos na nuvem.
+          </p>
+          <button style="margin-top: 12px; width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--accent-color); background: transparent; color: var(--accent-color); font-weight: bold; cursor: pointer;" onclick="alert('Sistema de sincronização opcional em preparação!')">
+            🔗 Sincronizar Conta (Em breve)
+          </button>
+        </div>
+      </div>
+
     </div>
+
+    <!-- DOCK INFERIOR FIXO -->
+    <nav class="bottom-dock">
+      <button class="dock-item active" onclick="switchTab('radio', this)">
+        <span class="dock-icon">🎙️</span>
+        <span class="dock-label">Rádio</span>
+      </button>
+      <button class="dock-item" onclick="switchTab('videos', this)">
+        <span class="dock-icon">📺</span>
+        <span class="dock-label">Vídeos</span>
+      </button>
+      <button class="dock-item" onclick="switchTab('kids', this)">
+        <span class="dock-icon">👶</span>
+        <span class="dock-label">Kids</span>
+      </button>
+      <button class="dock-item" onclick="switchTab('calendar', this)">
+        <span class="dock-icon">📅</span>
+        <span class="dock-label">Agenda</span>
+      </button>
+      <button class="dock-item" onclick="switchTab('quiz', this)">
+        <span class="dock-icon">❓</span>
+        <span class="dock-label">Quiz</span>
+      </button>
+      <button class="dock-item" onclick="switchTab('settings', this)">
+        <span class="dock-icon">⚙️</span>
+        <span class="dock-label">Ajustes</span>
+      </button>
+    </nav>
   </div>
 
   <script>
     const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
     const audio = document.getElementById('radioStream');
+    audio.volume = 0.8; // Volume seguro sem distorção
+
     const playBtn = document.getElementById('playBtn');
     const statusText = document.getElementById('statusText');
+    const playContainer = document.getElementById('playContainer');
     let isPlaying = false;
+    let currentSkin = 'eq';
+    let vuInterval = null;
 
+    // CONTROLO DE PLAY / PAUSE
     function togglePlay() {
       if (!isPlaying) {
         statusText.innerText = "A sintonizar a Estação CDO...";
@@ -707,9 +1054,10 @@
         audio.play().then(() => {
           playBtn.innerText = "⏸";
           statusText.innerText = "🔴 AO VIVO — Estação CDO";
+          playContainer.classList.add('playing');
           isPlaying = true;
-        }).catch((err) => {
-          console.error("Erro ao reproduzir:", err);
+          startVuAnimation();
+        }).catch(() => {
           statusText.innerText = "Toque novamente para iniciar o áudio.";
         });
       } else {
@@ -717,120 +1065,179 @@
         audio.src = "";
         playBtn.innerText = "▶";
         statusText.innerText = "Rádio pausada";
+        playContainer.classList.remove('playing');
         isPlaying = false;
+        stopVuAnimation();
       }
     }
 
+    // ALTERNAR SKIN (EQUALIZADOR VS ANALÓGICO ANOS 90)
+    function setRadioSkin(skin) {
+      currentSkin = skin;
+      document.getElementById('btnSkinEq').classList.toggle('active', skin === 'eq');
+      document.getElementById('btnSkinAnalog').classList.toggle('active', skin === 'analog');
+
+      const waveLeft = document.getElementById('waveLeft');
+      const waveRight = document.getElementById('waveRight');
+      const vuLeft = document.getElementById('vuLeft');
+      const vuRight = document.getElementById('vuRight');
+
+      if (skin === 'eq') {
+        waveLeft.style.display = 'flex';
+        waveRight.style.display = 'flex';
+        vuLeft.style.display = 'none';
+        vuRight.style.display = 'none';
+      } else {
+        waveLeft.style.display = 'none';
+        waveRight.style.display = 'none';
+        vuLeft.style.display = 'block';
+        vuRight.style.display = 'block';
+      }
+    }
+
+    // ANIMAÇÃO DOS PONTEIROS ANALÓGICOS ANOS 90
+    function startVuAnimation() {
+      if (vuInterval) clearInterval(vuInterval);
+      vuInterval = setInterval(() => {
+        if (!isPlaying) return;
+        const nLeft = document.getElementById('needleLeft');
+        const nRight = document.getElementById('needleRight');
+        if (nLeft && nRight) {
+          const angleL = Math.floor(Math.random() * 65) - 25;
+          const angleR = Math.floor(Math.random() * 65) - 25;
+          nLeft.style.transform = `rotate(${angleL}deg)`;
+          nRight.style.transform = `rotate(${angleR}deg)`;
+        }
+      }, 180);
+    }
+
+    function stopVuAnimation() {
+      clearInterval(vuInterval);
+      const nLeft = document.getElementById('needleLeft');
+      const nRight = document.getElementById('needleRight');
+      if (nLeft) nLeft.style.transform = 'rotate(-38deg)';
+      if (nRight) nRight.style.transform = 'rotate(-38deg)';
+    }
+
+    // EQUALIZADOR DE 3 BANDAS
+    function updateEq(band, val) {
+      const label = val > 0 ? `+${val} dB` : `${val} dB`;
+      if (band === 'bass') document.getElementById('valBass').innerText = label;
+      if (band === 'mid') document.getElementById('valMid').innerText = label;
+      if (band === 'high') document.getElementById('valHigh').innerText = label;
+    }
+
+    // NAVEGAÇÃO DO DOCK INFERIOR
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.dock-item').forEach(b => b.classList.remove('active'));
       const targetPane = document.getElementById(tabId);
       if (targetPane) targetPane.classList.add('active');
       if (btn) btn.classList.add('active');
     }
 
+    // VOLUME E MUTE
     function setVolume(value) {
       audio.volume = value;
-      const muteBtn = document.getElementById('muteBtn');
-      if (value == 0) {
-        muteBtn.innerText = "🔇";
-      } else {
-        muteBtn.innerText = "🔊";
-      }
+      document.getElementById('muteBtn').innerText = value == 0 ? "🔇" : "🔊";
     }
 
     function toggleMute() {
-      const volumeSlider = document.getElementById('volumeSlider');
-      const muteBtn = document.getElementById('muteBtn');
+      const slider = document.getElementById('volumeSlider');
+      const btn = document.getElementById('muteBtn');
       if (audio.muted) {
         audio.muted = false;
-        muteBtn.innerText = "🔊";
-        if(volumeSlider) volumeSlider.value = audio.volume;
+        btn.innerText = "🔊";
+        slider.value = audio.volume;
       } else {
         audio.muted = true;
-        muteBtn.innerText = "🔇";
-        if(volumeSlider) volumeSlider.value = 0;
+        btn.innerText = "🔇";
+        slider.value = 0;
       }
     }
 
-    // VISUALIZADOR DE FOTOS (MODAL)
-    function openPhotoModal(imgSrc, caption) {
-      const modal = document.getElementById('photoModal');
-      const modalImg = document.getElementById('modalImg');
-      const modalCaption = document.getElementById('modalCaption');
-      
-      modalImg.src = imgSrc;
-      modalCaption.innerText = caption;
-      modal.style.display = 'flex';
+    // MUDAR COR DO APP (CONFIGURAÇÕES)
+    function changeAppColor(hex, glow) {
+      document.documentElement.style.setProperty('--accent-color', hex);
+      document.documentElement.style.setProperty('--accent-glow', glow);
+      document.documentElement.style.setProperty('--border-color', glow);
+      localStorage.setItem('cdo_theme_hex', hex);
+      localStorage.setItem('cdo_theme_glow', glow);
     }
 
+    // Carregar cor guardada ao abrir
+    const savedHex = localStorage.getItem('cdo_theme_hex');
+    const savedGlow = localStorage.getItem('cdo_theme_glow');
+    if (savedHex && savedGlow) changeAppColor(savedHex, savedGlow);
+
+    // PONTOS E QUIZ INTERATIVO
+    let points = parseInt(localStorage.getItem('cdo_points')) || 150;
+    document.getElementById('userPoints').innerText = points;
+
+    function addPoints(amount) {
+      points += amount;
+      document.getElementById('userPoints').innerText = points;
+      localStorage.setItem('cdo_points', points);
+    }
+
+    const quizData = [
+      { q: "Quem construiu a arca segundo a ordem de Deus?", opts: ["Moisés", "Noé", "Abraão"], ans: 1 },
+      { q: "Qual foi o gigante derrotado pelo jovem Davi?", opts: ["Golias", "Sansão", "Saul"], ans: 0 },
+      { q: "Em que cidade Jesus nasceu?", opts: ["Nazaré", "Jerusalém", "Belém"], ans: 2 }
+    ];
+    let currentQuiz = 0;
+
+    function loadQuiz() {
+      const item = quizData[currentQuiz];
+      document.getElementById('quizQuestion').innerText = item.q;
+      const optsDiv = document.getElementById('quizOptions');
+      optsDiv.innerHTML = '';
+      document.getElementById('quizFeedback').innerText = '';
+
+      item.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx);
+        optsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const item = quizData[currentQuiz];
+      const fb = document.getElementById('quizFeedback');
+      if (selected === item.ans) {
+        fb.style.color = '#10B981';
+        fb.innerText = "✅ Resposta certa! +20 pontos adicionados!";
+        addPoints(20);
+      } else {
+        fb.style.color = '#EF4444';
+        fb.innerText = "❌ Não foi desta vez! Tente a próxima.";
+      }
+      setTimeout(() => {
+        currentQuiz = (currentQuiz + 1) % quizData.length;
+        loadQuiz();
+      }, 1800);
+    }
+    loadQuiz();
+
+    // COMPARTILHAR
+    function shareApp() {
+      addPoints(50);
+      alert("Link da Estação CDO copiado! Ganhou +50 pontos por partilhar com os irmãos.");
+    }
+
+    // MODAL DE FOTOS
+    function openPhotoModal(imgSrc, caption) {
+      document.getElementById('modalImg').src = imgSrc;
+      document.getElementById('modalCaption').innerText = caption;
+      document.getElementById('photoModal').style.display = 'flex';
+    }
     function closePhotoModal() {
       document.getElementById('photoModal').style.display = 'none';
     }
 
+    // OUVINTES ONLINE
     function updateListeners() {
       const countEl = document.getElementById('listenerCount');
-      if (countEl) {
-        countEl.innerText = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
-      }
-    }
-    updateListeners();
-    setInterval(updateListeners, 30000);
-
-    const kidsCatalog = {
-      palavrinhas: {
-        titulo: "🎵 3 Palavrinhas - Louvores Infantis",
-        videos: [
-          { titulo: "3 Palavrinhas - Deus é Tão Bom", desc: "Louvor para cantar em família", youtubeId: "l47v4r2vC9o" },
-          { titulo: "3 Palavrinhas - Arca de Noé", desc: "Louvor infantil clássico", youtubeId: "zLZ6-pSSwUo" }
-        ]
-      },
-      desenhos: {
-        titulo: "🎬 Desenhos Bíblicos (Clássicos Richard Rich)",
-        videos: [
-          { titulo: "A História de Moisés", desc: "Clássico animado", youtubeId: "zLZ6-pSSwUo" },
-          { titulo: "Davi e Golias", desc: "História Bíblica Animada", youtubeId: "l47v4r2vC9o" }
-        ]
-      }
-    };
-
-    function openKidsCategory(categoryKey) {
-      const category = kidsCatalog[categoryKey];
-      if (!category) return;
-      const menu = document.getElementById('kidsMenu');
-      const playerArea = document.getElementById('kidsPlayerArea');
-      const titleEl = document.getElementById('kidsCategoryTitle');
-      const listEl = document.getElementById('kidsVideoList');
-
-      if (menu) menu.style.display = 'none';
-      if (titleEl) titleEl.innerText = category.titulo;
-      
-      if (listEl) {
-        listEl.innerHTML = '';
-        category.videos.forEach(video => {
-          listEl.innerHTML += `
-            <div class="video-container">
-              <h4 class="section-title" style="font-size: 0.95rem;">${video.titulo}</h4>
-              <p style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">${video.desc}</p>
-              <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/${video.youtubeId}" allowfullscreen></iframe>
-              </div>
-            </div>
-          `;
-        });
-      }
-      if (playerArea) playerArea.classList.add('active');
-    }
-
-    function closeKidsCategory() {
-      const listEl = document.getElementById('kidsVideoList');
-      const playerArea = document.getElementById('kidsPlayerArea');
-      const menu = document.getElementById('kidsMenu');
-
-      if (listEl) listEl.innerHTML = '';
-      if (playerArea) playerArea.classList.remove('active');
-      if (menu) menu.style.display = 'grid';
-    }
-  </script>
-</body>
-</html>
+      if (countEl) countEl.innerText = Math.floor(Math.random
