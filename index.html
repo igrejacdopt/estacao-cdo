@@ -65,6 +65,8 @@
       background: var(--card-gradient);
       padding: 12px 20px;
       border-bottom: 2px solid var(--accent-gold);
+      position: relative;
+      z-index: 10;
     }
 
     .brand-container {
@@ -110,10 +112,12 @@
     .app-content {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 16px 95px 16px;
+      padding: 12px 16px 105px 16px;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      position: relative;
+      z-index: 1;
     }
 
     .app-content::-webkit-scrollbar {
@@ -134,23 +138,27 @@
       display: flex;
     }
 
-    /* DOCK EM ROLETA (SCROLL HORIZONTAL SUAVE) */
+    /* DOCK EM ROLETA CIRCULAR CORRIGIDO */
     .bottom-dock {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
+      height: 84px;
       background: rgba(19, 27, 49, 0.98);
       backdrop-filter: blur(12px);
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 14px;
+      padding: 8px 16px;
       overflow-x: auto;
+      overflow-y: hidden;
       scroll-snap-type: x mandatory;
-      z-index: 1000;
+      z-index: 2000;
       box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+      touch-action: pan-x;
+      -webkit-overflow-scrolling: touch;
     }
 
     .bottom-dock::-webkit-scrollbar {
@@ -161,57 +169,68 @@
       .bottom-dock {
         border-bottom-left-radius: 24px;
         border-bottom-right-radius: 24px;
-        justify-content: center;
+        justify-content: flex-start;
       }
     }
 
     .dock-item {
       flex: 0 0 72px;
+      height: 58px;
       scroll-snap-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      justify-content: center;
+      gap: 3px;
       border: none;
       background: transparent;
       color: var(--text-muted);
       font-size: 0.65rem;
       font-weight: 600;
       cursor: pointer;
-      padding: 6px 4px;
+      padding: 4px;
       border-radius: 12px;
-      transition: 0.3s;
+      transition: background 0.2s, color 0.2s;
+      user-select: none;
+      position: relative;
+      z-index: 2001;
     }
 
     .dock-item .dock-icon {
       font-size: 1.2rem;
+      pointer-events: none;
+    }
+
+    .dock-item span {
+      pointer-events: none;
     }
 
     .dock-item.active {
       color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.12);
+      background: rgba(245, 158, 11, 0.14);
     }
 
-    /* BOTÃO RÁDIO AO CENTRO */
+    /* BOTÃO RÁDIO AO CENTRO DA ROLETA */
     .dock-radio-center {
-      flex: 0 0 78px;
-      scroll-snap-align: center;
-      position: relative;
-      top: -8px;
-      background: var(--accent-gold);
-      color: var(--bg-dark);
+      flex: 0 0 64px;
       width: 64px;
       height: 64px;
+      scroll-snap-align: center;
+      background: var(--accent-gold);
+      color: var(--bg-dark);
       border-radius: 50%;
       border: 3px solid var(--bg-dark);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 22px var(--accent-gold-glow);
+      box-shadow: 0 0 18px var(--accent-gold-glow);
       cursor: pointer;
       font-weight: bold;
-      transition: transform 0.2s;
+      transition: transform 0.15s;
+      user-select: none;
+      position: relative;
+      z-index: 2002;
     }
 
     .dock-radio-center:active {
@@ -219,13 +238,15 @@
     }
 
     .dock-radio-center .dock-icon {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
+      pointer-events: none;
     }
 
     .dock-radio-center span:not(.dock-icon) {
       font-size: 0.55rem;
       line-height: 1;
       font-weight: 800;
+      pointer-events: none;
     }
 
     /* CARDS DE CONTEÚDO */
@@ -325,6 +346,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       z-index: 5;
     }
 
@@ -584,6 +606,7 @@
       display: flex;
       align-items: center;
       gap: 5px;
+      position: relative;
       z-index: 5;
     }
 
@@ -668,6 +691,7 @@
     .kids-cat-info {
       position: relative;
       z-index: 2;
+      pointer-events: none;
     }
 
     .kids-cat-title {
@@ -765,14 +789,14 @@
         </div>
 
         <div id="kidsMenu" class="kids-grid">
-          <button class="kids-cat-btn" data-kids="palavrinhas" style="background-image: url('3palavrinhas.jpg');">
+          <button type="button" class="kids-cat-btn" data-kids="palavrinhas" style="background-image: url('3palavrinhas.jpg');">
             <div class="kids-cat-info">
               <div class="kids-cat-title">🎵 3 Palavrinhas</div>
               <div class="kids-cat-sub">Louvores e alegria</div>
             </div>
           </button>
 
-          <button class="kids-cat-btn" data-kids="desenhos" style="background-image: url('jesus.jpg');">
+          <button type="button" class="kids-cat-btn" data-kids="desenhos" style="background-image: url('jesus.jpg');">
             <div class="kids-cat-info">
               <div class="kids-cat-title">🎬 Desenhos Bíblicos</div>
               <div class="kids-cat-sub">Clássicos de Richard Rich</div>
@@ -781,13 +805,13 @@
         </div>
 
         <div id="kidsPlayerArea" class="kids-player-area">
-          <button class="kids-back-btn" id="kidsBackBtn">← Voltar às Categorias</button>
+          <button type="button" class="kids-back-btn" id="kidsBackBtn">← Voltar às Categorias</button>
           <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
           <div id="kidsVideoList"></div>
         </div>
       </div>
 
-      <!-- Aba 4: Rádio (Principal / Com Fotos e Mural de Avisos da Semana) -->
+      <!-- Aba 4: Rádio (Principal) -->
       <div id="radio" class="tab-pane active">
         <div class="radio-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
@@ -805,7 +829,7 @@
           <audio id="radioStream" crossorigin="anonymous" preload="none"></audio>
           
           <div class="play-container">
-            <button class="play-btn" id="playBtn">▶</button>
+            <button type="button" class="play-btn" id="playBtn">▶</button>
           </div>
 
           <div class="spectrum-container">
@@ -813,7 +837,7 @@
           </div>
 
           <div class="volume-control-box">
-            <button class="volume-btn" id="muteBtn">🔊</button>
+            <button type="button" class="volume-btn" id="muteBtn">🔊</button>
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8">
           </div>
           
@@ -825,7 +849,7 @@
             <strong style="font-size: 0.8rem; color: var(--accent-gold);">Convide Irmãos</strong>
             <p style="font-size: 0.65rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
           </div>
-          <button class="invite-btn" id="shareBtn">💬 Compartilhar</button>
+          <button type="button" class="invite-btn" id="shareBtn">💬 Compartilhar</button>
         </div>
 
         <div>
@@ -840,7 +864,7 @@
           </div>
         </div>
 
-        <!-- MURAL DE AVISOS DA SEMANA E EVENTOS (Logo abaixo das imagens) -->
+        <!-- MURAL DE AVISOS DA SEMANA E EVENTOS -->
         <div class="info-card" style="margin-top: 4px;">
           <h3 class="section-title">📢 Avisos da Semana & Eventos</h3>
           <p>Fique por dentro de tudo o que vai acontecer na nossa comunidade:</p>
@@ -864,7 +888,19 @@
         </div>
       </div>
 
-      <!-- Aba 6: Sobre -->
+      <!-- Aba 6: Comunidade -->
+      <div id="comunidade" class="tab-pane">
+        <div class="info-card">
+          <h3 class="section-title">💬 Comunidade CDO</h3>
+          <p>Um espaço de comunhão e partilha entre todos os ouvintes espalhados pelo mundo.</p>
+          <div style="background: rgba(28, 37, 65, 0.8); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-top: 6px;">
+            <p style="font-weight: bold; color: var(--accent-gold); margin-bottom: 4px;">Mural de Recados:</p>
+            <p>"A paz do Senhor a todos os irmãos que acompanham a programação da rádio!" — Família Domiciano</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 7: Sobre -->
       <div id="sobre" class="tab-pane">
         <div class="info-card">
           <h3 class="section-title">⛪ Quem Somos</h3>
@@ -873,7 +909,7 @@
         </div>
       </div>
 
-      <!-- Aba 7: Ajustes & Equalizador -->
+      <!-- Aba 8: Ajustes & Equalizador -->
       <div id="settings" class="tab-pane">
         <div class="settings-card">
           <h3 class="section-title">⚙️ Definições de Áudio</h3>
@@ -909,40 +945,44 @@
       </div>
     </div>
 
-    <!-- DOCK EM FORMATO DE ROLETA (7 ITENS: RÁDIO EXATAMENTE NA 4.ª POSIÇÃO / CENTRO) -->
-    <nav class="bottom-dock">
-      <button class="dock-item" data-target="videos">
+    <!-- DOCK EM ROLETA CIRCULAR -->
+    <nav class="bottom-dock" id="bottomDock">
+      <button type="button" class="dock-item" data-target="videos">
         <span class="dock-icon">📺</span>
         <span>Vídeos</span>
       </button>
 
-      <button class="dock-item" data-target="palavra">
+      <button type="button" class="dock-item" data-target="palavra">
         <span class="dock-icon">📖</span>
         <span>Palavra</span>
       </button>
 
-      <button class="dock-item" data-target="kids">
+      <button type="button" class="dock-item" data-target="kids">
         <span class="dock-icon">👶</span>
         <span>Kids</span>
       </button>
 
-      <!-- Botão Rádio Centralizado Exatamente na 4.ª Posição -->
-      <button class="dock-radio-center active" data-target="radio">
-        <span class="dock-icon">🎙️</span>
-        <span>Rádio</span>
-      </button>
-
-      <button class="dock-item" data-target="oracao">
+      <button type="button" class="dock-item" data-target="oracao">
         <span class="dock-icon">🙏</span>
         <span>Oração</span>
       </button>
 
-      <button class="dock-item" data-target="sobre">
+      <button type="button" class="dock-radio-center active" id="radioDockBtn" data-target="radio">
+        <span class="dock-icon">🎙️</span>
+        <span>Rádio</span>
+      </button>
+
+      <button type="button" class="dock-item" data-target="comunidade">
+        <span class="dock-icon">🌐</span>
+        <span>Comunidade</span>
+      </button>
+
+      <button type="button" class="dock-item" data-target="sobre">
         <span class="dock-icon">⛪</span>
         <span>Sobre</span>
       </button>
 
-      <button class="dock-item" data-target="settings">
+      <button type="button" class="dock-item" data-target="settings">
         <span class="dock-icon">🎛️</span>
         <span>Ajustes</span>
       </button>
@@ -972,19 +1012,30 @@
       const canvas = document.getElementById('spectrumCanvas');
       const canvasCtx = canvas ? canvas.getContext('2d') : null;
 
-      // 1. GESTÃO DE ABAS DO DOCK (ROLETA)
+      // CENTRA O BOTÃO DA RÁDIO NO ARRANQUE
+      const bottomDock = document.getElementById('bottomDock');
+      const radioDockBtn = document.getElementById('radioDockBtn');
+      if (bottomDock && radioDockBtn) {
+        requestAnimationFrame(() => {
+          const scrollLeft = radioDockBtn.offsetLeft - (bottomDock.clientWidth / 2) + (radioDockBtn.clientWidth / 2);
+          bottomDock.scrollLeft = scrollLeft;
+        });
+      }
+
+      // 1. GESTÃO DE ABAS DO DOCK
       const dockButtons = document.querySelectorAll('.dock-item, .dock-radio-center');
       dockButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
           const targetTab = btn.getAttribute('data-target');
+          if (!targetTab) return;
           
           document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
           dockButtons.forEach(b => b.classList.remove('active'));
           
           const paneEl = document.getElementById(targetTab);
           if (paneEl) paneEl.classList.add('active');
-          
-          document.querySelectorAll(`[data-target="${targetTab}"]`).forEach(el => el.classList.add('active'));
+          btn.classList.add('active');
         });
       });
 
