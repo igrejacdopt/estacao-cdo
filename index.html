@@ -66,7 +66,8 @@
       padding: 12px 20px;
       border-bottom: 2px solid var(--accent-gold);
       position: relative;
-      z-index: 10;
+      z-index: 50;
+      flex-shrink: 0;
     }
 
     .brand-container {
@@ -112,12 +113,13 @@
     .app-content {
       flex: 1;
       overflow-y: auto;
-      padding: 12px 16px 105px 16px;
+      padding: 14px 16px 100px 16px;
       display: flex;
       flex-direction: column;
       gap: 12px;
       position: relative;
-      z-index: 1;
+      z-index: 10;
+      pointer-events: auto;
     }
 
     .app-content::-webkit-scrollbar {
@@ -138,28 +140,27 @@
       display: flex;
     }
 
-    /* DOCK EM ROLETA CIRCULAR INFINITA */
+    /* DOCK FIXO BLINDADO COM TAMANHO FIXO GARANTIDO */
     .bottom-dock {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: 84px;
-      background: rgba(19, 27, 49, 0.98);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border-color);
+      background: #0B132B;
+      border-top: 2px solid var(--accent-gold);
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
+      padding: 6px 14px;
       overflow-x: auto;
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
-      z-index: 2000;
-      box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
+      z-index: 999999;
+      box-shadow: 0 -5px 25px rgba(0,0,0,0.8);
       touch-action: pan-x;
       -webkit-overflow-scrolling: touch;
-      scroll-behavior: auto;
+      pointer-events: auto;
     }
 
     .bottom-dock::-webkit-scrollbar {
@@ -175,47 +176,50 @@
     }
 
     .dock-item {
-      flex: 0 0 72px;
-      height: 58px;
+      flex: 0 0 74px !important;
+      width: 74px !important;
+      height: 68px !important;
       scroll-snap-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 4px;
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 0.65rem;
+      font-size: 0.72rem;
       font-weight: 600;
       cursor: pointer;
       padding: 4px;
       border-radius: 12px;
       transition: background 0.2s, color 0.2s;
       user-select: none;
-      position: relative;
-      z-index: 2001;
+      pointer-events: auto;
+      z-index: 1000000;
     }
 
     .dock-item .dock-icon {
-      font-size: 1.2rem;
+      font-size: 1.5rem !important;
       pointer-events: none;
     }
 
-    .dock-item span {
+    .dock-item span:not(.dock-icon) {
+      font-size: 0.7rem !important;
       pointer-events: none;
+      white-space: nowrap;
     }
 
     .dock-item.active {
       color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.14);
+      background: rgba(245, 158, 11, 0.15);
     }
 
-    /* BOTÃO RÁDIO AO CENTRO DA ROLETA */
+    /* BOTÃO RÁDIO AO CENTRO COM TAMANHO FIXO BLINDADO */
     .dock-radio-center {
-      flex: 0 0 64px;
-      width: 64px;
-      height: 64px;
+      flex: 0 0 72px !important;
+      width: 72px !important;
+      height: 72px !important;
       scroll-snap-align: center;
       background: var(--accent-gold);
       color: var(--bg-dark);
@@ -225,13 +229,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 18px var(--accent-gold-glow);
+      box-shadow: 0 0 15px var(--accent-gold-glow);
       cursor: pointer;
       font-weight: bold;
       transition: transform 0.15s;
       user-select: none;
-      position: relative;
-      z-index: 2002;
+      pointer-events: auto;
+      z-index: 1000001;
     }
 
     .dock-radio-center:active {
@@ -239,15 +243,16 @@
     }
 
     .dock-radio-center .dock-icon {
-      font-size: 1.45rem;
+      font-size: 1.7rem !important;
       pointer-events: none;
     }
 
     .dock-radio-center span:not(.dock-icon) {
-      font-size: 0.55rem;
+      font-size: 0.62rem !important;
       line-height: 1;
       font-weight: 800;
       pointer-events: none;
+      white-space: nowrap;
     }
 
     /* CARDS DE CONTEÚDO */
@@ -289,6 +294,8 @@
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       border: 1px solid var(--border-color);
+      position: relative;
+      z-index: 15;
     }
 
     .live-indicator {
@@ -331,6 +338,8 @@
       align-items: center;
       justify-content: center;
       margin: 10px 0;
+      position: relative;
+      z-index: 20;
     }
 
     .play-btn {
@@ -348,7 +357,8 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      z-index: 5;
+      z-index: 25;
+      pointer-events: auto;
     }
 
     .play-btn:active {
@@ -383,6 +393,8 @@
       padding: 8px 12px;
       border-radius: 12px;
       border: 1px solid var(--border-color);
+      position: relative;
+      z-index: 20;
     }
 
     .volume-btn {
@@ -392,6 +404,7 @@
       font-size: 1.2rem;
       cursor: pointer;
       padding: 2px;
+      pointer-events: auto;
     }
 
     .volume-slider {
@@ -400,6 +413,7 @@
       accent-color: var(--accent-gold);
       cursor: pointer;
       border-radius: 4px;
+      pointer-events: auto;
     }
 
     .status-text {
@@ -461,6 +475,7 @@
       transform: rotate(-90deg);
       cursor: pointer;
       accent-color: var(--accent-gold);
+      pointer-events: auto;
     }
 
     .eq-band label {
@@ -489,6 +504,8 @@
       gap: 10px;
       scroll-snap-type: x mandatory;
       padding-bottom: 4px;
+      position: relative;
+      z-index: 20;
     }
 
     .carousel::-webkit-scrollbar {
@@ -515,6 +532,8 @@
       border: 1px solid var(--border-color);
       cursor: pointer;
       transition: transform 0.2s;
+      z-index: 21;
+      pointer-events: auto;
     }
 
     .carousel-item:active {
@@ -526,11 +545,12 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(to top, rgba(11,19,43,0.95), transparent 60%);
+      pointer-events: none;
     }
 
     .carousel-caption {
       position: relative;
-      z-index: 1;
+      z-index: 22;
       font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-light);
@@ -538,18 +558,20 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      pointer-events: none;
     }
 
     #photoModal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(7, 13, 31, 0.95);
-      z-index: 9999;
+      background: rgba(7, 13, 31, 0.96);
+      z-index: 9999999;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       padding: 20px;
+      pointer-events: auto;
     }
 
     #modalImg {
@@ -583,6 +605,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 10000000;
+      pointer-events: auto;
     }
 
     .invite-card {
@@ -608,7 +632,8 @@
       align-items: center;
       gap: 5px;
       position: relative;
-      z-index: 5;
+      z-index: 20;
+      pointer-events: auto;
     }
 
     .video-container {
@@ -660,6 +685,9 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
     }
 
     .kids-cat-btn {
@@ -678,7 +706,8 @@
       align-items: flex-start;
       padding: 10px;
       text-align: left;
-      z-index: 5;
+      z-index: 21;
+      pointer-events: auto;
     }
 
     .kids-cat-btn::after {
@@ -687,6 +716,7 @@
       inset: 0;
       background: linear-gradient(to top, rgba(11, 19, 43, 0.95) 20%, rgba(11, 19, 43, 0.2) 100%);
       z-index: 1;
+      pointer-events: none;
     }
 
     .kids-cat-info {
@@ -713,6 +743,8 @@
       display: none;
       flex-direction: column;
       gap: 10px;
+      position: relative;
+      z-index: 20;
     }
 
     .kids-player-area.active {
@@ -732,7 +764,8 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      z-index: 5;
+      z-index: 21;
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -740,7 +773,7 @@
 
   <!-- MODAL DE FOTOS -->
   <div id="photoModal">
-    <button class="modal-close" id="closeModalBtn">✕</button>
+    <button type="button" class="modal-close" id="closeModalBtn">✕</button>
     <img id="modalImg" src="" alt="Momento CDO Ampliado">
     <p id="modalCaption"></p>
   </div>
@@ -801,6 +834,27 @@
             <div class="kids-cat-info">
               <div class="kids-cat-title">🎬 Desenhos Bíblicos</div>
               <div class="kids-cat-sub">Clássicos de Richard Rich</div>
+            </div>
+          </button>
+
+          <button type="button" class="kids-cat-btn" data-kids="krozz" style="background-image: url('krozz.jpg');">
+            <div class="kids-cat-info">
+              <div class="kids-cat-title">🚀 Krozz</div>
+              <div class="kids-cat-sub">História Completa</div>
+            </div>
+          </button>
+
+          <button type="button" class="kids-cat-btn" data-kids="missaoharpa" style="background-image: url('missaoharpa.jpg');">
+            <div class="kids-cat-info">
+              <div class="kids-cat-title">🎻 Missão Harpa</div>
+              <div class="kids-cat-sub">História da Harpa</div>
+            </div>
+          </button>
+
+          <button type="button" class="kids-cat-btn" data-kids="minhavida" style="background-image: url('minhavida.jpg');">
+            <div class="kids-cat-info">
+              <div class="kids-cat-title">🌍 Minha vida é uma viagem</div>
+              <div class="kids-cat-sub">Volumes 1 ao 5</div>
             </div>
           </button>
         </div>
@@ -959,7 +1013,7 @@
       </div>
     </div>
 
-    <!-- DOCK EM ROLETA CIRCULAR INFINITA (9 ITENS POR BLOCO) -->
+    <!-- DOCK EM ROLETA CIRCULAR INFINITA -->
     <nav class="bottom-dock" id="bottomDock">
       <!-- BLOCO 1 (CÓPIA INICIAL) -->
       <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
@@ -1282,15 +1336,37 @@
         palavrinhas: {
           titulo: "🎵 3 Palavrinhas - Louvores Infantis",
           videos: [
-            { titulo: "3 Palavrinhas - Deus é Tão Bom", desc: "Louvor para cantar em família", youtubeId: "l47v4r2vC9o" },
-            { titulo: "3 Palavrinhas - Arca de Noé", desc: "Louvor infantil clássico", youtubeId: "zLZ6-pSSwUo" }
+            { titulo: "3 Palavrinhas - Deus é Tão Bom", desc: "Louvor para cantar em família", embedUrl: "https://www.youtube.com/embed/l47v4r2vC9o" },
+            { titulo: "3 Palavrinhas - Arca de Noé", desc: "Louvor infantil clássico", embedUrl: "https://www.youtube.com/embed/zLZ6-pSSwUo" }
           ]
         },
         desenhos: {
           titulo: "🎬 Desenhos Bíblicos (Clássicos Richard Rich)",
           videos: [
-            { titulo: "A História de Moisés", desc: "Clássico animado", youtubeId: "zLZ6-pSSwUo" },
-            { titulo: "Davi e Golias", desc: "História Bíblica Animada", youtubeId: "l47v4r2vC9o" }
+            { titulo: "A História de Moisés", desc: "Clássico animado", embedUrl: "https://www.youtube.com/embed/zLZ6-pSSwUo" },
+            { titulo: "Davi e Golias", desc: "História Bíblica Animada", embedUrl: "https://www.youtube.com/embed/l47v4r2vC9o" }
+          ]
+        },
+        krozz: {
+          titulo: "🚀 Krozz - Aventuras",
+          videos: [
+            { titulo: "Krozz - História Completa", desc: "Aventura completa", embedUrl: "https://www.youtube.com/embed/g78AmTLB6R8?start=2261" }
+          ]
+        },
+        missaoharpa: {
+          titulo: "🎻 Missão Harpa - História",
+          videos: [
+            { titulo: "Missão Harpa - A História", desc: "História inspiradora da Harpa Cristã", embedUrl: "https://www.youtube.com/embed/VahaDWMyK58?start=79" }
+          ]
+        },
+        minhavida: {
+          titulo: "🌍 Minha vida é uma viagem",
+          videos: [
+            { titulo: "Minha Vida é Uma Viagem - Volume 1", desc: "Volume 1 Completo", embedUrl: "https://www.youtube.com/embed/9er3RsvfUSA?start=948" },
+            { titulo: "Minha Vida é Uma Viagem - Volume 2", desc: "Volume 2 Completo", embedUrl: "https://www.youtube.com/embed/x3nTjHwp65c" },
+            { titulo: "Minha Vida é Uma Viagem - Volume 3", desc: "Volume 3 Completo", embedUrl: "https://www.youtube.com/embed/C-wD0ba0btU" },
+            { titulo: "Minha Vida é Uma Viagem - Volume 4", desc: "Volume 4 Completo", embedUrl: "https://www.youtube.com/embed/kLSKNRD01qs" },
+            { titulo: "Minha Vida é Uma Viagem - Volume 5", desc: "Volume 5 Completo", embedUrl: "https://www.youtube.com/embed/63bsooaIe0M?start=519" }
           ]
         }
       };
@@ -1317,7 +1393,7 @@
                   <h4 class="section-title" style="font-size: 0.9rem;">${video.titulo}</h4>
                   <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">${video.desc}</p>
                   <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/${video.youtubeId}" allowfullscreen></iframe>
+                    <iframe src="${video.embedUrl}" allowfullscreen></iframe>
                   </div>
                 </div>
               `;
