@@ -138,7 +138,7 @@
       display: flex;
     }
 
-    /* DOCK EM ROLETA CIRCULAR CORRIGIDO */
+    /* DOCK EM ROLETA CIRCULAR INFINITA */
     .bottom-dock {
       position: absolute;
       bottom: 0;
@@ -159,6 +159,7 @@
       box-shadow: 0 -10px 25px rgba(0,0,0,0.5);
       touch-action: pan-x;
       -webkit-overflow-scrolling: touch;
+      scroll-behavior: auto;
     }
 
     .bottom-dock::-webkit-scrollbar {
@@ -811,7 +812,20 @@
         </div>
       </div>
 
-      <!-- Aba 4: Rádio (Principal) -->
+      <!-- Aba 4: Agenda -->
+      <div id="agenda" class="tab-pane">
+        <div class="info-card">
+          <h3 class="section-title">📅 Agenda da Igreja</h3>
+          <p>Fique por dentro de todos os nossos encontros e cultos semanais:</p>
+          <ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
+            <li><strong>Domingo às 10:00:</strong> Culto de Celebração e Família</li>
+            <li><strong>Quarta-feira às 19:30:</strong> Culto de Ensino e Oração</li>
+            <li><strong>Sábado às 17:00:</strong> Encontro de Jovens CDO</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Aba 5: Rádio (Principal) -->
       <div id="radio" class="tab-pane active">
         <div class="radio-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
@@ -876,7 +890,7 @@
         </div>
       </div>
 
-      <!-- Aba 5: Oração -->
+      <!-- Aba 6: Oração -->
       <div id="oracao" class="tab-pane">
         <div class="info-card">
           <h3 class="section-title">🙏 Mural de Oração</h3>
@@ -888,7 +902,7 @@
         </div>
       </div>
 
-      <!-- Aba 6: Comunidade -->
+      <!-- Aba 7: Comunidade -->
       <div id="comunidade" class="tab-pane">
         <div class="info-card">
           <h3 class="section-title">💬 Comunidade CDO</h3>
@@ -900,7 +914,7 @@
         </div>
       </div>
 
-      <!-- Aba 7: Sobre -->
+      <!-- Aba 8: Sobre -->
       <div id="sobre" class="tab-pane">
         <div class="info-card">
           <h3 class="section-title">⛪ Quem Somos</h3>
@@ -909,7 +923,7 @@
         </div>
       </div>
 
-      <!-- Aba 8: Ajustes & Equalizador -->
+      <!-- Aba 9: Ajustes & Equalizador -->
       <div id="settings" class="tab-pane">
         <div class="settings-card">
           <h3 class="section-title">⚙️ Definições de Áudio</h3>
@@ -945,47 +959,40 @@
       </div>
     </div>
 
-    <!-- DOCK EM ROLETA CIRCULAR -->
+    <!-- DOCK EM ROLETA CIRCULAR INFINITA (9 ITENS POR BLOCO) -->
     <nav class="bottom-dock" id="bottomDock">
-      <button type="button" class="dock-item" data-target="videos">
-        <span class="dock-icon">📺</span>
-        <span>Vídeos</span>
-      </button>
+      <!-- BLOCO 1 (CÓPIA INICIAL) -->
+      <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
+      <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
+      <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
+      <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
+      <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
+      <button type="button" class="dock-item" data-target="settings"><span class="dock-icon">🎛️</span><span>Ajustes</span></button>
 
-      <button type="button" class="dock-item" data-target="palavra">
-        <span class="dock-icon">📖</span>
-        <span>Palavra</span>
-      </button>
+      <!-- BLOCO 2 (NÚCLEO CENTRAL - ONDE ABRE A RÁDIO) -->
+      <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
+      <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
+      <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-radio-center active core-radio" id="radioCoreBtn" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
+      <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
+      <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
+      <button type="button" class="dock-item" data-target="settings"><span class="dock-icon">🎛️</span><span>Ajustes</span></button>
 
-      <button type="button" class="dock-item" data-target="kids">
-        <span class="dock-icon">👶</span>
-        <span>Kids</span>
-      </button>
-
-      <button type="button" class="dock-item" data-target="oracao">
-        <span class="dock-icon">🙏</span>
-        <span>Oração</span>
-      </button>
-
-      <button type="button" class="dock-radio-center active" id="radioDockBtn" data-target="radio">
-        <span class="dock-icon">🎙️</span>
-        <span>Rádio</span>
-      </button>
-
-      <button type="button" class="dock-item" data-target="comunidade">
-        <span class="dock-icon">🌐</span>
-        <span>Comunidade</span>
-      </button>
-
-      <button type="button" class="dock-item" data-target="sobre">
-        <span class="dock-icon">⛪</span>
-        <span>Sobre</span>
-      </button>
-
-      <button type="button" class="dock-item" data-target="settings">
-        <span class="dock-icon">🎛️</span>
-        <span>Ajustes</span>
-      </button>
+      <!-- BLOCO 3 (CÓPIA FINAL PARA LOOP INFINITO) -->
+      <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
+      <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
+      <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
+      <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
+      <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
+      <button type="button" class="dock-item" data-target="settings"><span class="dock-icon">🎛️</span><span>Ajustes</span></button>
     </nav>
   </div>
 
@@ -1012,17 +1019,30 @@
       const canvas = document.getElementById('spectrumCanvas');
       const canvasCtx = canvas ? canvas.getContext('2d') : null;
 
-      // CENTRA O BOTÃO DA RÁDIO NO ARRANQUE
       const bottomDock = document.getElementById('bottomDock');
-      const radioDockBtn = document.getElementById('radioDockBtn');
-      if (bottomDock && radioDockBtn) {
+      const radioCoreBtn = document.getElementById('radioCoreBtn');
+
+      // 1. CENTRALIZA NA RÁDIO DO BLOCO CENTRAL AO ABRIR
+      if (bottomDock && radioCoreBtn) {
         requestAnimationFrame(() => {
-          const scrollLeft = radioDockBtn.offsetLeft - (bottomDock.clientWidth / 2) + (radioDockBtn.clientWidth / 2);
+          const scrollLeft = radioCoreBtn.offsetLeft - (bottomDock.clientWidth / 2) + (radioCoreBtn.clientWidth / 2);
           bottomDock.scrollLeft = scrollLeft;
         });
       }
 
-      // 1. GESTÃO DE ABAS DO DOCK
+      // 2. LOOP INFINITO INSTANTÂNEO NO SCROLL DO DOCK
+      if (bottomDock) {
+        bottomDock.addEventListener('scroll', () => {
+          const singleBlockWidth = bottomDock.scrollWidth / 3;
+          if (bottomDock.scrollLeft < singleBlockWidth * 0.5) {
+            bottomDock.scrollLeft += singleBlockWidth;
+          } else if (bottomDock.scrollLeft > singleBlockWidth * 2.5) {
+            bottomDock.scrollLeft -= singleBlockWidth;
+          }
+        });
+      }
+
+      // 3. GESTÃO DE ABAS DO DOCK (SINCRONIZA TODOS OS BOTÕES IGUAIS)
       const dockButtons = document.querySelectorAll('.dock-item, .dock-radio-center');
       dockButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -1035,11 +1055,12 @@
           
           const paneEl = document.getElementById(targetTab);
           if (paneEl) paneEl.classList.add('active');
-          btn.classList.add('active');
+
+          document.querySelectorAll(`[data-target="${targetTab}"]`).forEach(el => el.classList.add('active'));
         });
       });
 
-      // 2. AUDIO GRAPH & VISUALIZADOR
+      // 4. AUDIO GRAPH & VISUALIZADOR
       function initAudioGraph() {
         if (audioCtx) return;
         try {
@@ -1150,7 +1171,7 @@
       }
       drawSpectrum();
 
-      // 3. PLAY / PAUSE BUTTON
+      // 5. PLAY / PAUSE BUTTON
       if (playBtn) {
         playBtn.addEventListener('click', () => {
           if (!audio) return;
@@ -1180,7 +1201,7 @@
         });
       }
 
-      // 4. VOLUME & MUTE
+      // 6. VOLUME & MUTE
       if (volumeSlider) {
         volumeSlider.addEventListener('input', (e) => {
           const val = e.target.value;
@@ -1204,7 +1225,7 @@
         });
       }
 
-      // 5. EQUALIZADOR SLIDERS
+      // 7. EQUALIZADOR SLIDERS
       function bindEq(sliderId, valId, bandName) {
         const slider = document.getElementById(sliderId);
         const valEl = document.getElementById(valId);
@@ -1224,14 +1245,14 @@
       bindEq('sliderMid', 'valMid', 'mid');
       bindEq('sliderHigh', 'valHigh', 'high');
 
-      // 6. COMPARTILHAR
+      // 8. COMPARTILHAR
       if (shareBtn) {
         shareBtn.addEventListener('click', () => {
           alert('Link de convite copiado para o WhatsApp!');
         });
       }
 
-      // 7. MODAL DE FOTOS
+      // 9. MODAL DE FOTOS
       document.querySelectorAll('.carousel-item').forEach(item => {
         item.addEventListener('click', () => {
           const imgSrc = item.getAttribute('data-img');
@@ -1256,7 +1277,7 @@
         });
       }
 
-      // 8. KIDS SECTION CATALOG
+      // 10. KIDS SECTION CATALOG
       const kidsCatalog = {
         palavrinhas: {
           titulo: "🎵 3 Palavrinhas - Louvores Infantis",
@@ -1319,7 +1340,7 @@
         });
       }
 
-      // 9. OUVINTES SIMULADOS
+      // 11. OUVINTES SIMULADOS
       function updateListeners() {
         const countEl = document.getElementById('listenerCount');
         if (countEl) {
