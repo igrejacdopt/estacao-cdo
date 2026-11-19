@@ -13,6 +13,7 @@
       --bg-dark: #F5F1EB;
       --card-bg: #FAF7F2;
       --card-gradient: linear-gradient(145deg, #FCF9F4, #EFE9DF);
+      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("Estação CDO_ Som em Ouro.png");
       --surface-soft: #E8E1D5;
       --accent-gold: #C27412;
       --accent-gold-strong: #A85E08;
@@ -24,7 +25,7 @@
       --dock-bg: rgba(250, 247, 242, 0.96);
       --dock-active-bg: rgba(194, 116, 18, 0.16);
       --radio-btn-text: #FFFDF9;
-      --spectrum-bg: #E6E0D6;
+      --spectrum-bg: rgba(230, 224, 214, 0.82);
       --spectrum-dot-idle: rgba(34, 41, 56, 0.08);
       --kids-purple: #8B5CF6;
       --kids-light: #6D28D9;
@@ -40,6 +41,7 @@
       --bg-dark: #0B132B;
       --card-bg: #1C2541;
       --card-gradient: linear-gradient(145deg, #1C2541, #131B31);
+      --radio-card-bg: linear-gradient(145deg, #1C2541, #131B31);
       --surface-soft: rgba(11, 19, 43, 0.65);
       --accent-gold: #F59E0B;
       --accent-gold-strong: #FBBF24;
@@ -477,7 +479,10 @@
     }
 
     .radio-card {
-      background: var(--card-gradient);
+      background: var(--radio-card-bg);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       padding: 14px 16px;
       border-radius: 16px;
       text-align: center;
@@ -487,11 +492,16 @@
       z-index: 15;
     }
 
+    body.theme-dark .radio-card {
+      background-image: none;
+      background-color: var(--card-bg);
+    }
+
     .live-indicator {
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      background: rgba(220, 38, 38, 0.12);
+      background: rgba(220, 38, 38, 0.14);
       color: #DC2626;
       padding: 3px 10px;
       border-radius: 10px;
@@ -628,6 +638,7 @@
       font-size: 0.75rem;
       color: var(--text-muted);
       margin-top: 8px;
+      font-weight: 600;
     }
 
     .settings-card {
