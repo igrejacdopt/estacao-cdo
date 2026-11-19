@@ -13,7 +13,7 @@
       --bg-dark: #F5F1EB;
       --card-bg: #FAF7F2;
       --card-gradient: linear-gradient(145deg, #FCF9F4, #EFE9DF);
-      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("bannerouro.png");
+      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("Estação CDO_ Som em Ouro.png");
       --surface-soft: #E8E1D5;
       --accent-gold: #C27412;
       --accent-gold-strong: #A85E08;
@@ -1021,6 +1021,12 @@
       display: flex;
     }
 
+    .kids-nav-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .kids-back-btn {
       align-self: flex-start;
       background: rgba(139, 92, 246, 0.16);
@@ -1036,6 +1042,117 @@
       gap: 5px;
       z-index: 21;
       pointer-events: auto;
+    }
+
+    /* BOTÕES VISUAIS DE VOLUMES / TEMPORADAS (ÁREA PREPARADA PARA FUTUROS VOLUMES) */
+    .kids-volumes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    .kids-volume-btn {
+      position: relative;
+      height: 136px;
+      border-radius: 14px;
+      border: 2px solid rgba(139, 92, 246, 0.55);
+      background-color: var(--surface-soft);
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 11px;
+      text-align: left;
+      z-index: 21;
+      pointer-events: auto;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .kids-volume-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--kids-card-overlay);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .kids-volume-btn:active {
+      transform: scale(0.98);
+    }
+
+    .kids-volume-pill {
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      background: var(--kids-purple);
+      color: #FFFFFF;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 5px;
+      pointer-events: none;
+    }
+
+    .kids-section-divider {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      font-weight: 800;
+      color: var(--kids-light);
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
+    .kids-track-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .kids-track-num {
+      background: rgba(139, 92, 246, 0.18);
+      border: 1px solid var(--kids-purple);
+      color: var(--kids-light);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .kids-search-box {
+      background: var(--surface-soft);
+      border: 1px solid var(--subtle-border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .kids-external-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--kids-purple);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 8px;
+      align-self: flex-start;
     }
   </style>
 </head>
@@ -1060,7 +1177,7 @@
       <div class="points-badge">⭐ 150 pts</div>
     </header>
 
-    <div class="app-content">
+    <div class="app-content" id="appContentScroll">
       <!-- Aba 1: Vídeos -->
       <div id="videos" class="tab-pane">
         <div class="video-container">
@@ -1113,7 +1230,7 @@
           <button type="button" class="kids-cat-btn" data-kids="palavrinhas" style="background-image: url('3palavrinhas.jpg');">
             <div class="kids-cat-info">
               <div class="kids-cat-title">🎵 3 Palavrinhas</div>
-              <div class="kids-cat-sub">Louvores e alegria</div>
+              <div class="kids-cat-sub">Escolha um volume</div>
             </div>
           </button>
 
@@ -1147,7 +1264,10 @@
         </div>
 
         <div id="kidsPlayerArea" class="kids-player-area">
-          <button type="button" class="kids-back-btn" id="kidsBackBtn">← Voltar às Categorias</button>
+          <div class="kids-nav-row">
+            <button type="button" class="kids-back-btn" id="kidsBackBtn">← Voltar às Categorias</button>
+            <button type="button" class="kids-back-btn" id="kidsBackVolumesBtn" style="display: none;">← Voltar aos Volumes</button>
+          </div>
           <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
           <div id="kidsVideoList"></div>
         </div>
@@ -1346,611 +1466,778 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // 0. ALTERNADOR DE TEMA (SOFT PADRÃO / ESCURO)
-      const btnThemeSoft = document.getElementById('btnThemeSoft');
-      const btnThemeDark = document.getElementById('btnThemeDark');
-      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    (function () {
+      function initApp() {
+        const appContentScroll = document.getElementById('appContentScroll');
 
-      function applyAppTheme(themeMode) {
-        const isDark = themeMode === 'dark';
-        document.body.classList.toggle('theme-dark', isDark);
-
-        if (btnThemeSoft) btnThemeSoft.classList.toggle('active', !isDark);
-        if (btnThemeDark) btnThemeDark.classList.toggle('active', isDark);
-
-        if (metaThemeColor) {
-          metaThemeColor.setAttribute('content', isDark ? '#0B132B' : '#EFEAE2');
-        }
-
-        try {
-          localStorage.setItem('cdo_theme_mode', isDark ? 'dark' : 'soft');
-        } catch (e) {}
-      }
-
-      let savedTheme = 'soft';
-      try {
-        savedTheme = localStorage.getItem('cdo_theme_mode') || 'soft';
-      } catch (e) {}
-      applyAppTheme(savedTheme);
-
-      if (btnThemeSoft) {
-        btnThemeSoft.addEventListener('click', () => applyAppTheme('soft'));
-      }
-      if (btnThemeDark) {
-        btnThemeDark.addEventListener('click', () => applyAppTheme('dark'));
-      }
-
-      const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
-      const audio = document.getElementById('radioStream');
-      if (audio) audio.volume = 0.8;
-
-      const playBtn = document.getElementById('playBtn');
-      const statusText = document.getElementById('statusText');
-      const muteBtn = document.getElementById('muteBtn');
-      const volumeSlider = document.getElementById('volumeSlider');
-      const shareBtn = document.getElementById('shareBtn');
-      
-      let isPlaying = false;
-      let audioCtx = null;
-      let analyser = null;
-      let sourceNode = null;
-      let bassFilter = null;
-      let midFilter = null;
-      let highFilter = null;
-      
-      const canvas = document.getElementById('spectrumCanvas');
-      const canvasCtx = canvas ? canvas.getContext('2d') : null;
-
-      const bottomDock = document.getElementById('bottomDock');
-      const radioCoreBtn = document.getElementById('radioCoreBtn');
-
-      // 1. CENTRALIZA NA RÁDIO DO BLOCO CENTRAL AO ABRIR
-      if (bottomDock && radioCoreBtn) {
-        requestAnimationFrame(() => {
-          const scrollLeft = radioCoreBtn.offsetLeft - (bottomDock.clientWidth / 2) + (radioCoreBtn.clientWidth / 2);
-          bottomDock.scrollLeft = scrollLeft;
-        });
-      }
-
-      // 2. LOOP INFINITO INSTANTÂNEO NO SCROLL DO DOCK
-      if (bottomDock) {
-        bottomDock.addEventListener('scroll', () => {
-          const singleBlockWidth = bottomDock.scrollWidth / 3;
-          if (bottomDock.scrollLeft < singleBlockWidth * 0.5) {
-            bottomDock.scrollLeft += singleBlockWidth;
-          } else if (bottomDock.scrollLeft > singleBlockWidth * 2.5) {
-            bottomDock.scrollLeft -= singleBlockWidth;
-          }
-        });
-      }
-
-      // 3. GESTÃO DE ABAS DO DOCK (SINCRONIZA TODOS OS BOTÕES IGUAIS)
-      const dockButtons = document.querySelectorAll('.dock-item, .dock-radio-center');
-      dockButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetTab = btn.getAttribute('data-target');
+        // FUNÇÃO CENTRAL PARA TROCAR DE ABA
+        function switchTab(targetTab) {
           if (!targetTab) return;
-          
-          document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-          dockButtons.forEach(b => b.classList.remove('active'));
-          
-          const paneEl = document.getElementById(targetTab);
-          if (paneEl) paneEl.classList.add('active');
+          const allPanes = document.querySelectorAll('.tab-pane');
+          const allDockBtns = document.querySelectorAll('.dock-item, .dock-radio-center');
+
+          allPanes.forEach(pane => pane.classList.remove('active'));
+          allDockBtns.forEach(btn => btn.classList.remove('active'));
+
+          const targetPane = document.getElementById(targetTab);
+          if (targetPane) targetPane.classList.add('active');
 
           document.querySelectorAll(`[data-target="${targetTab}"]`).forEach(el => el.classList.add('active'));
-        });
-      });
 
-      // 4. PALAVRA DO DIA (DATA REAL + SUPORTE A ANO BISSEXTO)
-      const monthsPT = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-
-      const baseWords = [
-        {
-          tema: "Direção em Meio às Escolhas",
-          ref: "Salmos 119:105",
-          trecho: "A tua palavra é lâmpada que ilumina os meus passos e luz que clareia o meu caminho.",
-          meditacao: "Muitas vezes queremos enxergar o ano inteiro de uma só vez, mas Deus costuma dar clareza suficiente para o passo de hoje. Quando entregamos nossas decisões à Palavra, a ansiedade perde espaço.",
-          aplicacao: "Antes de tomar uma decisão importante hoje, pare por dois minutos em oração e peça discernimento para agir com calma e sabedoria."
-        },
-        {
-          tema: "Descanso Sob Cuidado",
-          ref: "Salmos 23:1-2",
-          trecho: "O Senhor é o meu pastor; nada me faltará. Ele me faz repousar em pastos verdejantes.",
-          meditacao: "Cuidar da família, trabalhar e lidar com imprevistos cansa. Ter o Senhor como pastor não significa ausência de desafios, mas a certeza de que você não caminha sozinho nem precisa carregar tudo na própria força.",
-          aplicacao: "Identifique uma preocupação que está tirando o seu sossego hoje e entregue-a conscientemente nas mãos de Deus."
-        },
-        {
-          tema: "Confiança Além do que se Vê",
-          ref: "Provérbios 3:5",
-          trecho: "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.",
-          meditacao: "Nossa lógica humana tenta calcular todos os cenários, mas nem sempre enxerga o quadro completo. Confiar é escolher obedecer e manter a paz mesmo quando os motivos ainda não estão claros.",
-          aplicacao: "Evite tirar conclusões precipitadas hoje; busque ouvir, observar com paciência e reagir com mansidão."
-        },
-        {
-          tema: "Força Renovada no Dia a Dia",
-          ref: "Isaías 40:31",
-          trecho: "Mas os que esperam no Senhor renovam as suas forças; sobem com asas como águias.",
-          meditacao: "O cansaço físico e emocional faz parte da rotina. Esperar no Senhor não é ficar parado, mas buscar fôlego espiritual para continuar servindo e amando sem perder a esperança.",
-          aplicacao: "Reserve um pequeno momento hoje para desacelerar, respirar fundo e renovar a sua mente antes de continuar as tarefas."
-        },
-        {
-          tema: "Paz que Guarda o Coração",
-          ref: "Filipenses 4:6-7",
-          trecho: "Não andeis ansiosos por coisa alguma; antes em tudo sejam as vossas petições conhecidas diante de Deus.",
-          meditacao: "A ansiedade costuma antecipar problemas que ainda nem aconteceram. Transformar cada preocupação em oração muda o foco do problema para Aquele que governa todas as coisas.",
-          aplicacao: "Sempre que sentir o peito apertar por causa de algo pendente, transforme esse pensamento em uma frase curta de oração."
-        },
-        {
-          tema: "Coragem para Recomeçar",
-          ref: "Lamentações 3:22-23",
-          trecho: "As misericórdias do Senhor são a causa de não sermos consumidos; elas se renovam cada manhã.",
-          meditacao: "Ontem pode ter sido um dia difícil ou marcado por falhas, mas cada novo amanhecer traz recomeço. A graça diária nos convida a levantar, aprender e seguir em frente sem culpa paralisante.",
-          aplicacao: "Deixe para trás o peso de um erro recente, peça perdão se necessário e dê hoje um passo simples de recomeço."
-        },
-        {
-          tema: "Fidelidade nas Pequenas Coisas",
-          ref: "Lucas 16:10",
-          trecho: "Quem é fiel no pouco também é fiel no muito.",
-          meditacao: "Grandes conquistas nascem de hábitos diários silenciosos: uma palavra gentil, um compromisso cumprido, paciência em casa e honestidade quando ninguém está olhando.",
-          aplicacao: "Faça bem feito hoje uma tarefa simples que você costuma deixar de lado ou fazer com pressa."
+          if (appContentScroll) {
+            appContentScroll.scrollTop = 0;
+          }
         }
-      ];
 
-      function formatDatePT(date) {
-        return `${date.getDate()} de ${monthsPT[date.getMonth()]} de ${date.getFullYear()}`;
-      }
+        // 0. ALTERNADOR DE TEMA (SOFT PADRÃO / ESCURO)
+        const btnThemeSoft = document.getElementById('btnThemeSoft');
+        const btnThemeDark = document.getElementById('btnThemeDark');
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
-      function getDayOfYear(date) {
-        const start = new Date(date.getFullYear(), 0, 0);
-        const diff = date - start;
-        const oneDay = 1000 * 60 * 60 * 24;
-        return Math.floor(diff / oneDay);
-      }
+        function applyAppTheme(themeMode) {
+          const isDark = themeMode === 'dark';
+          document.body.classList.toggle('theme-dark', isDark);
 
-      function getWordByDate(date) {
-        const dayOfYear = getDayOfYear(date);
-        const idx = (dayOfYear - 1) % baseWords.length;
-        const base = baseWords[idx];
-        return {
-          date: new Date(date),
-          tema: base.tema,
-          ref: base.ref,
-          trecho: base.trecho,
-          meditacao: base.meditacao,
-          aplicacao: base.aplicacao
-        };
-      }
+          if (btnThemeSoft) btnThemeSoft.classList.toggle('active', !isDark);
+          if (btnThemeDark) btnThemeDark.classList.toggle('active', isDark);
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      let selectedDate = new Date(today);
+          if (metaThemeColor) {
+            metaThemeColor.setAttribute('content', isDark ? '#0B132B' : '#EFEAE2');
+          }
 
-      const palavraDayBadge = document.getElementById('palavraDayBadge');
-      const palavraBackTodayBtn = document.getElementById('palavraBackTodayBtn');
-      const palavraTheme = document.getElementById('palavraTheme');
-      const palavraVerseBox = document.getElementById('palavraVerseBox');
-      const palavraMeditation = document.getElementById('palavraMeditation');
-      const palavraApplication = document.getElementById('palavraApplication');
-      const palavraHistoryList = document.getElementById('palavraHistoryList');
+          try {
+            localStorage.setItem('cdo_theme_mode', isDark ? 'dark' : 'soft');
+          } catch (e) {}
+        }
 
-      function isSameDay(d1, d2) {
-        return d1.getFullYear() === d2.getFullYear() &&
-               d1.getMonth() === d2.getMonth() &&
-               d1.getDate() === d2.getDate();
-      }
+        let savedTheme = 'soft';
+        try {
+          savedTheme = localStorage.getItem('cdo_theme_mode') || 'soft';
+        } catch (e) {}
+        applyAppTheme(savedTheme);
 
-      function renderSevenDayHistory() {
-        if (!palavraHistoryList) return;
-        palavraHistoryList.innerHTML = '';
+        if (btnThemeSoft) {
+          btnThemeSoft.addEventListener('click', () => applyAppTheme('soft'));
+        }
+        if (btnThemeDark) {
+          btnThemeDark.addEventListener('click', () => applyAppTheme('dark'));
+        }
 
-        for (let offset = 1; offset <= 7; offset++) {
-          const histDate = new Date(today);
-          histDate.setDate(today.getDate() - offset);
-          const item = getWordByDate(histDate);
-          const isSelected = isSameDay(histDate, selectedDate);
+        const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
+        const audio = document.getElementById('radioStream');
+        if (audio) audio.volume = 0.8;
 
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = `history-item${isSelected ? ' selected' : ''}`;
-          btn.innerHTML = `
-            <div>
-              <div class="history-item-title">${item.tema}</div>
-              <div class="history-item-meta">${formatDatePT(histDate)} • ${item.ref}</div>
-            </div>
-            <div class="history-item-badge">${offset === 1 ? 'Ontem' : `Há ${offset} dias`} ›</div>
-          `;
-          btn.addEventListener('click', () => {
-            selectedDate = new Date(histDate);
-            renderSelectedWord();
-            const mainCard = document.getElementById('palavraMainCard');
-            if (mainCard) mainCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const playBtn = document.getElementById('playBtn');
+        const statusText = document.getElementById('statusText');
+        const muteBtn = document.getElementById('muteBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const shareBtn = document.getElementById('shareBtn');
+
+        let isPlaying = false;
+        let audioCtx = null;
+        let analyser = null;
+        let sourceNode = null;
+        let bassFilter = null;
+        let midFilter = null;
+        let highFilter = null;
+
+        const canvas = document.getElementById('spectrumCanvas');
+        const canvasCtx = canvas ? canvas.getContext('2d') : null;
+
+        const bottomDock = document.getElementById('bottomDock');
+        const radioCoreBtn = document.getElementById('radioCoreBtn');
+
+        // 1. CENTRALIZA NA RÁDIO DO BLOCO CENTRAL AO ABRIR
+        if (bottomDock && radioCoreBtn) {
+          requestAnimationFrame(() => {
+            const scrollLeft = radioCoreBtn.offsetLeft - (bottomDock.clientWidth / 2) + (radioCoreBtn.clientWidth / 2);
+            bottomDock.scrollLeft = scrollLeft;
+          });
+        }
+
+        // 2. LOOP INFINITO INSTANTÂNEO NO SCROLL DO DOCK
+        if (bottomDock) {
+          bottomDock.addEventListener('scroll', () => {
+            const singleBlockWidth = bottomDock.scrollWidth / 3;
+            if (singleBlockWidth > 0) {
+              if (bottomDock.scrollLeft < singleBlockWidth * 0.5) {
+                bottomDock.scrollLeft += singleBlockWidth;
+              } else if (bottomDock.scrollLeft > singleBlockWidth * 2.5) {
+                bottomDock.scrollLeft -= singleBlockWidth;
+              }
+            }
           });
 
-          palavraHistoryList.appendChild(btn);
+          bottomDock.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-target]');
+            if (!btn) return;
+            e.preventDefault();
+            const targetTab = btn.getAttribute('data-target');
+            switchTab(targetTab);
+          });
         }
-      }
 
-      function renderSelectedWord() {
-        const entry = getWordByDate(selectedDate);
-        if (!entry) return;
+        // 3. PALAVRA DO DIA (DATA REAL + SUPORTE A ANO BISSEXTO)
+        const monthsPT = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
 
-        const isToday = isSameDay(selectedDate, today);
-
-        if (palavraDayBadge) {
-          if (isToday) {
-            palavraDayBadge.innerText = `${formatDatePT(selectedDate)} • Hoje`;
-          } else {
-            palavraDayBadge.innerText = formatDatePT(selectedDate);
+        const baseWords = [
+          {
+            tema: "Direção em Meio às Escolhas",
+            ref: "Salmos 119:105",
+            trecho: "A tua palavra é lâmpada que ilumina os meus passos e luz que clareia o meu caminho.",
+            meditacao: "Muitas vezes queremos enxergar o ano inteiro de uma só vez, mas Deus costuma dar clareza suficiente para o passo de hoje. Quando entregamos nossas decisões à Palavra, a ansiedade perde espaço.",
+            aplicacao: "Antes de tomar uma decisão importante hoje, pare por dois minutos em oração e peça discernimento para agir com calma e sabedoria."
+          },
+          {
+            tema: "Descanso Sob Cuidado",
+            ref: "Salmos 23:1-2",
+            trecho: "O Senhor é o meu pastor; nada me faltará. Ele me faz repousar em pastos verdejantes.",
+            meditacao: "Cuidar da família, trabalhar e lidar com imprevistos cansa. Ter o Senhor como pastor não significa ausência de desafios, mas a certeza de que você não caminha sozinho nem precisa carregar tudo na própria força.",
+            aplicacao: "Identifique uma preocupação que está tirando o seu sossego hoje e entregue-a conscientemente nas mãos de Deus."
+          },
+          {
+            tema: "Confiança Além do que se Vê",
+            ref: "Provérbios 3:5",
+            trecho: "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.",
+            meditacao: "Nossa lógica humana tenta calcular todos os cenários, mas nem sempre enxerga o quadro completo. Confiar é escolher obedecer e manter a paz mesmo quando os motivos ainda não estão claros.",
+            aplicacao: "Evite tirar conclusões precipitadas hoje; busque ouvir, observar com paciência e reagir com mansidão."
+          },
+          {
+            tema: "Força Renovada no Dia a Dia",
+            ref: "Isaías 40:31",
+            trecho: "Mas os que esperam no Senhor renovam as suas forças; sobem com asas como águias.",
+            meditacao: "O cansaço físico e emocional faz parte da rotina. Esperar no Senhor não é ficar parado, mas buscar fôlego espiritual para continuar servindo e amando sem perder a esperança.",
+            aplicacao: "Reserve um pequeno momento hoje para desacelerar, respirar fundo e renovar a sua mente antes de continuar as tarefas."
+          },
+          {
+            tema: "Paz que Guarda o Coração",
+            ref: "Filipenses 4:6-7",
+            trecho: "Não andeis ansiosos por coisa alguma; antes em tudo sejam as vossas petições conhecidas diante de Deus.",
+            meditacao: "A ansiedade costuma antecipar problemas que ainda nem aconteceram. Transformar cada preocupação em oração muda o foco do problema para Aquele que governa todas as coisas.",
+            aplicacao: "Sempre que sentir o peito apertar por causa de algo pendente, transforme esse pensamento em uma frase curta de oração."
+          },
+          {
+            tema: "Coragem para Recomeçar",
+            ref: "Lamentações 3:22-23",
+            trecho: "As misericórdias do Senhor são a causa de não sermos consumidos; elas se renovam cada manhã.",
+            meditacao: "Ontem pode ter sido um dia difícil ou marcado por falhas, mas cada novo amanhecer traz recomeço. A graça diária nos convida a levantar, aprender e seguir em frente sem culpa paralisante.",
+            aplicacao: "Deixe para trás o peso de um erro recente, peça perdão se necessário e dê hoje um passo simples de recomeço."
+          },
+          {
+            tema: "Fidelidade nas Pequenas Coisas",
+            ref: "Lucas 16:10",
+            trecho: "Quem é fiel no pouco também é fiel no muito.",
+            meditacao: "Grandes conquistas nascem de hábitos diários silenciosos: uma palavra gentil, um compromisso cumprido, paciência em casa e honestidade quando ninguém está olhando.",
+            aplicacao: "Faça bem feito hoje uma tarefa simples que você costuma deixar de lado ou fazer com pressa."
           }
+        ];
+
+        function formatDatePT(date) {
+          return `${date.getDate()} de ${monthsPT[date.getMonth()]} de ${date.getFullYear()}`;
+        }
+
+        function getDayOfYear(date) {
+          const start = new Date(date.getFullYear(), 0, 0);
+          const diff = date - start;
+          const oneDay = 1000 * 60 * 60 * 24;
+          return Math.floor(diff / oneDay);
+        }
+
+        function getWordByDate(date) {
+          const dayOfYear = getDayOfYear(date);
+          const idx = (dayOfYear - 1) % baseWords.length;
+          const base = baseWords[idx];
+          return {
+            date: new Date(date),
+            tema: base.tema,
+            ref: base.ref,
+            trecho: base.trecho,
+            meditacao: base.meditacao,
+            aplicacao: base.aplicacao
+          };
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let selectedDate = new Date(today);
+
+        const palavraDayBadge = document.getElementById('palavraDayBadge');
+        const palavraBackTodayBtn = document.getElementById('palavraBackTodayBtn');
+        const palavraTheme = document.getElementById('palavraTheme');
+        const palavraVerseBox = document.getElementById('palavraVerseBox');
+        const palavraMeditation = document.getElementById('palavraMeditation');
+        const palavraApplication = document.getElementById('palavraApplication');
+        const palavraHistoryList = document.getElementById('palavraHistoryList');
+
+        function isSameDay(d1, d2) {
+          return d1.getFullYear() === d2.getFullYear() &&
+                 d1.getMonth() === d2.getMonth() &&
+                 d1.getDate() === d2.getDate();
+        }
+
+        function renderSevenDayHistory() {
+          if (!palavraHistoryList) return;
+          palavraHistoryList.innerHTML = '';
+
+          for (let offset = 1; offset <= 7; offset++) {
+            const histDate = new Date(today);
+            histDate.setDate(today.getDate() - offset);
+            const item = getWordByDate(histDate);
+            const isSelected = isSameDay(histDate, selectedDate);
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = `history-item${isSelected ? ' selected' : ''}`;
+            btn.innerHTML = `
+              <div>
+                <div class="history-item-title">${item.tema}</div>
+                <div class="history-item-meta">${formatDatePT(histDate)} • ${item.ref}</div>
+              </div>
+              <div class="history-item-badge">${offset === 1 ? 'Ontem' : `Há ${offset} dias`} ›</div>
+            `;
+            btn.addEventListener('click', () => {
+              selectedDate = new Date(histDate);
+              renderSelectedWord();
+              const mainCard = document.getElementById('palavraMainCard');
+              if (mainCard) mainCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            palavraHistoryList.appendChild(btn);
+          }
+        }
+
+        function renderSelectedWord() {
+          const entry = getWordByDate(selectedDate);
+          if (!entry) return;
+
+          const isToday = isSameDay(selectedDate, today);
+
+          if (palavraDayBadge) {
+            palavraDayBadge.innerText = isToday ? `${formatDatePT(selectedDate)} • Hoje` : formatDatePT(selectedDate);
+          }
+
+          if (palavraBackTodayBtn) {
+            palavraBackTodayBtn.style.display = isToday ? 'none' : 'inline-block';
+          }
+
+          if (palavraTheme) palavraTheme.innerText = entry.tema;
+          if (palavraVerseBox) {
+            palavraVerseBox.innerHTML = `"${entry.trecho}"<br><strong>— ${entry.ref}</strong>`;
+          }
+          if (palavraMeditation) palavraMeditation.innerText = entry.meditacao;
+          if (palavraApplication) palavraApplication.innerText = entry.aplicacao;
+
+          renderSevenDayHistory();
         }
 
         if (palavraBackTodayBtn) {
-          palavraBackTodayBtn.style.display = isToday ? 'none' : 'inline-block';
-        }
-
-        if (palavraTheme) palavraTheme.innerText = entry.tema;
-        if (palavraVerseBox) {
-          palavraVerseBox.innerHTML = `"${entry.trecho}"<br><strong>— ${entry.ref}</strong>`;
-        }
-        if (palavraMeditation) palavraMeditation.innerText = entry.meditacao;
-        if (palavraApplication) palavraApplication.innerText = entry.aplicacao;
-
-        renderSevenDayHistory();
-      }
-
-      if (palavraBackTodayBtn) {
-        palavraBackTodayBtn.addEventListener('click', () => {
-          selectedDate = new Date(today);
-          renderSelectedWord();
-        });
-      }
-
-      renderSelectedWord();
-
-      // 5. AUDIO GRAPH & VISUALIZADOR (COM FALLBACK PARA SAFARI/iOS)
-      function initAudioGraph() {
-        if (audioCtx) return;
-        try {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          audioCtx = new AudioContext();
-
-          sourceNode = audioCtx.createMediaElementSource(audio);
-          analyser = audioCtx.createAnalyser();
-          analyser.fftSize = 64;
-
-          bassFilter = audioCtx.createBiquadFilter();
-          bassFilter.type = "lowshelf";
-          bassFilter.frequency.value = 120;
-          const sBass = document.getElementById('sliderBass');
-          if (sBass) bassFilter.gain.value = parseFloat(sBass.value);
-
-          midFilter = audioCtx.createBiquadFilter();
-          midFilter.type = "peaking";
-          midFilter.frequency.value = 1000;
-          midFilter.Q.value = 1;
-          const sMid = document.getElementById('sliderMid');
-          if (sMid) midFilter.gain.value = parseFloat(sMid.value);
-
-          highFilter = audioCtx.createBiquadFilter();
-          highFilter.type = "highshelf";
-          highFilter.frequency.value = 6000;
-          const sHigh = document.getElementById('sliderHigh');
-          if (sHigh) highFilter.gain.value = parseFloat(sHigh.value);
-
-          sourceNode.connect(bassFilter);
-          bassFilter.connect(midFilter);
-          midFilter.connect(highFilter);
-          highFilter.connect(analyser);
-          analyser.connect(audioCtx.destination);
-        } catch (e) {
-          console.warn("Web Audio API restrita no Safari — a ativar modo visual dinâmico:", e);
-        }
-      }
-
-      function drawSpectrum() {
-        requestAnimationFrame(drawSpectrum);
-        if (!canvasCtx || !canvas) return;
-
-        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-        const isDarkMode = document.body.classList.contains('theme-dark');
-        const idleDotColor = isDarkMode ? "rgba(255, 255, 255, 0.04)" : "rgba(34, 41, 56, 0.08)";
-        const idleRefColor = isDarkMode ? "rgba(255, 255, 255, 0.015)" : "rgba(34, 41, 56, 0.03)";
-
-        const numCols = 12;
-        const colWidth = canvas.width / numCols;
-        const dotRadius = 2.4;
-        const dotSpacing = 4.2;
-        const maxRows = 11;
-
-        const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 32);
-        
-        if (analyser && isPlaying && audioCtx && audioCtx.state === 'running') {
-          try {
-            analyser.getByteFrequencyData(dataArray);
-          } catch (err) {
-            for (let i = 0; i < dataArray.length; i++) {
-              dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 180 + i) * 140 + Math.random() * 60));
-            }
-          }
-        } else if (isPlaying) {
-          for (let i = 0; i < dataArray.length; i++) {
-            dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 150 + i * 0.7) * 150 + Math.random() * 80));
-          }
-        } else {
-          for (let i = 0; i < dataArray.length; i++) dataArray[i] = 18;
-        }
-
-        const bassGain = bassFilter ? bassFilter.gain.value : 0;
-        const midGain = midFilter ? midFilter.gain.value : 0;
-        const highGain = highFilter ? highFilter.gain.value : 0;
-
-        for (let i = 0; i < numCols; i++) {
-          let rawVal = dataArray[i * 2] || 25;
-
-          if (i < 4) {
-            rawVal *= (1 + (bassGain / 12));
-          } else if (i < 8) {
-            rawVal *= (1 + (midGain / 12));
-          } else {
-            rawVal *= (1 + (highGain / 12));
-          }
-          rawVal = Math.min(255, Math.max(10, rawVal));
-
-          const activeRows = Math.floor((rawVal / 255) * maxRows);
-          const x = i * colWidth + colWidth / 2;
-
-          for (let r = 0; r < maxRows; r++) {
-            const y = canvas.height - 15 - (r * dotSpacing);
-
-            if (r < activeRows) {
-              if (r < 4) {
-                canvasCtx.fillStyle = "#2563EB"; 
-              } else if (r < 8) {
-                canvasCtx.fillStyle = "#8B5CF6"; 
-              } else {
-                canvasCtx.fillStyle = "#DB2777"; 
-              }
-            } else {
-              canvasCtx.fillStyle = idleDotColor;
-            }
-
-            canvasCtx.beginPath();
-            canvasCtx.arc(x, y, dotRadius, 0, Math.PI * 2);
-            canvasCtx.fill();
-
-            let refY = canvas.height - 8 + (r * dotSpacing);
-            if (r < activeRows) {
-              canvasCtx.fillStyle = r >= 8 ? "rgba(219, 39, 119, 0.2)" : (r >= 4 ? "rgba(139, 92, 246, 0.16)" : "rgba(37, 99, 235, 0.14)");
-            } else {
-              canvasCtx.fillStyle = idleRefColor;
-            }
-            canvasCtx.beginPath();
-            canvasCtx.arc(x, refY, dotRadius, 0, Math.PI * 2);
-            canvasCtx.fill();
-          }
-        }
-      }
-      drawSpectrum();
-
-      // 6. PLAY / PAUSE BUTTON
-      if (playBtn) {
-        playBtn.addEventListener('click', () => {
-          if (!audio) return;
-          if (!isPlaying) {
-            if (statusText) statusText.innerText = "A sintonizar a Estação CDO...";
-            initAudioGraph();
-            if (audioCtx && audioCtx.state === 'suspended') {
-              audioCtx.resume();
-            }
-
-            audio.src = streamUrl + "?t=" + Date.now();
-            audio.play().then(() => {
-              playBtn.innerText = "⏸";
-              if (statusText) statusText.innerText = "🔴 AO VIVO — Estação CDO";
-              isPlaying = true;
-            }).catch((err) => {
-              console.error("Erro ao reproduzir:", err);
-              if (statusText) statusText.innerText = "Toque novamente para iniciar o áudio.";
-            });
-          } else {
-            audio.pause();
-            audio.src = "";
-            playBtn.innerText = "▶";
-            if (statusText) statusText.innerText = "Rádio pausada";
-            isPlaying = false;
-          }
-        });
-      }
-
-      // 7. VOLUME & MUTE
-      if (volumeSlider) {
-        volumeSlider.addEventListener('input', (e) => {
-          const val = e.target.value;
-          if (audio) audio.volume = val;
-          if (muteBtn) muteBtn.innerText = (val == 0) ? "🔇" : "🔊";
-        });
-      }
-
-      if (muteBtn) {
-        muteBtn.addEventListener('click', () => {
-          if (!audio) return;
-          if (audio.muted) {
-            audio.muted = false;
-            muteBtn.innerText = "🔊";
-            if (volumeSlider) volumeSlider.value = audio.volume;
-          } else {
-            audio.muted = true;
-            muteBtn.innerText = "🔇";
-            if (volumeSlider) volumeSlider.value = 0;
-          }
-        });
-      }
-
-      // 8. EQUALIZADOR SLIDERS
-      function bindEq(sliderId, valId, bandName) {
-        const slider = document.getElementById(sliderId);
-        const valEl = document.getElementById(valId);
-        if (slider) {
-          slider.addEventListener('input', (e) => {
-            const numericVal = parseFloat(e.target.value);
-            const label = numericVal > 0 ? `+${numericVal} dB` : `${numericVal} dB`;
-            if (valEl) valEl.innerText = label;
-            
-            if (bandName === 'bass' && bassFilter) bassFilter.gain.value = numericVal;
-            if (bandName === 'mid' && midFilter) midFilter.gain.value = numericVal;
-            if (bandName === 'high' && highFilter) highFilter.gain.value = numericVal;
+          palavraBackTodayBtn.addEventListener('click', () => {
+            selectedDate = new Date(today);
+            renderSelectedWord();
           });
         }
-      }
-      bindEq('sliderBass', 'valBass', 'bass');
-      bindEq('sliderMid', 'valMid', 'mid');
-      bindEq('sliderHigh', 'valHigh', 'high');
 
-      // 9. COMPARTILHAR (Web Share API + fallback WhatsApp)
-      if (shareBtn) {
-        shareBtn.addEventListener('click', async () => {
-          const shareData = {
-            title: 'Estação CDO',
-            text: 'Ouça a Estação CDO - Casa de Oração para Todos os Povos 🙏',
-            url: window.location.href
-          };
+        renderSelectedWord();
 
-          if (navigator.share) {
+        // 4. AUDIO GRAPH & VISUALIZADOR
+        function initAudioGraph() {
+          if (audioCtx) return;
+          try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+
+            sourceNode = audioCtx.createMediaElementSource(audio);
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 64;
+
+            bassFilter = audioCtx.createBiquadFilter();
+            bassFilter.type = "lowshelf";
+            bassFilter.frequency.value = 120;
+            const sBass = document.getElementById('sliderBass');
+            if (sBass) bassFilter.gain.value = parseFloat(sBass.value);
+
+            midFilter = audioCtx.createBiquadFilter();
+            midFilter.type = "peaking";
+            midFilter.frequency.value = 1000;
+            midFilter.Q.value = 1;
+            const sMid = document.getElementById('sliderMid');
+            if (sMid) midFilter.gain.value = parseFloat(sMid.value);
+
+            highFilter = audioCtx.createBiquadFilter();
+            highFilter.type = "highshelf";
+            highFilter.frequency.value = 6000;
+            const sHigh = document.getElementById('sliderHigh');
+            if (sHigh) highFilter.gain.value = parseFloat(sHigh.value);
+
+            sourceNode.connect(bassFilter);
+            bassFilter.connect(midFilter);
+            midFilter.connect(highFilter);
+            highFilter.connect(analyser);
+            analyser.connect(audioCtx.destination);
+          } catch (e) {
+            console.warn("Web Audio API restrita — a usar modo visual dinâmico:", e);
+          }
+        }
+
+        function drawSpectrum() {
+          requestAnimationFrame(drawSpectrum);
+          if (!canvasCtx || !canvas) return;
+
+          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const isDarkMode = document.body.classList.contains('theme-dark');
+          const idleDotColor = isDarkMode ? "rgba(255, 255, 255, 0.04)" : "rgba(34, 41, 56, 0.08)";
+          const idleRefColor = isDarkMode ? "rgba(255, 255, 255, 0.015)" : "rgba(34, 41, 56, 0.03)";
+
+          const numCols = 12;
+          const colWidth = canvas.width / numCols;
+          const dotRadius = 2.4;
+          const dotSpacing = 4.2;
+          const maxRows = 11;
+
+          const dataArray = new Uint8Array(analyser ? analyser.frequencyBinCount : 32);
+
+          if (analyser && isPlaying && audioCtx && audioCtx.state === 'running') {
             try {
-              await navigator.share(shareData);
+              analyser.getByteFrequencyData(dataArray);
             } catch (err) {
-              // Usuário cancelou ou erro — não faz nada
+              for (let i = 0; i < dataArray.length; i++) {
+                dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 180 + i) * 140 + Math.random() * 60));
+              }
+            }
+          } else if (isPlaying) {
+            for (let i = 0; i < dataArray.length; i++) {
+              dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 150 + i * 0.7) * 150 + Math.random() * 80));
             }
           } else {
-            const text = encodeURIComponent('Ouça a Estação CDO - Casa de Oração para Todos os Povos 🙏\n' + window.location.href);
-            window.open('https://wa.me/?text=' + text, '_blank');
+            for (let i = 0; i < dataArray.length; i++) dataArray[i] = 18;
           }
-        });
-      }
 
-      // 10. MODAL DE FOTOS
-      document.querySelectorAll('.carousel-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const imgSrc = item.getAttribute('data-img');
-          const caption = item.getAttribute('data-caption');
-          const modal = document.getElementById('photoModal');
-          const modalImg = document.getElementById('modalImg');
-          const modalCaption = document.getElementById('modalCaption');
+          const bassGain = bassFilter ? bassFilter.gain.value : 0;
+          const midGain = midFilter ? midFilter.gain.value : 0;
+          const highGain = highFilter ? highFilter.gain.value : 0;
 
-          if (modal && modalImg && modalCaption) {
-            modalImg.src = imgSrc;
-            modalCaption.innerText = caption;
-            modal.style.display = 'flex';
+          for (let i = 0; i < numCols; i++) {
+            let rawVal = dataArray[i * 2] || 25;
+
+            if (i < 4) {
+              rawVal *= (1 + (bassGain / 12));
+            } else if (i < 8) {
+              rawVal *= (1 + (midGain / 12));
+            } else {
+              rawVal *= (1 + (highGain / 12));
+            }
+            rawVal = Math.min(255, Math.max(10, rawVal));
+
+            const activeRows = Math.floor((rawVal / 255) * maxRows);
+            const x = i * colWidth + colWidth / 2;
+
+            for (let r = 0; r < maxRows; r++) {
+              const y = canvas.height - 15 - (r * dotSpacing);
+
+              if (r < activeRows) {
+                if (r < 4) {
+                  canvasCtx.fillStyle = "#2563EB";
+                } else if (r < 8) {
+                  canvasCtx.fillStyle = "#8B5CF6";
+                } else {
+                  canvasCtx.fillStyle = "#DB2777";
+                }
+              } else {
+                canvasCtx.fillStyle = idleDotColor;
+              }
+
+              canvasCtx.beginPath();
+              canvasCtx.arc(x, y, dotRadius, 0, Math.PI * 2);
+              canvasCtx.fill();
+
+              const refY = canvas.height - 8 + (r * dotSpacing);
+              if (r < activeRows) {
+                canvasCtx.fillStyle = r >= 8 ? "rgba(219, 39, 119, 0.2)" : (r >= 4 ? "rgba(139, 92, 246, 0.16)" : "rgba(37, 99, 235, 0.14)");
+              } else {
+                canvasCtx.fillStyle = idleRefColor;
+              }
+              canvasCtx.beginPath();
+              canvasCtx.arc(x, refY, dotRadius, 0, Math.PI * 2);
+              canvasCtx.fill();
+            }
           }
-        });
-      });
-
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-          const modal = document.getElementById('photoModal');
-          if (modal) modal.style.display = 'none';
-        });
-      }
-
-      // 11. KIDS SECTION CATALOG
-      const kidsCatalog = {
-        palavrinhas: {
-          titulo: "🎵 3 Palavrinhas - Louvores Infantis",
-          videos: [
-            { titulo: "3 Palavrinhas - Deus é Tão Bom", desc: "Louvor para cantar em família", embedUrl: "https://www.youtube.com/embed/l47v4r2vC9o" },
-            { titulo: "3 Palavrinhas - Arca de Noé", desc: "Louvor infantil clássico", embedUrl: "https://www.youtube.com/embed/zLZ6-pSSwUo" }
-          ]
-        },
-        desenhos: {
-          titulo: "🎬 Desenhos Bíblicos (Clássicos Richard Rich)",
-          videos: [
-            { titulo: "A História de Moisés", desc: "Clássico animado", embedUrl: "https://www.youtube.com/embed/zLZ6-pSSwUo" },
-            { titulo: "Davi e Golias", desc: "História Bíblica Animada", embedUrl: "https://www.youtube.com/embed/l47v4r2vC9o" }
-          ]
-        },
-        krozz: {
-          titulo: "🚀 Krozz - Aventuras",
-          videos: [
-            { titulo: "Krozz - História Completa", desc: "Aventura completa", embedUrl: "https://www.youtube.com/embed/g78AmTLB6R8?start=2261" }
-          ]
-        },
-        missaoharpa: {
-          titulo: "🎻 Missão Harpa - História",
-          videos: [
-            { titulo: "Missão Harpa - A História", desc: "História inspiradora da Harpa Cristã", embedUrl: "https://www.youtube.com/embed/VahaDWMyK58?start=79" }
-          ]
-        },
-        minhavida: {
-          titulo: "🌍 Minha vida é uma viagem",
-          videos: [
-            { titulo: "Minha Vida é Uma Viagem - Volume 1", desc: "Volume 1 Completo", embedUrl: "https://www.youtube.com/embed/9er3RsvfUSA?start=948" },
-            { titulo: "Minha Vida é Uma Viagem - Volume 2", desc: "Volume 2 Completo", embedUrl: "https://www.youtube.com/embed/x3nTjHwp65c" },
-            { titulo: "Minha Vida é Uma Viagem - Volume 3", desc: "Volume 3 Completo", embedUrl: "https://www.youtube.com/embed/C-wD0ba0btU" },
-            { titulo: "Minha Vida é Uma Viagem - Volume 4", desc: "Volume 4 Completo", embedUrl: "https://www.youtube.com/embed/kLSKNRD01qs" },
-            { titulo: "Minha Vida é Uma Viagem - Volume 5", desc: "Volume 5 Completo", embedUrl: "https://www.youtube.com/embed/63bsooaIe0M?start=519" }
-          ]
         }
-      };
+        drawSpectrum();
 
-      document.querySelectorAll('.kids-cat-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const catKey = btn.getAttribute('data-kids');
-          const category = kidsCatalog[catKey];
-          if (!category) return;
+        // 5. PLAY / PAUSE BUTTON
+        if (playBtn) {
+          playBtn.addEventListener('click', () => {
+            if (!audio) return;
+            if (!isPlaying) {
+              if (statusText) statusText.innerText = "A sintonizar a Estação CDO...";
+              initAudioGraph();
+              if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+              }
 
-          const menu = document.getElementById('kidsMenu');
-          const playerArea = document.getElementById('kidsPlayerArea');
-          const titleEl = document.getElementById('kidsCategoryTitle');
-          const listEl = document.getElementById('kidsVideoList');
+              audio.src = streamUrl + "?t=" + Date.now();
+              audio.play().then(() => {
+                playBtn.innerText = "⏸";
+                if (statusText) statusText.innerText = "🔴 AO VIVO — Estação CDO";
+                isPlaying = true;
+              }).catch((err) => {
+                console.error("Erro ao reproduzir:", err);
+                if (statusText) statusText.innerText = "Toque novamente para iniciar o áudio.";
+              });
+            } else {
+              audio.pause();
+              audio.src = "";
+              playBtn.innerText = "▶";
+              if (statusText) statusText.innerText = "Rádio pausada";
+              isPlaying = false;
+            }
+          });
+        }
 
-          if (menu) menu.style.display = 'none';
-          if (titleEl) titleEl.innerText = category.titulo;
+        // 6. VOLUME & MUTE
+        if (volumeSlider) {
+          volumeSlider.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (audio) audio.volume = val;
+            if (muteBtn) muteBtn.innerText = (val == 0) ? "🔇" : "🔊";
+          });
+        }
 
-          if (listEl) {
-            listEl.innerHTML = '';
-            category.videos.forEach(video => {
-              listEl.innerHTML += `
-                <div class="video-container">
-                  <h4 class="section-title" style="font-size: 0.9rem;">${video.titulo}</h4>
-                  <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">${video.desc}</p>
-                  <div class="video-wrapper">
-                    <iframe src="${video.embedUrl}" allowfullscreen></iframe>
-                  </div>
-                </div>
-              `;
+        if (muteBtn) {
+          muteBtn.addEventListener('click', () => {
+            if (!audio) return;
+            if (audio.muted) {
+              audio.muted = false;
+              muteBtn.innerText = "🔊";
+              if (volumeSlider) volumeSlider.value = audio.volume;
+            } else {
+              audio.muted = true;
+              muteBtn.innerText = "🔇";
+              if (volumeSlider) volumeSlider.value = 0;
+            }
+          });
+        }
+
+        // 7. EQUALIZADOR SLIDERS
+        function bindEq(sliderId, valId, bandName) {
+          const slider = document.getElementById(sliderId);
+          const valEl = document.getElementById(valId);
+          if (slider) {
+            slider.addEventListener('input', (e) => {
+              const numericVal = parseFloat(e.target.value);
+              const label = numericVal > 0 ? `+${numericVal} dB` : `${numericVal} dB`;
+              if (valEl) valEl.innerText = label;
+
+              if (bandName === 'bass' && bassFilter) bassFilter.gain.value = numericVal;
+              if (bandName === 'mid' && midFilter) midFilter.gain.value = numericVal;
+              if (bandName === 'high' && highFilter) highFilter.gain.value = numericVal;
             });
           }
-          if (playerArea) playerArea.classList.add('active');
-        });
-      });
-
-      const kidsBackBtn = document.getElementById('kidsBackBtn');
-      if (kidsBackBtn) {
-        kidsBackBtn.addEventListener('click', () => {
-          const listEl = document.getElementById('kidsVideoList');
-          const playerArea = document.getElementById('kidsPlayerArea');
-          const menu = document.getElementById('kidsMenu');
-
-          if (listEl) listEl.innerHTML = '';
-          if (playerArea) playerArea.classList.remove('active');
-          if (menu) menu.style.display = 'grid';
-        });
-      }
-
-      // 12. OUVINTES SIMULADOS
-      function updateListeners() {
-        const countEl = document.getElementById('listenerCount');
-        if (countEl) {
-          countEl.innerText = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
         }
+        bindEq('sliderBass', 'valBass', 'bass');
+        bindEq('sliderMid', 'valMid', 'mid');
+        bindEq('sliderHigh', 'valHigh', 'high');
+
+        // 8. COMPARTILHAR
+        if (shareBtn) {
+          shareBtn.addEventListener('click', async () => {
+            const shareData = {
+              title: 'Estação CDO',
+              text: 'Ouça a Estação CDO - Casa de Oração para Todos os Povos 🙏',
+              url: window.location.href
+            };
+
+            if (navigator.share) {
+              try {
+                await navigator.share(shareData);
+              } catch (err) {}
+            } else {
+              const text = encodeURIComponent('Ouça a Estação CDO - Casa de Oração para Todos os Povos 🙏\n' + window.location.href);
+              window.open('https://wa.me/?text=' + text, '_blank');
+            }
+          });
+        }
+
+        // 9. MODAL DE FOTOS
+        document.querySelectorAll('.carousel-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const imgSrc = item.getAttribute('data-img');
+            const caption = item.getAttribute('data-caption');
+            const modal = document.getElementById('photoModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalCaption = document.getElementById('modalCaption');
+
+            if (modal && modalImg && modalCaption) {
+              modalImg.src = imgSrc;
+              modalCaption.innerText = caption;
+              modal.style.display = 'flex';
+            }
+          });
+        });
+
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        if (closeModalBtn) {
+          closeModalBtn.addEventListener('click', () => {
+            const modal = document.getElementById('photoModal');
+            if (modal) modal.style.display = 'none';
+          });
+        }
+
+        // 10. KIDS SECTION CATALOG (BOTÕES DE VOLUMES / TEMPORADAS)
+        const kidsCatalog = {
+          palavrinhas: {
+            titulo: "🎵 3 Palavrinhas",
+            subtitulo: "Escolha um volume para assistir:",
+            volumes: [
+              {
+                id: "vol1",
+                badge: "1º VOLUME",
+                nome: "Volume 1",
+                desc: "Álbum completo + 10 músicas",
+                image: "3palavrinhas.jpg",
+                album: {
+                  titulo: "Álbum Completo — 3 Palavrinhas Volume 1",
+                  desc: "3 Palavrinhas • Volume 1 Completo",
+                  embedUrl: "https://www.youtube.com/embed/Iw8ujbWna3s"
+                },
+                videos: [
+                  { num: "01", titulo: "3 Palavrinhas", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/by57a60VfqA" },
+                  { num: "02", titulo: "Deus Criou os Peixes", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/XHZQX09Ty5U" },
+                  { num: "03", titulo: "Quem Fez?", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/mMJP-ci-EtE" },
+                  { num: "04", titulo: "O Sabão", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/r87JrGEC45s" },
+                  { num: "05", titulo: "Meu Barco", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/rjgrxY1QsjA?list=PLpoW9xiINn3R4xKYbcAilFulh-nCUPnRa&index=6" },
+                  { num: "06", titulo: "Estou Alegre", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/zB2lFJIhwRo" },
+                  { num: "07", titulo: "Ao Senhor Agradecemos", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/EnTRTlYoaTY" },
+                  { num: "08", titulo: "A Deus Dai Louvor", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/YjoZhRSThqA" },
+                  { num: "09", titulo: "Missionariozinho", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/MKPAkjY463I?list=PLpoW9xiINn3R4xKYbcAilFulh-nCUPnRa&index=10" },
+                  { num: "10", titulo: "Alô", desc: "3 Palavrinhas - Volume 1", embedUrl: "https://www.youtube.com/embed/AVoFNNKoJuA" }
+                ]
+              }
+            ],
+            videos: []
+          },
+          desenhos: {
+            titulo: "🎬 Desenhos Bíblicos (Clássicos Richard Rich)",
+            volumes: [],
+            videos: [
+              { titulo: "A História de Moisés", desc: "Clássico animado", embedUrl: "https://www.youtube.com/embed/zLZ6-pSSwUo" },
+              { titulo: "Davi e Golias", desc: "História Bíblica Animada", embedUrl: "https://www.youtube.com/embed/l47v4r2vC9o" }
+            ]
+          },
+          krozz: {
+            titulo: "🚀 Krozz - Aventuras",
+            volumes: [],
+            videos: [
+              { titulo: "Krozz - História Completa", desc: "Aventura completa", embedUrl: "https://www.youtube.com/embed/g78AmTLB6R8?start=2261" }
+            ]
+          },
+          missaoharpa: {
+            titulo: "🎻 Missão Harpa - História",
+            volumes: [],
+            videos: [
+              { titulo: "Missão Harpa - A História", desc: "História inspiradora da Harpa Cristã", embedUrl: "https://www.youtube.com/embed/VahaDWMyK58?start=79" }
+            ]
+          },
+          minhavida: {
+            titulo: "🌍 Minha vida é uma viagem",
+            volumes: [],
+            videos: [
+              { titulo: "Minha Vida é Uma Viagem - Volume 1", desc: "Volume 1 Completo", embedUrl: "https://www.youtube.com/embed/9er3RsvfUSA?start=948" },
+              { titulo: "Minha Vida é Uma Viagem - Volume 2", desc: "Volume 2 Completo", embedUrl: "https://www.youtube.com/embed/x3nTjHwp65c" },
+              { titulo: "Minha Vida é Uma Viagem - Volume 3", desc: "Volume 3 Completo", embedUrl: "https://www.youtube.com/embed/C-wD0ba0btU" },
+              { titulo: "Minha Vida é Uma Viagem - Volume 4", desc: "Volume 4 Completo", embedUrl: "https://www.youtube.com/embed/kLSKNRD01qs" },
+              { titulo: "Minha Vida é Uma Viagem - Volume 5", desc: "Volume 5 Completo", embedUrl: "https://www.youtube.com/embed/63bsooaIe0M?start=519" }
+            ]
+          }
+        };
+
+        let currentKidsCategoryKey = null;
+
+        const menuEl = document.getElementById('kidsMenu');
+        const playerAreaEl = document.getElementById('kidsPlayerArea');
+        const titleEl = document.getElementById('kidsCategoryTitle');
+        const listEl = document.getElementById('kidsVideoList');
+        const backVolumesBtn = document.getElementById('kidsBackVolumesBtn');
+        const kidsBackBtn = document.getElementById('kidsBackBtn');
+
+        function buildVideoCardHtml(video) {
+          const numBadge = video.num ? `<span class="kids-track-num">${video.num}</span>` : '';
+
+          if (video.embedUrl) {
+            return `
+              <div class="video-container">
+                <div class="kids-track-header">
+                  ${numBadge}
+                  <h4 class="section-title" style="font-size: 0.9rem;">${video.titulo}</h4>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">${video.desc}</p>
+                <div class="video-wrapper">
+                  <iframe src="${video.embedUrl}" allowfullscreen></iframe>
+                </div>
+              </div>
+            `;
+          }
+
+          if (video.externalUrl) {
+            return `
+              <div class="video-container">
+                <div class="kids-track-header">
+                  ${numBadge}
+                  <h4 class="section-title" style="font-size: 0.9rem;">${video.titulo}</h4>
+                </div>
+                <div class="kids-search-box">
+                  <p style="font-size: 0.72rem; color: var(--text-muted);">${video.desc}</p>
+                  <a href="${video.externalUrl}" target="_blank" rel="noopener noreferrer" class="kids-external-btn">
+                    🔍 Abrir no YouTube
+                  </a>
+                </div>
+              </div>
+            `;
+          }
+
+          return '';
+        }
+
+        function renderKidsVolumeContent(volume) {
+          if (!listEl || !volume) return;
+          let html = '';
+
+          if (volume.album) {
+            html += `<div class="kids-section-divider">💿 Álbum Completo</div>`;
+            html += buildVideoCardHtml(volume.album);
+          }
+
+          if (Array.isArray(volume.videos) && volume.videos.length > 0) {
+            html += `<div class="kids-section-divider">🎶 Músicas Individuais</div>`;
+            html += volume.videos.map(buildVideoCardHtml).join('');
+          }
+
+          listEl.innerHTML = html;
+        }
+
+        function renderKidsVideoCards(videos) {
+          if (!listEl) return;
+          listEl.innerHTML = (videos || []).map(buildVideoCardHtml).join('');
+        }
+
+        function openKidsVolumes(catKey) {
+          const category = kidsCatalog[catKey];
+          if (!category || !Array.isArray(category.volumes) || !listEl || !titleEl) return;
+
+          currentKidsCategoryKey = catKey;
+          if (menuEl) menuEl.style.display = 'none';
+          if (backVolumesBtn) backVolumesBtn.style.display = 'none';
+          titleEl.innerText = `${category.titulo} — ${category.subtitulo || 'Escolha um volume'}`;
+
+          const gridWrapper = document.createElement('div');
+          gridWrapper.className = 'kids-volumes-grid';
+
+          category.volumes.forEach(volume => {
+            const volBtn = document.createElement('button');
+            volBtn.type = 'button';
+            volBtn.className = 'kids-volume-btn';
+            if (volume.image) {
+              volBtn.style.backgroundImage = `url('${volume.image}')`;
+            }
+            volBtn.innerHTML = `
+              <div class="kids-cat-info">
+                ${volume.badge ? `<span class="kids-volume-pill">${volume.badge}</span>` : ''}
+                <div class="kids-cat-title">${volume.nome}</div>
+                <div class="kids-cat-sub">${volume.desc}</div>
+              </div>
+            `;
+            volBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              openKidsVolumeVideos(catKey, volume.id);
+            });
+            gridWrapper.appendChild(volBtn);
+          });
+
+          listEl.innerHTML = '';
+          listEl.appendChild(gridWrapper);
+
+          if (playerAreaEl) playerAreaEl.classList.add('active');
+        }
+
+        function openKidsVolumeVideos(catKey, volumeId) {
+          const category = kidsCatalog[catKey];
+          if (!category || !Array.isArray(category.volumes) || !titleEl) return;
+
+          const volume = category.volumes.find(v => v.id === volumeId);
+          if (!volume) return;
+
+          currentKidsCategoryKey = catKey;
+          titleEl.innerText = `${category.titulo} • ${volume.nome}`;
+          if (backVolumesBtn) backVolumesBtn.style.display = 'inline-flex';
+          renderKidsVolumeContent(volume);
+        }
+
+        if (menuEl) {
+          menuEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('.kids-cat-btn');
+            if (!btn) return;
+            e.preventDefault();
+            e.stopPropagation();
+
+            const catKey = btn.getAttribute('data-kids');
+            const category = kidsCatalog[catKey];
+            if (!category) return;
+
+            if (Array.isArray(category.volumes) && category.volumes.length > 0) {
+              openKidsVolumes(catKey);
+              return;
+            }
+
+            currentKidsCategoryKey = null;
+            menuEl.style.display = 'none';
+            if (backVolumesBtn) backVolumesBtn.style.display = 'none';
+            if (titleEl) titleEl.innerText = category.titulo;
+            renderKidsVideoCards(category.videos || []);
+            if (playerAreaEl) playerAreaEl.classList.add('active');
+          });
+        }
+
+        if (backVolumesBtn) {
+          backVolumesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (currentKidsCategoryKey) {
+              openKidsVolumes(currentKidsCategoryKey);
+            }
+          });
+        }
+
+        if (kidsBackBtn) {
+          kidsBackBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            currentKidsCategoryKey = null;
+            if (listEl) listEl.innerHTML = '';
+            if (backVolumesBtn) backVolumesBtn.style.display = 'none';
+            if (playerAreaEl) playerAreaEl.classList.remove('active');
+            if (menuEl) menuEl.style.display = 'grid';
+          });
+        }
+
+        // 11. OUVINTES SIMULADOS
+        function updateListeners() {
+          const countEl = document.getElementById('listenerCount');
+          if (countEl) {
+            countEl.innerText = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
+          }
+        }
+        updateListeners();
+        setInterval(updateListeners, 30000);
       }
-      updateListeners();
-      setInterval(updateListeners, 30000);
-    });
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
   </script>
 </body>
 </html>
