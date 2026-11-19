@@ -1,6 +1,7 @@
 {
   "name": "Estação CDO",
   "short_name": "Estação CDO",
+  "description": "Aplicativo oficial da Casa de Oração para Todos os Povos com rádio ao vivo 24h, Palavra do Dia, cantinho infantil e agenda.",
   "start_url": "/estacao-cdo/",
   "scope": "/estacao-cdo/",
   "display": "standalone",
