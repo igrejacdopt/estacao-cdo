@@ -5,19 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Estação CDO - Casa de Oração para Todos os Povos</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0B132B">
+  <meta name="theme-color" content="#EFEAE2">
   <style>
     :root {
+      /* TEMA SOFT (PADRÃO ACOLHEDOR) */
+      --outer-bg: #EAE4DA;
+      --bg-dark: #F5F1EB;
+      --card-bg: #FAF7F2;
+      --card-gradient: linear-gradient(145deg, #FCF9F4, #EFE9DF);
+      --surface-soft: #E8E1D5;
+      --accent-gold: #C27412;
+      --accent-gold-strong: #A85E08;
+      --accent-gold-glow: rgba(194, 116, 18, 0.25);
+      --text-light: #222938;
+      --text-muted: #5A6478;
+      --border-color: rgba(194, 116, 18, 0.28);
+      --subtle-border: rgba(34, 41, 56, 0.1);
+      --dock-bg: rgba(250, 247, 242, 0.96);
+      --dock-active-bg: rgba(194, 116, 18, 0.16);
+      --radio-btn-text: #FFFDF9;
+      --spectrum-bg: #E6E0D6;
+      --spectrum-dot-idle: rgba(34, 41, 56, 0.08);
+      --kids-purple: #8B5CF6;
+      --kids-light: #6D28D9;
+      --kids-header-bg: linear-gradient(145deg, #F3ECFF, #E6DCFA);
+      --kids-card-overlay: linear-gradient(to top, rgba(30, 22, 54, 0.88) 22%, rgba(30, 22, 54, 0.18) 100%);
+      --modal-bg: rgba(34, 41, 56, 0.92);
+      --shadow-soft: 0 10px 24px rgba(34, 41, 56, 0.08);
+    }
+
+    body.theme-dark {
+      /* TEMA ESCURO (ALTERNÁVEL NOS AJUSTES) */
+      --outer-bg: #070D1F;
       --bg-dark: #0B132B;
       --card-bg: #1C2541;
       --card-gradient: linear-gradient(145deg, #1C2541, #131B31);
+      --surface-soft: rgba(11, 19, 43, 0.65);
       --accent-gold: #F59E0B;
-      --accent-gold-glow: rgba(245, 158, 11, 0.4);
+      --accent-gold-strong: #FBBF24;
+      --accent-gold-glow: rgba(245, 158, 11, 0.35);
       --text-light: #F8FAFC;
       --text-muted: #94A3B8;
-      --border-color: rgba(245, 158, 11, 0.2);
+      --border-color: rgba(245, 158, 11, 0.24);
+      --subtle-border: rgba(248, 250, 252, 0.08);
+      --dock-bg: #0B132B;
+      --dock-active-bg: rgba(245, 158, 11, 0.15);
+      --radio-btn-text: #0B132B;
+      --spectrum-bg: #050A18;
+      --spectrum-dot-idle: rgba(255, 255, 255, 0.04);
       --kids-purple: #A855F7;
       --kids-light: #C084FC;
+      --kids-header-bg: linear-gradient(145deg, #1C2541, #1A103C);
+      --kids-card-overlay: linear-gradient(to top, rgba(11, 19, 43, 0.95) 20%, rgba(11, 19, 43, 0.2) 100%);
+      --modal-bg: rgba(7, 13, 31, 0.96);
+      --shadow-soft: 0 12px 26px rgba(0, 0, 0, 0.35);
     }
 
     * {
@@ -28,13 +69,14 @@
     }
 
     body {
-      background-color: #070D1F;
+      background-color: var(--outer-bg);
       color: var(--text-light);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 0;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     button {
@@ -50,8 +92,9 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 20px 45px rgba(34, 41, 56, 0.14);
       overflow: hidden;
+      transition: background-color 0.25s ease;
     }
 
     @media (min-width: 768px) {
@@ -59,7 +102,7 @@
         max-width: 750px;
         height: 92vh;
         border-radius: 24px;
-        border: 2px solid var(--border-color);
+        border: 1.5px solid var(--border-color);
       }
     }
 
@@ -69,7 +112,7 @@
       align-items: center;
       background: var(--card-gradient);
       padding: 12px 20px;
-      border-bottom: 2px solid var(--accent-gold);
+      border-bottom: 1.5px solid var(--border-color);
       position: relative;
       z-index: 50;
       flex-shrink: 0;
@@ -93,7 +136,7 @@
     .brand h1 {
       font-size: 1.05rem;
       color: var(--accent-gold);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
       line-height: 1.1;
     }
 
@@ -103,16 +146,20 @@
     }
 
     .points-badge {
-      background: rgba(245, 158, 11, 0.15);
+      background: var(--dock-active-bg);
       border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
+      color: var(--accent-gold-strong);
       padding: 5px 10px;
       border-radius: 20px;
       font-size: 0.75rem;
-      font-weight: bold;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 5px;
+    }
+
+    body.theme-dark .points-badge {
+      color: var(--accent-gold);
     }
 
     .app-content {
@@ -153,8 +200,8 @@
       left: 0;
       right: 0;
       height: 84px;
-      background: #0B132B;
-      border-top: 2px solid var(--accent-gold);
+      background: var(--dock-bg);
+      border-top: 1.5px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -163,10 +210,15 @@
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
       z-index: 999999;
-      box-shadow: 0 -5px 25px rgba(0,0,0,0.8);
+      box-shadow: 0 -6px 22px rgba(34, 41, 56, 0.12);
       touch-action: pan-x;
       -webkit-overflow-scrolling: touch;
       pointer-events: auto;
+      backdrop-filter: blur(8px);
+    }
+
+    body.theme-dark .bottom-dock {
+      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.8);
     }
 
     .bottom-dock::-webkit-scrollbar {
@@ -217,8 +269,12 @@
     }
 
     .dock-item.active {
+      color: var(--accent-gold-strong);
+      background: var(--dock-active-bg);
+    }
+
+    body.theme-dark .dock-item.active {
       color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.15);
     }
 
     /* BOTÃO RÁDIO AO CENTRO COM TAMANHO FIXO BLINDADO */
@@ -228,14 +284,14 @@
       height: 72px !important;
       scroll-snap-align: center;
       background: var(--accent-gold);
-      color: var(--bg-dark);
+      color: var(--radio-btn-text);
       border-radius: 50%;
-      border: 3px solid var(--bg-dark);
+      border: 3px solid var(--card-bg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 15px var(--accent-gold-glow);
+      box-shadow: 0 4px 16px var(--accent-gold-glow);
       cursor: pointer;
       font-weight: bold;
       transition: transform 0.15s;
@@ -267,20 +323,29 @@
       padding: 16px;
       border-radius: 16px;
       border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
     .info-card h3 {
-      color: var(--accent-gold);
+      color: var(--accent-gold-strong);
       font-size: 1.05rem;
+    }
+
+    body.theme-dark .info-card h3 {
+      color: var(--accent-gold);
     }
 
     .info-card p, .info-card li {
       font-size: 0.82rem;
       color: var(--text-muted);
-      line-height: 1.45;
+      line-height: 1.48;
+    }
+
+    .info-card strong {
+      color: var(--text-light);
     }
 
     /* ESTILOS DA PALAVRA DO DIA + HISTÓRICO 7 DIAS */
@@ -294,8 +359,8 @@
 
     .palavra-day-pill {
       display: inline-block;
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--accent-gold);
+      background: var(--dock-active-bg);
+      color: var(--accent-gold-strong);
       border: 1px solid var(--border-color);
       padding: 3px 10px;
       border-radius: 20px;
@@ -303,16 +368,24 @@
       font-weight: 700;
     }
 
-    .palavra-today-btn {
-      background: rgba(245, 158, 11, 0.18);
-      border: 1px solid var(--accent-gold);
+    body.theme-dark .palavra-day-pill {
       color: var(--accent-gold);
+    }
+
+    .palavra-today-btn {
+      background: var(--dock-active-bg);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-strong);
       padding: 4px 10px;
       border-radius: 8px;
       font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       pointer-events: auto;
+    }
+
+    body.theme-dark .palavra-today-btn {
+      color: var(--accent-gold);
     }
 
     .palavra-theme {
@@ -322,28 +395,32 @@
     }
 
     .verse-box {
-      background: rgba(245, 158, 11, 0.08);
+      background: var(--dock-active-bg);
       border-left: 3px solid var(--accent-gold);
       padding: 12px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-style: italic;
       color: var(--text-light);
       font-size: 0.85rem;
-      line-height: 1.45;
+      line-height: 1.48;
     }
 
     .palavra-block-label {
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.6px;
-      color: var(--accent-gold);
+      color: var(--accent-gold-strong);
       font-weight: 800;
       margin-bottom: 3px;
     }
 
+    body.theme-dark .palavra-block-label {
+      color: var(--accent-gold);
+    }
+
     .application-box {
-      background: rgba(11, 19, 43, 0.65);
-      border: 1px solid var(--border-color);
+      background: var(--surface-soft);
+      border: 1px solid var(--subtle-border);
       border-radius: 10px;
       padding: 11px 12px;
     }
@@ -358,8 +435,8 @@
     .history-item {
       width: 100%;
       text-align: left;
-      background: rgba(11, 19, 43, 0.6);
-      border: 1px solid var(--border-color);
+      background: var(--surface-soft);
+      border: 1px solid var(--subtle-border);
       border-radius: 12px;
       padding: 10px 12px;
       cursor: pointer;
@@ -373,7 +450,7 @@
 
     .history-item.selected {
       border-color: var(--accent-gold);
-      background: rgba(245, 158, 11, 0.14);
+      background: var(--dock-active-bg);
     }
 
     .history-item-title {
@@ -391,8 +468,12 @@
     .history-item-badge {
       font-size: 0.68rem;
       font-weight: 700;
-      color: var(--accent-gold);
+      color: var(--accent-gold-strong);
       white-space: nowrap;
+    }
+
+    body.theme-dark .history-item-badge {
+      color: var(--accent-gold);
     }
 
     .radio-card {
@@ -400,7 +481,7 @@
       padding: 14px 16px;
       border-radius: 16px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-soft);
       border: 1px solid var(--border-color);
       position: relative;
       z-index: 15;
@@ -410,22 +491,33 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-      background: rgba(239, 68, 68, 0.15);
-      color: #EF4444;
+      background: rgba(220, 38, 38, 0.12);
+      color: #DC2626;
       padding: 3px 10px;
       border-radius: 10px;
       font-size: 0.68rem;
       font-weight: bold;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(220, 38, 38, 0.28);
+    }
+
+    body.theme-dark .live-indicator {
+      background: rgba(239, 68, 68, 0.15);
+      color: #EF4444;
+      border-color: rgba(239, 68, 68, 0.3);
     }
 
     .live-dot {
       width: 6px;
       height: 6px;
-      background-color: #EF4444;
+      background-color: #DC2626;
       border-radius: 50%;
-      box-shadow: 0 0 8px #EF4444;
+      box-shadow: 0 0 6px rgba(220, 38, 38, 0.6);
       animation: pulse 1.5s infinite;
+    }
+
+    body.theme-dark .live-dot {
+      background-color: #EF4444;
+      box-shadow: 0 0 8px #EF4444;
     }
 
     @keyframes pulse {
@@ -456,10 +548,10 @@
       border-radius: 50%;
       border: none;
       background: var(--accent-gold);
-      color: var(--bg-dark);
+      color: var(--radio-btn-text);
       font-size: 1.3rem;
       cursor: pointer;
-      box-shadow: 0 0 15px var(--accent-gold-glow);
+      box-shadow: 0 4px 16px var(--accent-gold-glow);
       transition: transform 0.2s, background 0.2s;
       display: flex;
       align-items: center;
@@ -474,14 +566,18 @@
     }
 
     .spectrum-container {
-      background: #030712;
-      border-radius: 10px;
+      background: var(--spectrum-bg);
+      border-radius: 12px;
       padding: 6px;
       margin: 8px 0;
       border: 1px solid var(--border-color);
-      box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+      box-shadow: inset 0 2px 10px rgba(34, 41, 56, 0.08);
       display: flex;
       justify-content: center;
+    }
+
+    body.theme-dark .spectrum-container {
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
     }
 
     #spectrumCanvas {
@@ -497,10 +593,10 @@
       justify-content: center;
       gap: 10px;
       margin-top: 8px;
-      background: rgba(28, 37, 65, 0.6);
+      background: var(--surface-soft);
       padding: 8px 12px;
       border-radius: 12px;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--subtle-border);
       position: relative;
       z-index: 20;
     }
@@ -508,11 +604,15 @@
     .volume-btn {
       background: transparent;
       border: none;
-      color: var(--accent-gold);
+      color: var(--accent-gold-strong);
       font-size: 1.2rem;
       cursor: pointer;
       padding: 2px;
       pointer-events: auto;
+    }
+
+    body.theme-dark .volume-btn {
+      color: var(--accent-gold);
     }
 
     .volume-slider {
@@ -535,14 +635,58 @@
       padding: 16px;
       border-radius: 16px;
       border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
       gap: 14px;
     }
 
-    .eq-panel {
-      background: rgba(11, 19, 43, 0.7);
+    .theme-switch-box {
+      background: var(--surface-soft);
       border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .theme-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .theme-option-btn {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--subtle-border);
+      background: var(--card-bg);
+      color: var(--text-light);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      pointer-events: auto;
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+
+    .theme-option-btn.active {
+      border-color: var(--accent-gold);
+      background: var(--dock-active-bg);
+      color: var(--accent-gold-strong);
+    }
+
+    body.theme-dark .theme-option-btn.active {
+      color: var(--accent-gold);
+    }
+
+    .eq-panel {
+      background: var(--surface-soft);
+      border: 1px solid var(--subtle-border);
       border-radius: 12px;
       padding: 12px;
     }
@@ -589,6 +733,10 @@
     .eq-band label {
       font-size: 0.7rem;
       font-weight: 800;
+      color: var(--accent-gold-strong);
+    }
+
+    body.theme-dark .eq-band label {
       color: var(--accent-gold);
     }
 
@@ -652,7 +800,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(11,19,43,0.95), transparent 60%);
+      background: linear-gradient(to top, rgba(24, 30, 44, 0.88), transparent 62%);
       pointer-events: none;
     }
 
@@ -661,7 +809,7 @@
       z-index: 22;
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--text-light);
+      color: #F8FAFC;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -673,7 +821,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(7, 13, 31, 0.96);
+      background: var(--modal-bg);
       z-index: 9999999;
       justify-content: center;
       align-items: center;
@@ -687,11 +835,11 @@
       max-height: 75vh;
       border-radius: 16px;
       border: 2px solid var(--accent-gold);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     }
 
     #modalCaption {
-      color: var(--text-light);
+      color: #F8FAFC;
       margin-top: 15px;
       font-size: 0.95rem;
       text-align: center;
@@ -702,9 +850,9 @@
       position: absolute;
       top: 20px;
       right: 25px;
-      background: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.22);
       border: 1px solid var(--accent-gold);
-      color: var(--accent-gold);
+      color: #FBBF24;
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -725,13 +873,14 @@
       justify-content: space-between;
       align-items: center;
       border: 1px dashed var(--accent-gold);
+      box-shadow: var(--shadow-soft);
     }
 
     .invite-btn {
-      background: #25D366;
+      background: #1EA952;
       color: #fff;
       border: none;
-      padding: 6px 12px;
+      padding: 7px 12px;
       border-radius: 8px;
       font-weight: bold;
       font-size: 0.7rem;
@@ -749,6 +898,7 @@
       padding: 12px;
       border-radius: 14px;
       border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-soft);
       margin-bottom: 10px;
     }
 
@@ -759,7 +909,7 @@
       overflow: hidden;
       border-radius: 10px;
       margin-top: 8px;
-      background: #000;
+      background: #111827;
     }
 
     .video-wrapper iframe {
@@ -772,15 +922,16 @@
     }
 
     .kids-header-card {
-      background: linear-gradient(145deg, #1C2541, #1A103C);
+      background: var(--kids-header-bg);
       padding: 14px;
       border-radius: 14px;
       border: 1px solid var(--kids-purple);
+      box-shadow: var(--shadow-soft);
     }
 
     .kids-badge {
       display: inline-block;
-      background: rgba(168, 85, 247, 0.2);
+      background: rgba(139, 92, 246, 0.16);
       color: var(--kids-light);
       padding: 3px 8px;
       border-radius: 8px;
@@ -802,8 +953,8 @@
       position: relative;
       height: 140px;
       border-radius: 14px;
-      border: 2px solid rgba(168, 85, 247, 0.45);
-      background-color: #1a103c;
+      border: 2px solid rgba(139, 92, 246, 0.5);
+      background-color: var(--surface-soft);
       background-size: cover;
       background-position: center;
       cursor: pointer;
@@ -822,7 +973,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(11, 19, 43, 0.95) 20%, rgba(11, 19, 43, 0.2) 100%);
+      background: var(--kids-card-overlay);
       z-index: 1;
       pointer-events: none;
     }
@@ -842,7 +993,7 @@
 
     .kids-cat-sub {
       font-size: 0.65rem;
-      color: var(--kids-light);
+      color: #E9D5FF;
       margin-top: 2px;
       font-weight: 600;
     }
@@ -861,7 +1012,7 @@
 
     .kids-back-btn {
       align-self: flex-start;
-      background: rgba(168, 85, 247, 0.2);
+      background: rgba(139, 92, 246, 0.16);
       border: 1px solid var(--kids-purple);
       color: var(--text-light);
       padding: 6px 12px;
@@ -1012,7 +1163,7 @@
               <span class="live-dot"></span> NO AR 24H
             </div>
             
-            <div id="listenerBadge" style="font-size: 0.7rem; color: var(--accent-gold); background: rgba(245, 158, 11, 0.1); padding: 3px 8px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; font-weight: 600;">
+            <div id="listenerBadge" style="font-size: 0.7rem; color: var(--accent-gold-strong); background: var(--dock-active-bg); padding: 3px 8px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px; font-weight: 700;">
               👥 <span id="listenerCount">...</span> ouvintes
             </div>
           </div>
@@ -1039,7 +1190,7 @@
 
         <div class="invite-card">
           <div>
-            <strong style="font-size: 0.8rem; color: var(--accent-gold);">Convide Irmãos</strong>
+            <strong style="font-size: 0.8rem; color: var(--accent-gold-strong);">Convide Irmãos</strong>
             <p style="font-size: 0.65rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
           </div>
           <button type="button" class="invite-btn" id="shareBtn">💬 Compartilhar</button>
@@ -1074,8 +1225,8 @@
         <div class="info-card">
           <h3 class="section-title">🙏 Mural de Oração</h3>
           <p>Acreditamos no poder da intercessão em comunidade. Envie o seu pedido ou ore pelos pedidos dos irmãos.</p>
-          <div style="background: rgba(28, 37, 65, 0.8); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-top: 6px;">
-            <p style="font-weight: bold; color: var(--accent-gold); margin-bottom: 4px;">Como participar:</p>
+          <div style="background: var(--surface-soft); padding: 12px; border-radius: 10px; border: 1px solid var(--subtle-border); margin-top: 6px;">
+            <p style="font-weight: bold; color: var(--accent-gold-strong); margin-bottom: 4px;">Como participar:</p>
             <p>Pode enviar o seu pedido diretamente para a nossa equipa de pastoral através dos nossos canais oficiais ou partilhar com os irmãos nos cultos presenciais.</p>
           </div>
         </div>
@@ -1086,8 +1237,8 @@
         <div class="info-card">
           <h3 class="section-title">💬 Comunidade CDO</h3>
           <p>Um espaço de comunhão e partilha entre todos os ouvintes espalhados pelo mundo.</p>
-          <div style="background: rgba(28, 37, 65, 0.8); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-top: 6px;">
-            <p style="font-weight: bold; color: var(--accent-gold); margin-bottom: 4px;">Mural de Recados:</p>
+          <div style="background: var(--surface-soft); padding: 12px; border-radius: 10px; border: 1px solid var(--subtle-border); margin-top: 6px;">
+            <p style="font-weight: bold; color: var(--accent-gold-strong); margin-bottom: 4px;">Mural de Recados:</p>
             <p>"A paz do Senhor a todos os irmãos que acompanham a programação da rádio!" — Família Domiciano</p>
           </div>
         </div>
@@ -1105,8 +1256,16 @@
       <!-- Aba 9: Ajustes & Equalizador -->
       <div id="settings" class="tab-pane">
         <div class="settings-card">
-          <h3 class="section-title">⚙️ Definições de Áudio</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted);">Ajuste o som da rádio ao seu gosto pessoal.</p>
+          <h3 class="section-title">⚙️ Definições do App & Áudio</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha o estilo visual e ajuste o som da rádio ao seu gosto.</p>
+
+          <div class="theme-switch-box">
+            <div class="eq-title" style="margin-bottom: 0;">🎨 Estilo Visual do App</div>
+            <div class="theme-options">
+              <button type="button" class="theme-option-btn active" id="btnThemeSoft" data-theme="soft">☀️ Modo Soft</button>
+              <button type="button" class="theme-option-btn" id="btnThemeDark" data-theme="dark">🌙 Modo Escuro</button>
+            </div>
+          </div>
           
           <div class="eq-panel">
             <div class="eq-title">🎛️ Equalizador de Frequência</div>
@@ -1177,6 +1336,40 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // 0. ALTERNADOR DE TEMA (SOFT PADRÃO / ESCURO)
+      const btnThemeSoft = document.getElementById('btnThemeSoft');
+      const btnThemeDark = document.getElementById('btnThemeDark');
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+
+      function applyAppTheme(themeMode) {
+        const isDark = themeMode === 'dark';
+        document.body.classList.toggle('theme-dark', isDark);
+
+        if (btnThemeSoft) btnThemeSoft.classList.toggle('active', !isDark);
+        if (btnThemeDark) btnThemeDark.classList.toggle('active', isDark);
+
+        if (metaThemeColor) {
+          metaThemeColor.setAttribute('content', isDark ? '#0B132B' : '#EFEAE2');
+        }
+
+        try {
+          localStorage.setItem('cdo_theme_mode', isDark ? 'dark' : 'soft');
+        } catch (e) {}
+      }
+
+      let savedTheme = 'soft';
+      try {
+        savedTheme = localStorage.getItem('cdo_theme_mode') || 'soft';
+      } catch (e) {}
+      applyAppTheme(savedTheme);
+
+      if (btnThemeSoft) {
+        btnThemeSoft.addEventListener('click', () => applyAppTheme('soft'));
+      }
+      if (btnThemeDark) {
+        btnThemeDark.addEventListener('click', () => applyAppTheme('dark'));
+      }
+
       const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
       const audio = document.getElementById('radioStream');
       if (audio) audio.volume = 0.8;
@@ -1299,7 +1492,6 @@
       }
 
       function getDayOfYear(date) {
-        // Cálculo correto com suporte a ano bissexto
         const start = new Date(date.getFullYear(), 0, 0);
         const diff = date - start;
         const oneDay = 1000 * 60 * 60 * 24;
@@ -1452,6 +1644,10 @@
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
+        const isDarkMode = document.body.classList.contains('theme-dark');
+        const idleDotColor = isDarkMode ? "rgba(255, 255, 255, 0.04)" : "rgba(34, 41, 56, 0.08)";
+        const idleRefColor = isDarkMode ? "rgba(255, 255, 255, 0.015)" : "rgba(34, 41, 56, 0.03)";
+
         const numCols = 12;
         const colWidth = canvas.width / numCols;
         const dotRadius = 2.4;
@@ -1500,14 +1696,14 @@
 
             if (r < activeRows) {
               if (r < 4) {
-                canvasCtx.fillStyle = "#3B82F6"; 
+                canvasCtx.fillStyle = "#2563EB"; 
               } else if (r < 8) {
-                canvasCtx.fillStyle = "#A855F7"; 
+                canvasCtx.fillStyle = "#8B5CF6"; 
               } else {
-                canvasCtx.fillStyle = "#EC4899"; 
+                canvasCtx.fillStyle = "#DB2777"; 
               }
             } else {
-              canvasCtx.fillStyle = "rgba(255, 255, 255, 0.03)";
+              canvasCtx.fillStyle = idleDotColor;
             }
 
             canvasCtx.beginPath();
@@ -1516,9 +1712,9 @@
 
             let refY = canvas.height - 8 + (r * dotSpacing);
             if (r < activeRows) {
-              canvasCtx.fillStyle = r >= 8 ? "rgba(236, 72, 153, 0.2)" : (r >= 4 ? "rgba(168, 85, 247, 0.15)" : "rgba(59, 130, 246, 0.1)");
+              canvasCtx.fillStyle = r >= 8 ? "rgba(219, 39, 119, 0.2)" : (r >= 4 ? "rgba(139, 92, 246, 0.16)" : "rgba(37, 99, 235, 0.14)");
             } else {
-              canvasCtx.fillStyle = "rgba(255, 255, 255, 0.01)";
+              canvasCtx.fillStyle = idleRefColor;
             }
             canvasCtx.beginPath();
             canvasCtx.arc(x, refY, dotRadius, 0, Math.PI * 2);
@@ -1618,7 +1814,6 @@
               // Usuário cancelou ou erro — não faz nada
             }
           } else {
-            // Fallback: abre WhatsApp com a mensagem pronta
             const text = encodeURIComponent('Ouça a Estação CDO - Casa de Oração para Todos os Povos 🙏\n' + window.location.href);
             window.open('https://wa.me/?text=' + text, '_blank');
           }
