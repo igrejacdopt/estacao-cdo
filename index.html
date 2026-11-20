@@ -13,7 +13,7 @@
       --bg-dark: #F5F1EB;
       --card-bg: #FAF7F2;
       --card-gradient: linear-gradient(145deg, #FCF9F4, #EFE9DF);
-      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("bannerouro.png");
+      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("Estação CDO_ Som em Ouro.png");
       --surface-soft: #E8E1D5;
       --accent-gold: #C27412;
       --accent-gold-strong: #A85E08;
@@ -1284,6 +1284,7 @@
             <li><strong>Sábado às 17:00:</strong> Encontro de Jovens CDO</li>
           </ul>
         </div>
+
       </div>
 
       <!-- Aba 5: Rádio (Principal) -->
@@ -1322,33 +1323,94 @@
         <div class="invite-card">
           <div>
             <strong style="font-size: 0.8rem; color: var(--accent-gold-strong);">Convide Irmãos</strong>
-            <p style="font-size: 0.65rem; color: var(--text-muted);">Ganhe +50 pontos por indicação!</p>
+            <p style="font-size: 0.65rem; color: var(--text-muted);">Compartilhe a Estação CDO com alguém.</p>
           </div>
           <button type="button" class="invite-btn" id="shareBtn">💬 Compartilhar</button>
         </div>
 
-        <div>
-          <h3 class="section-title">📸 Momentos CDO (Toque na foto para ampliar)</h3>
-          <div class="carousel" style="margin-top: 6px;">
-            <div class="carousel-item" data-img="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1000&q=80" data-caption="Culto de Celebração - Domingo" style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=500&q=60');">
+        <section class="info-card momentos-feed" aria-label="Galeria Momentos CDO" style="margin-top: 12px; padding: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+            <h3 class="section-title" style="margin: 0;">📸 Momentos CDO</h3>
+            <span style="font-size: 0.68rem; color: var(--text-muted);">NOSSA COMUNIDADE</span>
+          </div>
+          <p style="font-size: 0.76rem; color: var(--text-muted); margin: 2px 0 10px;">Registros de encontros, celebrações e momentos especiais da nossa família CDO.</p>
+          <div class="carousel momentos-gallery" style="margin-top: 0; padding: 4px 2px 8px;">
+            <div class="carousel-item" data-img="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=85" data-caption="Culto de Celebração - Domingo" style="min-width:  min(82%, 310px); height: 205px; background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=700&q=75');">
               <span class="carousel-caption">Culto de Celebração - Domingo 🔍</span>
             </div>
-            <div class="carousel-item" data-img="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1000&q=80" data-caption="Encontro de Jovens CDO" style="background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=60');">
+            <div class="carousel-item" data-img="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1200&q=85" data-caption="Encontro de Jovens CDO" style="min-width: min(82%, 310px); height: 205px; background-image: url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=700&q=75');">
               <span class="carousel-caption">Encontro de Jovens CDO 🔍</span>
             </div>
           </div>
-        </div>
+          <div style="display: flex; align-items: center; gap: 6px; border-top: 1px solid var(--border-color); padding-top: 9px; margin-top: 2px; font-size: 0.68rem; color: var(--text-muted);">
+            <span>❤️</span><span>Memórias que fortalecem nossa caminhada em comunidade</span>
+          </div>
+        </section>
 
         <!-- MURAL DE AVISOS DA SEMANA E EVENTOS -->
         <div class="info-card" style="margin-top: 4px;">
           <h3 class="section-title">📢 Avisos da Semana & Eventos</h3>
-          <p>Fique por dentro de tudo o que vai acontecer na nossa comunidade:</p>
-          <ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
-            <li><strong>Domingo às 10:00:</strong> Culto de Celebração e Família</li>
-            <li><strong>Quarta-feira às 19:30:</strong> Culto de Ensino e Oração</li>
-            <li><strong>Sábado às 17:00:</strong> Encontro de Jovens CDO</li>
-          </ul>
+          <p>Fique por dentro de tudo o que vai acontecer na Casa de Oração para Todos os Povos:</p>
+
+          <div role="group" aria-label="Escolha a congregação" style="display: flex; gap: 8px; margin-top: 4px;">
+            <button type="button" class="aviso-location-btn active" data-aviso-location="albufeira" aria-pressed="true" style="flex: 1; padding: 10px 8px; border: 1px solid var(--accent-gold); border-radius: 10px; background: var(--dock-active-bg); color: var(--accent-gold-strong); font-weight: 700; cursor: pointer;">📍 Albufeira</button>
+            <button type="button" class="aviso-location-btn" data-aviso-location="lisboa" aria-pressed="false" style="flex: 1; padding: 10px 8px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--surface-soft); color: var(--text-muted); font-weight: 700; cursor: pointer;">📍 Lisboa</button>
+          </div>
+
+          <div id="avisosAlbufeira" data-aviso-panel="albufeira">
+        <div class="info-card" style="margin-top: 10px; padding: 10px 12px;">
+          <h3 class="section-title">📍 Como chegar à igreja</h3>
+          <p style="font-size: 0.76rem; margin-bottom: 6px;">Encontre a Casa de Oração para Todos os Povos em Albufeira.</p>
+          <div style="margin-top: 6px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);">
+            <iframe title="Localização da Casa de Oração para Todos os Povos em Albufeira" src="https://www.google.com/maps?q=37.1278744,-8.2280916&z=16&output=embed" width="100%" height="165" style="border: 0; display: block;" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+          <a href="https://www.google.com/maps/dir/?api=1&destination=37.1278744%2C-8.2280916" target="_blank" rel="noopener noreferrer" style="display: block; text-align: center; margin-top: 10px; padding: 11px 14px; border-radius: 10px; background: var(--accent-gold); color: #fff; font-weight: 700; text-decoration: none;">🧭 Abrir rota no Google Maps</a>
         </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>🙏 Intercessão Diária (Segunda a Sexta, às 19h00)</strong>
+                <p style="margin: 4px 0 0;">Momento de oração e clamor conduzido pelo Presbítero Elênio.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>🌅 Intercessão da Manhã (Segunda-feira, às 09h00)</strong>
+                <p style="margin: 4px 0 0;">Reunião de oração conduzida pela Irmã Marcilene.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>📖 Estudo Bíblico (Terça-feira, às 20h00)</strong>
+                <p style="margin: 4px 0 0;">Aprofundamento na Palavra ministrado pelo Evangelista Luís.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>🕊️ Círculo de Oração (Quinta-feira, às 19h00)</strong>
+                <p style="margin: 4px 0 0;">Momento de oração conduzido pela Pastora Jussara.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>🤝 Encontro de Varões (Quinta-feira, às 20h00)</strong>
+                <p style="margin: 4px 0 0;">Momento de comunhão e fortalecimento entre os irmãos, conduzido pelo Pastor Antonio.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>🔥 Encontro de Jovens (Quinta-feira, às 20h00)</strong>
+                <p style="margin: 4px 0 0;">Encontro conduzido pelo Evangelista Luís, com comunhão e edificação na Palavra.</p>
+              </div>
+              <div style="padding: 12px 14px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--border-color); box-shadow: 0 2px 7px rgba(0,0,0,0.05);">
+                <strong>👨‍👩‍👧‍👦 Culto da Família (Domingo, às 20h00)</strong>
+                <p style="margin: 4px 0 0;">Celebração e adoração para toda a família.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="avisosLisboa" data-aviso-panel="lisboa" hidden>
+            <p style="margin-top: 8px;">A programação desta congregação será divulgada em breve.</p>
+          </div>
+        </div>
+
+        <div class="invite-card" style="margin-top: 8px;">
+          <div>
+            <strong style="font-size: 0.8rem; color: var(--accent-gold-strong);">📲 Tenha a Estação CDO no seu celular</strong>
+            <p style="font-size: 0.65rem; color: var(--text-muted);">Adicione o aplicativo à tela inicial e acesse com facilidade.</p>
+          </div>
+          <button type="button" class="invite-btn" id="installAppBtn">＋ Instalar</button>
+        </div>
+
       </div>
 
       <!-- Aba 6: Oração -->
@@ -1468,6 +1530,60 @@
   <script>
     (function () {
       function initApp() {
+        // Alternância da programação entre as congregações
+        const avisoLocationButtons = document.querySelectorAll('[data-aviso-location]');
+        const avisoPanels = document.querySelectorAll('[data-aviso-panel]');
+        avisoLocationButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const selectedLocation = button.dataset.avisoLocation;
+            avisoLocationButtons.forEach((item) => {
+              const isActive = item === button;
+              item.classList.toggle('active', isActive);
+              item.setAttribute('aria-pressed', String(isActive));
+              item.style.background = isActive ? 'var(--dock-active-bg)' : 'var(--surface-soft)';
+              item.style.color = isActive ? 'var(--accent-gold-strong)' : 'var(--text-muted)';
+              item.style.borderColor = isActive ? 'var(--accent-gold)' : 'var(--border-color)';
+            });
+            avisoPanels.forEach((panel) => {
+              panel.hidden = panel.dataset.avisoPanel !== selectedLocation;
+            });
+          });
+        });
+
+        // Instalação PWA: usa o convite nativo do navegador quando disponível.
+        let deferredInstallPrompt = null;
+        const installAppBtn = document.getElementById('installAppBtn');
+        const isIosDevice = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+          event.preventDefault();
+          deferredInstallPrompt = event;
+          if (installAppBtn) installAppBtn.textContent = '＋ Instalar';
+        });
+
+        if (installAppBtn) {
+          if (isStandalone) {
+            installAppBtn.textContent = '✓ Já instalado';
+            installAppBtn.disabled = true;
+            installAppBtn.style.opacity = '0.7';
+          }
+          installAppBtn.addEventListener('click', async () => {
+            if (isStandalone) return;
+            if (deferredInstallPrompt) {
+              deferredInstallPrompt.prompt();
+              await deferredInstallPrompt.userChoice;
+              deferredInstallPrompt = null;
+              return;
+            }
+            if (isIosDevice) {
+              alert('Para adicionar a Estação CDO no iPhone ou iPad:\n\n1. Abra este site no Safari.\n2. Toque no botão Partilhar.\n3. Escolha “Adicionar ao ecrã principal”.\n4. Confirme em “Adicionar”.');
+            } else {
+              alert('Se a opção de instalação não apareceu automaticamente, abra o menu do navegador e procure “Instalar aplicação” ou “Adicionar ao ecrã inicial”.');
+            }
+          });
+        }
+
         const appContentScroll = document.getElementById('appContentScroll');
 
         // FUNÇÃO CENTRAL PARA TROCAR DE ABA
