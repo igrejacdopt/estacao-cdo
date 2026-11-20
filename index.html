@@ -1233,6 +1233,11 @@
     .calendar-event.event-evening { background:#344b70; color:#ffffff; border:1px solid #263b5d; }
     .calendar-day.special-day { border:2px solid #c99a32; background:rgba(201,154,50,.13); box-shadow:0 0 0 1px rgba(201,154,50,.12); }
     .calendar-day.special-day .day-number { color:#b27d16; }
+    /* Destaque vibrante para o dia atual */
+    .calendar-day.today-day { border:2px solid #00b8ff !important; background:rgba(0,184,255,.13) !important; box-shadow:inset 0 0 0 1px rgba(0,184,255,.28), 0 0 0 2px rgba(0,184,255,.20) !important; position:relative; }
+    .calendar-day.today-day .day-number { color:#007fb8 !important; font-weight:900; }
+    .calendar-month-view .calendar-day.today-day { border:3px solid #00aaff !important; background:#e3f7ff !important; box-shadow:inset 0 0 0 1px rgba(0,170,255,.22), 0 0 0 2px rgba(0,170,255,.22) !important; }
+    .calendar-month-view .calendar-day.today-day .day-number { color:#006f9f !important; }
     .calendar-event.special-event { background:#c99a32; color:#fff; font-weight:800; }
     .calendar-year-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin-top:12px; }
     .calendar-mini-month { appearance:none; border:1px solid var(--border-color); border-radius:16px; padding:14px 6px; background:var(--surface-soft); color:var(--text-color); text-align:center; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.04); transition:transform .18s ease,border-color .18s ease; }
@@ -1853,12 +1858,16 @@
             const events = year === 2026 ? [...(recurringEvents[date.getDay()] || [])] : [];
             if (key === '2026-12-31') events.push({ time: '22h', label: 'Culto da Virada', special: true });
             const special = key === '2026-12-31';
+            const now = new Date();
+            const isToday = year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
             const eventMarkup = events.map(event => {
               const hour = Number.parseInt(event.time, 10);
               const timeClass = event.special ? ' special-event' : (hour < 12 ? ' event-morning' : ' event-evening');
               return `<span class="calendar-event${timeClass}">${event.time} ${event.label}</span>`;
             }).join('');
-            cells += `<div class="calendar-day${special ? ' special-day' : ''}"${special ? ' aria-label="31 de dezembro: Culto da Virada às 22 horas"' : ''}><span class="day-number">${day}</span>${eventMarkup}</div>`;
+            const dayClasses = `calendar-day${special ? ' special-day' : ''}${isToday ? ' today-day' : ''}`;
+            const ariaLabel = [isToday ? 'Hoje' : '', special ? '31 de dezembro: Culto da Virada às 22 horas' : ''].filter(Boolean).join('. ');
+            cells += `<div class="${dayClasses}"${ariaLabel ? ` aria-label="${ariaLabel}"` : ''}><span class="day-number">${day}</span>${eventMarkup}</div>`;
           }
           return `<div class="calendar-grid">${cells}</div>`;
         }
