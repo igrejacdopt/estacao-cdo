@@ -2621,13 +2621,14 @@
         const visualizerCtx = visualizerCanvas ? visualizerCanvas.getContext('2d') : null;
         const visualizerSelect = document.getElementById('visualizerSelect');
         let visualizerFrame = 0;
+        let visualizerRunning = false;
         let visualizerTick = 0;
         let visualizerData = new Uint8Array(512);
         const visualizerNames = ['psychedelic','fire','circular','led','classic3d','ps1','tunnel','wave','orbit','equalizer'];
         function fitVisualizerCanvas(){
           if(!visualizerCanvas || !visualizerCanvas.parentElement) return;
           const r=visualizerCanvas.parentElement.getBoundingClientRect();
-          const d=Math.min(window.devicePixelRatio||1,2);
+          const d=Math.min(window.devicePixelRatio||1,1.5);
           visualizerCanvas.width=Math.max(320,Math.floor(r.width*d));
           visualizerCanvas.height=Math.max(220,Math.floor(r.height*d));
         }
@@ -2641,8 +2642,7 @@
           return visualizerData;
         }
         function drawVisualizer(){
-          if(!visualizerOverlay?.classList.contains('open') || !visualizerCtx) return;
-          visualizerFrame=requestAnimationFrame(drawVisualizer);
+          if(!visualizerRunning || !visualizerOverlay?.classList.contains('open') || !visualizerCtx) return;
           visualizerTick++;
           const ctx=visualizerCtx,w=visualizerCanvas.width,h=visualizerCanvas.height,cx=w/2,cy=h/2;
           const data=readVisualizerAudio(),n=data.length;
@@ -2699,14 +2699,52 @@
               ctx.fillStyle=g;ctx.fillRect(x0+1,h-bh,barWidth,bh);ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillRect(x0+1,h-bh-3,barWidth,2);
             }
           }
+          // Agenda o próximo quadro somente depois de concluir o atual. Se algum
+          // efeito falhar, não deixa uma cadeia infinita de quadros com erro.
+          if(visualizerRunning && visualizerOverlay?.classList.contains('open')){
+            visualizerFrame=requestAnimationFrame(drawVisualizer);
+          }
         }
-        function openVisualizers(){if(!visualizerOverlay)return;visualizerOverlay.classList.add('open');document.body.classList.add('visualizer-open');fitVisualizerCanvas();cancelAnimationFrame(visualizerFrame);visualizerFrame=requestAnimationFrame(drawVisualizer);}
-        function closeVisualizers(){visualizerOverlay?.classList.remove('open');document.body.classList.remove('visualizer-open');cancelAnimationFrame(visualizerFrame);}
+        function openVisualizers(){
+          if(!visualizerOverlay || visualizerRunning) return;
+          visualizerOverlay.classList.add('open');
+          document.body.classList.add('visualizer-open');
+          visualizerRunning=true;
+          fitVisualizerCanvas();
+          cancelAnimationFrame(visualizerFrame);
+          visualizerFrame=requestAnimationFrame(drawVisualizer);
+        }
+        function closeVisualizers(){
+          // Primeiro interrompe o loop para impedir que ele se reagende.
+          visualizerRunning=false;
+          cancelAnimationFrame(visualizerFrame);
+          visualizerFrame=0;
+          visualizerOverlay?.classList.remove('open');
+          document.body.classList.remove('visualizer-open');
+          // Restaura o estado gráfico do canvas e libera a superfície grande de GPU.
+          if(visualizerCtx && visualizerCanvas){
+            visualizerCtx.setTransform(1,0,0,1,0,0);
+            visualizerCtx.globalAlpha=1;
+            visualizerCtx.globalCompositeOperation='source-over';
+            visualizerCtx.filter='none';
+            visualizerCtx.shadowBlur=0;
+            visualizerCtx.clearRect(0,0,visualizerCanvas.width,visualizerCanvas.height);
+            visualizerCanvas.width=320;
+            visualizerCanvas.height=220;
+          }
+          // Se foi fechado durante tela cheia, devolve o app à janela normal.
+          if(document.fullscreenElement && document.fullscreenElement===visualizerOverlay){
+            document.exitFullscreen?.().catch(()=>{});
+          }
+          document.getElementById('openVisualizersBtn')?.focus({preventScroll:true});
+        }
         document.getElementById('openVisualizersBtn')?.addEventListener('click',openVisualizers);
         document.getElementById('closeVisualizersBtn')?.addEventListener('click',closeVisualizers);
         document.getElementById('randomVisualizerBtn')?.addEventListener('click',()=>{if(visualizerSelect){const current=visualizerSelect.selectedIndex;let next=Math.floor(Math.random()*visualizerNames.length);if(next===current)next=(next+1)%visualizerNames.length;visualizerSelect.value=visualizerNames[next];}});
         document.getElementById('fullscreenVisualizerBtn')?.addEventListener('click',async()=>{try{if(!document.fullscreenElement)await visualizerOverlay?.requestFullscreen();else await document.exitFullscreen();fitVisualizerCanvas();}catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}});
-        window.addEventListener('resize',()=>{if(visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();});
+        window.addEventListener('resize',()=>{if(visualizerRunning && visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();});
+        document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement && visualizerRunning && visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();});
+        window.addEventListener('pagehide',()=>{visualizerRunning=false;cancelAnimationFrame(visualizerFrame);});
         visualizerOverlay?.addEventListener('click',(e)=>{if(e.target===visualizerOverlay)closeVisualizers();});
         document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeVisualizers();});
 
