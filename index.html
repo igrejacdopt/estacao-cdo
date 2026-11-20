@@ -1270,6 +1270,24 @@
     .calendar-preview-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; }
     .calendar-year-pill { border-radius:20px; padding:5px 9px; background:var(--dock-active-bg); color:var(--accent-gold-strong); font-size:.75rem; font-weight:800; }
     @media (max-width:360px) { .calendar-year-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .calendar-day { min-height:48px; } }
+
+    /* MURAL DE ORAÇÃO - primeira integração Firebase */
+    .prayer-intro { line-height:1.45; color:var(--text-muted); font-size:.78rem; }
+    .prayer-form { display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+    .prayer-field { display:flex; flex-direction:column; gap:5px; font-size:.74rem; font-weight:700; color:var(--text-light); }
+    .prayer-field input, .prayer-field select, .prayer-field textarea { width:100%; border:1px solid var(--border-color); border-radius:10px; padding:11px 12px; background:var(--card-bg); color:var(--text-light); font-size:.82rem; outline:none; }
+    .prayer-field textarea { min-height:94px; resize:vertical; }
+    .prayer-check { display:flex; align-items:center; gap:8px; font-size:.74rem; color:var(--text-muted); }
+    .prayer-primary-btn { border:0; border-radius:11px; padding:12px 15px; background:var(--accent-gold-strong); color:#fff; font-weight:800; cursor:pointer; }
+    .prayer-primary-btn:disabled { opacity:.55; cursor:not-allowed; }
+    .prayer-status { padding:9px 11px; border-radius:9px; background:var(--surface-soft); color:var(--text-muted); font-size:.72rem; line-height:1.4; }
+    .prayer-post { padding:13px; border:1px solid var(--border-color); border-radius:13px; background:var(--card-bg); box-shadow:var(--shadow-soft); display:flex; flex-direction:column; gap:8px; }
+    .prayer-post-head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .prayer-post-kind { font-size:.68rem; font-weight:800; color:var(--accent-gold-strong); }
+    .prayer-post-category { font-size:.65rem; color:var(--text-muted); background:var(--surface-soft); border-radius:20px; padding:4px 8px; }
+    .prayer-post-text { font-size:.82rem; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .prayer-post-meta { font-size:.65rem; color:var(--text-muted); }
+    .prayer-section-title { font-size:.9rem; font-weight:800; color:var(--accent-gold-strong); }
   </style>
 </head>
 <body>
@@ -1557,14 +1575,46 @@
 
       </div>
 
-      <!-- Aba 6: Oração -->
+      <!-- Aba 6: Mural de Oração -->
       <div id="oracao" class="tab-pane">
         <div class="info-card">
           <h3 class="section-title">🙏 Mural de Oração</h3>
-          <p>Acreditamos no poder da intercessão em comunidade. Envie o seu pedido ou ore pelos pedidos dos irmãos.</p>
-          <div style="background: var(--surface-soft); padding: 12px; border-radius: 10px; border: 1px solid var(--subtle-border); margin-top: 6px;">
-            <p style="font-weight: bold; color: var(--accent-gold-strong); margin-bottom: 4px;">Como participar:</p>
-            <p>Pode enviar o seu pedido diretamente para a nossa equipa de pastoral através dos nossos canais oficiais ou partilhar com os irmãos nos cultos presenciais.</p>
+          <p class="prayer-intro">Um espaço de comunhão. Leia os pedidos, apresente suas orações e compartilhe motivos de gratidão e louvor.</p>
+          <div class="prayer-status" id="prayerConnectionStatus" role="status" aria-live="polite" style="margin-top:10px;">A ligar ao Mural de Oração...</div>
+          <div class="prayer-form">
+            <h4 class="prayer-section-title">Compartilhe com a comunidade</h4>
+            <label class="prayer-field">Tipo de publicação
+              <select id="prayerKind">
+                <option value="request">🙏 Pedido de oração</option>
+                <option value="thanks">❤️ Agradecimento</option>
+                <option value="glorify">✨ Glorificar a Deus</option>
+              </select>
+            </label>
+            <label class="prayer-field">Categoria
+              <select id="prayerCategory">
+                <option value="familia">Família</option>
+                <option value="saude">Saúde</option>
+                <option value="amigos">Amigos e próximos</option>
+                <option value="trabalho">Trabalho e finanças</option>
+                <option value="espiritual">Vida espiritual</option>
+                <option value="restauracao">Libertação e restauração</option>
+                <option value="agradecimentos">Agradecimentos</option>
+                <option value="outros">Outros pedidos</option>
+              </select>
+            </label>
+            <label class="prayer-field">Sua mensagem
+              <textarea id="prayerText" maxlength="1200" placeholder="Escreva aqui. Evite incluir moradas, telefones ou informações íntimas de outras pessoas."></textarea>
+            </label>
+            <label class="prayer-check"><input type="checkbox" id="prayerAnonymous"> Publicar como anônimo</label>
+            <p class="prayer-post-meta">Por padrão, seu nome salvo nas Definições será exibido. O mural é público e pode ser visto por qualquer visitante.</p>
+            <button type="button" class="prayer-primary-btn" id="prayerPublishBtn">Publicar no mural</button>
+            <div class="prayer-status" id="prayerPublishStatus" aria-live="polite">Para publicar, informe seu nome nas Definições do aplicativo.</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <h4 class="prayer-section-title">Pedidos e partilhas da comunidade</h4>
+          <div id="prayerPostsList" style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+            <p class="prayer-post-meta">A carregar publicações...</p>
           </div>
         </div>
       </div>
@@ -1595,6 +1645,15 @@
         <div class="settings-card">
           <h3 class="section-title">⚙️ Definições do App & Áudio</h3>
           <p style="font-size: 0.75rem; color: var(--text-muted);">Escolha o estilo visual e ajuste o som da rádio ao seu gosto.</p>
+
+          <div class="eq-panel" style="margin-top:12px;">
+            <div class="eq-title">👤 Identificação no Mural de Oração</div>
+            <label class="prayer-field" for="cdoMemberName">Nome que será mostrado nas publicações e interações
+              <input id="cdoMemberName" type="text" maxlength="40" autocomplete="name" placeholder="Como deseja ser identificado?">
+            </label>
+            <button type="button" class="prayer-primary-btn" id="saveCdoMemberName" style="margin-top:9px;">Guardar meu nome</button>
+            <p class="prayer-post-meta" id="cdoMemberNameStatus" style="margin-top:7px;">O nome fica guardado neste dispositivo. Futuramente poderá ser associado a uma conta pessoal.</p>
+          </div>
 
           <div class="theme-switch-box">
             <div class="eq-title" style="margin-bottom: 0;">🎨 Estilo Visual do App</div>
@@ -2750,5 +2809,130 @@
       }
     })();
   </script>
+
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, Timestamp, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBx1Q7nBFcMypsF6huiTEvSToYo2IKg9AM",
+      authDomain: "estacao-cdo.firebaseapp.com",
+      projectId: "estacao-cdo",
+      storageBucket: "estacao-cdo.firebasestorage.app",
+      messagingSenderId: "994229800041",
+      appId: "1:994229800041:web:5ec8e5ac043bfc1e7f66f8"
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const $ = (id) => document.getElementById(id);
+    const nameInput = $('cdoMemberName');
+    const saveNameButton = $('saveCdoMemberName');
+    const nameStatus = $('cdoMemberNameStatus');
+    const publishButton = $('prayerPublishBtn');
+    const publishStatus = $('prayerPublishStatus');
+    const connectionStatus = $('prayerConnectionStatus');
+    const postsList = $('prayerPostsList');
+    const NAME_KEY = 'cdo_member_display_name';
+    const categories = {
+      familia:'Família', saude:'Saúde', amigos:'Amigos e próximos', trabalho:'Trabalho e finanças',
+      espiritual:'Vida espiritual', restauracao:'Libertação e restauração', agradecimentos:'Agradecimentos', outros:'Outros pedidos'
+    };
+    const kinds = { request:'🙏 Pedido de oração', thanks:'❤️ Agradecimento', glorify:'✨ Glorificar a Deus' };
+    let authUser = null;
+
+    function savedName() { try { return (localStorage.getItem(NAME_KEY) || '').trim(); } catch (_) { return ''; } }
+    function updateNameHints() {
+      const name = savedName();
+      if (publishStatus) publishStatus.textContent = name ? `Você será identificado como “${name}”, salvo se escolher publicar anonimamente.` : 'Para publicar, informe seu nome nas Definições do aplicativo.';
+      if (publishButton) publishButton.disabled = !name;
+    }
+    if (nameInput) nameInput.value = savedName();
+    updateNameHints();
+    if (saveNameButton) saveNameButton.addEventListener('click', () => {
+      const value = (nameInput?.value || '').trim().replace(/\s+/g, ' ');
+      if (value.length < 2) { if (nameStatus) nameStatus.textContent = 'Digite um nome com pelo menos 2 caracteres.'; return; }
+      try { localStorage.setItem(NAME_KEY, value); } catch (_) { if (nameStatus) nameStatus.textContent = 'Não foi possível guardar neste dispositivo.'; return; }
+      if (nameStatus) nameStatus.textContent = `Nome guardado neste dispositivo: ${value}.`;
+      updateNameHints();
+    });
+
+    function safeDate(value) {
+      if (!value) return null;
+      if (typeof value.toDate === 'function') return value.toDate();
+      return value instanceof Date ? value : null;
+    }
+    function formatPostDate(value) {
+      const date = safeDate(value);
+      return date ? new Intl.DateTimeFormat('pt-PT', { dateStyle:'medium', timeStyle:'short' }).format(date) : 'Agora mesmo';
+    }
+    function renderPosts(snapshot) {
+      if (!postsList) return;
+      postsList.replaceChildren();
+      const now = Date.now();
+      const active = snapshot.docs.map(doc => ({ id:doc.id, ...doc.data() }))
+        .filter(post => { const expiry = safeDate(post.expiresAt); return !expiry || expiry.getTime() > now; });
+      if (!active.length) {
+        const empty = document.createElement('p'); empty.className = 'prayer-post-meta';
+        empty.textContent = 'Ainda não há publicações no mural. Seja o primeiro a compartilhar.'; postsList.appendChild(empty); return;
+      }
+      active.forEach(post => {
+        const card = document.createElement('article'); card.className = 'prayer-post';
+        const head = document.createElement('div'); head.className = 'prayer-post-head';
+        const kind = document.createElement('span'); kind.className = 'prayer-post-kind'; kind.textContent = kinds[post.kind] || '🙏 Publicação';
+        const category = document.createElement('span'); category.className = 'prayer-post-category'; category.textContent = categories[post.category] || 'Outros';
+        head.append(kind, category);
+        const body = document.createElement('p'); body.className = 'prayer-post-text'; body.textContent = post.text || '';
+        const author = document.createElement('p'); author.className = 'prayer-post-meta'; author.textContent = `${post.anonymous ? 'Pedido anônimo' : (post.authorName || 'Participante')} · ${formatPostDate(post.createdAt)}`;
+        card.append(head, body, author); postsList.appendChild(card);
+      });
+    }
+
+    onSnapshot(query(collection(db, 'prayerPosts'), orderBy('createdAt', 'desc'), limit(100)), renderPosts, error => {
+      console.error('Erro ao carregar Mural de Oração:', error);
+      if (connectionStatus) connectionStatus.textContent = 'Não foi possível carregar o mural. Verifique as regras do Firestore.';
+      if (postsList) postsList.textContent = 'O mural está temporariamente indisponível.';
+    });
+    if (connectionStatus) connectionStatus.textContent = 'Ligação ao Firebase preparada. O mural ficará disponível após aplicar as regras de segurança.';
+
+    if (publishButton) publishButton.addEventListener('click', async () => {
+      const name = savedName();
+      const text = ($('prayerText')?.value || '').trim();
+      const kind = $('prayerKind')?.value || 'request';
+      const category = $('prayerCategory')?.value || 'outros';
+      const anonymous = Boolean($('prayerAnonymous')?.checked);
+      if (name.length < 2) { if (publishStatus) publishStatus.textContent = 'Antes de publicar, guarde seu nome nas Definições.'; return; }
+      if (text.length < 5) { if (publishStatus) publishStatus.textContent = 'Escreva uma mensagem um pouco mais completa (mínimo 5 caracteres).'; return; }
+      if (text.length > 1200) { if (publishStatus) publishStatus.textContent = 'A mensagem ultrapassou o limite de 1.200 caracteres.'; return; }
+      publishButton.disabled = true;
+      if (publishStatus) publishStatus.textContent = 'A publicar...';
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        authUser = auth.currentUser;
+        const now = new Date();
+        const expires = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        await addDoc(collection(db, 'prayerPosts'), {
+          kind, category, text,
+          authorUid: authUser.uid,
+          authorName: anonymous ? 'Participação anônima' : name,
+          anonymous,
+          createdAt: serverTimestamp(),
+          expiresAt: Timestamp.fromDate(expires),
+          schemaVersion: 1
+        });
+        $('prayerText').value = '';
+        if ($('prayerAnonymous')) $('prayerAnonymous').checked = false;
+        if (publishStatus) publishStatus.textContent = 'Publicação enviada. Obrigado por compartilhar com a comunidade!';
+      } catch (error) {
+        console.error('Erro ao publicar:', error);
+        if (publishStatus) publishStatus.textContent = error.code === 'permission-denied'
+          ? 'O Firebase ainda está bloqueando gravações. Precisamos aplicar as regras de segurança.'
+          : 'Não foi possível publicar agora. Confira a ligação e tente novamente.';
+      } finally { updateNameHints(); }
+    });
+  </script>
+
 </body>
 </html>
