@@ -2,7 +2,7 @@
 <html lang="pt-PT">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Estação CDO - Casa de Oração para Todos os Povos</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#EFEAE2">
@@ -63,6 +63,11 @@
       --shadow-soft: 0 12px 26px rgba(0, 0, 0, 0.35);
     }
 
+    html {
+      overscroll-behavior-y: none;
+      height: 100%;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -71,13 +76,16 @@
     }
 
     body {
+      overscroll-behavior-y: none;
       background-color: var(--outer-bg);
       color: var(--text-light);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      min-height: 100dvh;
       padding: 0;
+      overflow: hidden;
       transition: background-color 0.25s ease, color 0.25s ease;
     }
 
@@ -90,6 +98,7 @@
       width: 100%;
       max-width: 100%;
       height: 100vh;
+      height: 100dvh;
       background-color: var(--bg-dark);
       display: flex;
       flex-direction: column;
@@ -175,6 +184,8 @@
       z-index: 10;
       pointer-events: auto;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y pinch-zoom;
     }
 
     .app-content::-webkit-scrollbar {
@@ -198,16 +209,16 @@
     /* DOCK FIXO BLINDADO COM TAMANHO FIXO GARANTIDO */
     .bottom-dock {
       position: absolute;
-      bottom: 0;
+      bottom: env(safe-area-inset-bottom, 0px);
       left: 0;
       right: 0;
-      height: 84px;
+      height: calc(84px + env(safe-area-inset-bottom, 0px));
       background: var(--dock-bg);
       border-top: 1.5px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
+      padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px));
       overflow-x: auto;
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
@@ -1294,7 +1305,9 @@
     .prayer-action-btn { border:1px solid var(--border-color); border-radius:20px; padding:8px 12px; background:var(--surface-soft); color:var(--text-light); font-size:.72rem; font-weight:800; cursor:pointer; }
     .prayer-action-btn.active { background:var(--dock-active-bg); border-color:var(--accent-gold); color:var(--accent-gold-strong); }
     .prayer-action-btn:disabled { opacity:.6; cursor:wait; }
-    .prayer-action-count { font-size:.68rem; color:var(--text-muted); }
+    .prayer-action-count { border:0; background:transparent; padding:8px 4px; font-size:.68rem; color:var(--text-muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+    .prayer-post-participants { margin-top:10px; padding:10px 12px; border-radius:10px; background:var(--surface-soft); border:1px solid var(--border-color); }
+    .prayer-post-participants[hidden] { display:none; }
     .prayer-section-title { font-size:.9rem; font-weight:800; color:var(--accent-gold-strong); }
   </style>
 </head>
@@ -2853,6 +2866,7 @@
     const kinds = { request:'🙏 Pedido de oração', thanks:'❤️ Agradecimento', glorify:'✨ Glorificar a Deus' };
     const actionLabels = { request:'🙏 Interceder', thanks:'❤️ Celebrar', glorify:'✨ Glorificar' };
     const reactionUnsubscribers = new Map();
+    const reactionSnapshots = new Map();
     let authUser = auth.currentUser || null;
     let lastPosts = [];
 
@@ -2899,11 +2913,28 @@
     function clearReactionListeners() {
       reactionUnsubscribers.forEach(unsub => { try { unsub(); } catch (_) {} });
       reactionUnsubscribers.clear();
+      reactionSnapshots.clear();
     }
-    function watchReactions(post, actionButton, countLabel) {
+    function renderReactionNames(postId, detailsList) {
+      const participants = reactionSnapshots.get(postId) || [];
+      detailsList.replaceChildren();
+      if (!participants.length) {
+        const empty = document.createElement('p'); empty.className = 'prayer-post-meta';
+        empty.textContent = 'Ainda não há participações neste pedido.'; detailsList.appendChild(empty); return;
+      }
+      participants.forEach(data => {
+        const line = document.createElement('p'); line.className = 'prayer-post-meta';
+        const name = data.anonymous ? 'Participante anônimo' : (data.displayName || 'Participante');
+        const verb = data.action === 'thanks' ? 'celebrando' : data.action === 'glorify' ? 'glorificando' : 'intercedendo';
+        line.textContent = `🙏 ${name} está ${verb}`; detailsList.appendChild(line);
+      });
+    }
+    function watchReactions(post, actionButton, countLabel, detailsList) {
       const reactionsRef = collection(db, 'prayerPosts', post.id, 'reactions');
       const unsubscribe = onSnapshot(reactionsRef, snapshot => {
         const count = snapshot.size;
+        reactionSnapshots.set(post.id, snapshot.docs.map(item => item.data()));
+        if (!detailsList.hidden) renderReactionNames(post.id, detailsList);
         const uid = auth.currentUser?.uid;
         const mine = uid ? snapshot.docs.some(item => item.id === uid) : false;
         actionButton.classList.toggle('active', mine);
@@ -2961,11 +2992,17 @@
         const author = document.createElement('p'); author.className = 'prayer-post-meta'; author.textContent = `${post.anonymous ? 'Publicação anônima' : (post.authorName || 'Participante')} · ${formatPostDate(post.createdAt)}`;
         const actions = document.createElement('div'); actions.className = 'prayer-post-actions';
         const actionButton = document.createElement('button'); actionButton.type = 'button'; actionButton.className = 'prayer-action-btn'; actionButton.textContent = actionLabels[post.kind] || '🙏 Participar';
-        actionButton.addEventListener('click', () => toggleReaction(post, actionButton, countLabel));
-        const countLabel = document.createElement('span'); countLabel.className = 'prayer-action-count'; countLabel.textContent = 'A carregar participações…';
+        const countLabel = document.createElement('button'); countLabel.type = 'button'; countLabel.className = 'prayer-action-count'; countLabel.textContent = 'A carregar participações…';
+        countLabel.setAttribute('aria-label', 'Ver quem participou');
+        actionButton.addEventListener('click', event => { event.stopPropagation(); toggleReaction(post, actionButton, countLabel); });
         actions.append(actionButton, countLabel);
-        card.append(head, body, author, actions); postsList.appendChild(card);
-        watchReactions(post, actionButton, countLabel);
+        const details = document.createElement('section'); details.className = 'prayer-post-participants'; details.hidden = true;
+        const detailsTitle = document.createElement('strong'); detailsTitle.textContent = 'Quem está participando'; detailsTitle.style.cssText = 'display:block;margin-bottom:7px;font-size:.78rem;color:var(--text-light);';
+        const detailsList = document.createElement('div'); details.append(detailsTitle, detailsList);
+        countLabel.addEventListener('click', event => { event.stopPropagation(); details.hidden = !details.hidden; if (!details.hidden) renderReactionNames(post.id, detailsList); });
+        card.addEventListener('click', event => { if (event.target.closest('button')) return; details.hidden = !details.hidden; if (!details.hidden) renderReactionNames(post.id, detailsList); });
+        card.append(head, body, author, actions, details); postsList.appendChild(card);
+        watchReactions(post, actionButton, countLabel, detailsList);
       });
     }
 
