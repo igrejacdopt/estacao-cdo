@@ -13,7 +13,7 @@
       --bg-dark: #F5F1EB;
       --card-bg: #FAF7F2;
       --card-gradient: linear-gradient(145deg, #FCF9F4, #EFE9DF);
-      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.78), rgba(239, 233, 223, 0.84)), url("Estação CDO_ Som em Ouro.png");
+      --radio-card-bg: linear-gradient(145deg, rgba(252, 249, 244, 0.28), rgba(239, 233, 223, 0.38)), url("bannerouro.png");
       --surface-soft: #E8E1D5;
       --accent-gold: #C27412;
       --accent-gold-strong: #A85E08;
@@ -41,7 +41,7 @@
       --bg-dark: #0B132B;
       --card-bg: #1C2541;
       --card-gradient: linear-gradient(145deg, #1C2541, #131B31);
-      --radio-card-bg: linear-gradient(145deg, #1C2541, #131B31);
+      --radio-card-bg: linear-gradient(145deg, rgba(11, 19, 43, 0.30), rgba(11, 19, 43, 0.48)), url("bannerneon.png");
       --surface-soft: rgba(11, 19, 43, 0.65);
       --accent-gold: #F59E0B;
       --accent-gold-strong: #FBBF24;
@@ -493,8 +493,10 @@
     }
 
     body.theme-dark .radio-card {
-      background-image: none;
-      background-color: var(--card-bg);
+      background: var(--radio-card-bg);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .live-indicator {
@@ -1154,6 +1156,77 @@
       border-radius: 8px;
       align-self: flex-start;
     }
+
+    .church-calendar-section { margin-bottom: 12px; }
+    .calendar-legend { display:flex; flex-wrap:wrap; gap:12px; margin:12px 0; font-size:.7rem; color:var(--text-muted); }
+    .calendar-legend span { display:flex; align-items:center; gap:5px; }
+    .calendar-dot { width:8px; height:8px; display:inline-block; border-radius:50%; background:var(--accent-gold); }
+    .calendar-dot.morning { background:#68a9df; }
+    .calendar-dot.evening { background:#344b70; }
+    .calendar-dot.special { background:#c99a32; }
+    .calendar-months { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .calendar-month { appearance:none; border:1px solid var(--border-color); border-radius:18px; padding:17px 12px; background:var(--surface-soft); color:var(--text-color); min-width:0; text-align:left; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.045); transition:transform .18s ease,border-color .18s ease; }
+    .calendar-month:active { transform:scale(.98); }
+    .calendar-month strong { display:block; color:var(--accent-gold-strong); font-size:1rem; text-transform:capitalize; }
+    .calendar-month span { display:block; margin-top:5px; color:var(--text-muted); font-size:.68rem; }
+    .calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:4px; }
+    .calendar-weekday { text-align:center; font-size:.62rem; font-weight:800; color:var(--text-muted); padding:4px 0; }
+    .calendar-day { min-height:54px; min-width:0; border:1px solid var(--border-color); border-radius:8px; padding:4px 3px; background:var(--surface-card, var(--background)); font-size:.68rem; }
+    .calendar-day.empty { border-color:transparent; background:transparent; }
+    .calendar-day .day-number { display:block; font-weight:800; margin-bottom:3px; }
+    .calendar-event { display:block; margin-top:2px; padding:2px 3px; border-radius:4px; background:var(--dock-active-bg); color:var(--accent-gold-strong); font-size:.53rem; line-height:1.2; overflow-wrap:anywhere; }
+    .calendar-event.event-morning { background:#e1f0fc; color:#245b86; border:1px solid #c5e0f5; }
+    .calendar-event.event-evening { background:#344b70; color:#ffffff; border:1px solid #263b5d; }
+    .calendar-day.special-day { border:2px solid #c99a32; background:rgba(201,154,50,.13); box-shadow:0 0 0 1px rgba(201,154,50,.12); }
+    .calendar-day.special-day .day-number { color:#b27d16; }
+    .calendar-event.special-event { background:#c99a32; color:#fff; font-weight:800; }
+    .calendar-year-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; margin-top:12px; }
+    .calendar-mini-month { appearance:none; border:1px solid var(--border-color); border-radius:16px; padding:14px 6px; background:var(--surface-soft); color:var(--text-color); text-align:center; cursor:pointer; box-shadow:0 3px 10px rgba(0,0,0,.04); transition:transform .18s ease,border-color .18s ease; }
+    .calendar-mini-month:active { transform:scale(.97); }
+    .calendar-mini-month strong { display:block; color:var(--accent-gold-strong); font-size:.78rem; text-transform:capitalize; }
+    .calendar-mini-month span { display:block; margin-top:4px; color:var(--text-muted); font-size:.58rem; }
+    /* Visão mensal clara e dimensionada para caber inteira acima da área do app */
+    .calendar-month-view { position:fixed; inset:0; z-index:1000001; display:none; align-items:center; justify-content:center; padding:12px; background:rgba(246,243,234,.97); }
+    .calendar-month-view.open { display:flex; }
+    .calendar-month-view-card { width:min(100%,720px); height:min(760px,calc(100dvh - 24px)); max-height:calc(100dvh - 24px); overflow:hidden; display:flex; flex-direction:column; border:1px solid #e6dfd1; border-radius:16px; padding:14px; background:#fffefa; color:#292929; box-shadow:0 12px 36px rgba(75,62,38,.14); }
+    .calendar-month-view-head { flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; padding-bottom:9px; border-bottom:2px solid #eee7d9; }
+    .calendar-month-view-head h3 { margin:0; color:#795719; text-transform:capitalize; font-size:1.3rem; font-weight:800; }
+    .calendar-month-back { border:1px solid #dfd5c2; border-radius:999px; padding:8px 14px; background:#f7f2e8; color:#514633; font-weight:700; cursor:pointer; }
+    #calendarMonthContent { flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
+    .calendar-month-view .calendar-grid { flex:1 1 auto; min-height:0; grid-template-rows:30px repeat(6,minmax(0,1fr)); gap:3px; }
+    .calendar-month-view .calendar-weekday { color:#665f52; font-size:.72rem; padding:5px 0; }
+    .calendar-month-view .calendar-day { min-height:0; height:100%; overflow:hidden; font-size:.72rem; padding:4px 3px; border:1px solid #e9e4da; border-radius:7px; background:#ffffff; color:#292929; }
+    .calendar-month-view .calendar-day.empty { background:transparent; border-color:transparent; }
+    .calendar-month-view .calendar-day .day-number { color:#343434; margin-bottom:2px; }
+    .calendar-month-view .calendar-event { font-size:clamp(.39rem,1.25vw,.56rem); line-height:1.12; padding:2px 3px; margin-top:2px; background:#f5eddc; color:#70521c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .calendar-month-view .calendar-event.event-morning { background:#e1f0fc; color:#245b86; border-color:#c5e0f5; }
+    .calendar-month-view .calendar-event.event-evening { background:#344b70; color:#ffffff; border-color:#263b5d; }
+    .calendar-month-view .calendar-day.special-day { border:2px solid #c99a32; background:#fff5d9; }
+    .calendar-month-view .calendar-day.special-day .day-number { color:#94650c; }
+    .calendar-month-view .calendar-event.special-event { background:#c99a32; color:#ffffff; font-weight:800; }
+    .calendar-month-view .calendar-coming-soon { border-color:#e6dcc8; color:#665f52; background:#faf7f0; }
+    @media (max-width:480px) {
+      .calendar-month-view { padding:7px; }
+      .calendar-month-view-card { width:100%; height:calc(100dvh - 14px); max-height:calc(100dvh - 14px); padding:10px 7px; border-radius:12px; }
+      .calendar-month-view-head { margin-bottom:7px; padding-bottom:7px; }
+      .calendar-month-view-head h3 { font-size:1.1rem; }
+      .calendar-month-back { padding:7px 11px; font-size:.78rem; }
+      .calendar-month-view .calendar-grid { grid-template-rows:26px repeat(6,minmax(0,1fr)); gap:2px; }
+      .calendar-month-view .calendar-weekday { font-size:.62rem; padding:4px 0; }
+      .calendar-month-view .calendar-day { font-size:.65rem; padding:3px 2px; border-radius:5px; }
+      .calendar-month-view .calendar-event { font-size:clamp(.34rem,1.5vw,.48rem); padding:2px 1px; margin-top:1px; }
+    }
+    @media (max-height:620px) {
+      .calendar-month-view-card { height:calc(100dvh - 12px); max-height:calc(100dvh - 12px); padding:7px; }
+      .calendar-month-view-head { margin-bottom:4px; padding-bottom:4px; }
+      .calendar-month-view .calendar-grid { grid-template-rows:22px repeat(6,minmax(0,1fr)); }
+      .calendar-month-view .calendar-day { padding:2px 1px; }
+      .calendar-month-view .calendar-event { font-size:.36rem; padding:1px; }
+    }
+    @media (max-width:360px) { .calendar-year-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    .calendar-preview-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .calendar-year-pill { border-radius:20px; padding:5px 9px; background:var(--dock-active-bg); color:var(--accent-gold-strong); font-size:.75rem; font-weight:800; }
+    @media (max-width:360px) { .calendar-year-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .calendar-day { min-height:48px; } }
   </style>
 </head>
 <body>
@@ -1275,16 +1348,35 @@
 
       <!-- Aba 4: Agenda -->
       <div id="agenda" class="tab-pane">
-        <div class="info-card">
+        <section class="info-card church-calendar-section">
           <h3 class="section-title">📅 Agenda da Igreja</h3>
-          <p>Fique por dentro de todos os nossos encontros e cultos semanais:</p>
-          <ul style="padding-left: 18px; display: flex; flex-direction: column; gap: 6px; margin-top: 4px;">
-            <li><strong>Domingo às 10:00:</strong> Culto de Celebração e Família</li>
-            <li><strong>Quarta-feira às 19:30:</strong> Culto de Ensino e Oração</li>
-            <li><strong>Sábado às 17:00:</strong> Encontro de Jovens CDO</li>
-          </ul>
+          <p>Confira os encontros recorrentes e as datas especiais da nossa comunidade.</p>
+          <div class="calendar-legend">
+            <span><i class="calendar-dot morning"></i> Manhã</span>
+            <span><i class="calendar-dot evening"></i> Noite</span>
+            <span><i class="calendar-dot special"></i> Evento especial</span>
+          </div>
+          <div id="calendar2026" class="calendar-months" aria-label="Calendário de novembro e dezembro de 2026"></div>
+        </section>
+        <section class="info-card church-calendar-section calendar-preview-section">
+          <div class="calendar-preview-heading">
+            <div>
+              <h3 class="section-title" style="margin-bottom: 3px;">✨ Pré-calendário 2027</h3>
+              <p style="margin: 0;">Um novo ano de comunhão e encontros. A programação será divulgada em breve.</p>
+            </div>
+            <span class="calendar-year-pill">2027</span>
+          </div>
+          <div id="calendar2027" class="calendar-year-grid" aria-label="Pré-calendário de 2027"></div>
+        </section>
+      </div>
+      <div id="calendarMonthView" class="calendar-month-view" role="dialog" aria-modal="true" aria-labelledby="calendarMonthTitle">
+        <div class="calendar-month-view-card">
+          <div class="calendar-month-view-head">
+            <h3 id="calendarMonthTitle">Mês</h3>
+            <button type="button" class="calendar-month-back" id="calendarMonthBack">← Voltar</button>
+          </div>
+          <div id="calendarMonthContent"></div>
         </div>
-
       </div>
 
       <!-- Aba 5: Rádio (Principal) -->
@@ -1529,7 +1621,90 @@
 
   <script>
     (function () {
+      function renderChurchCalendars() {
+        const recurringEvents = {
+          0: [{ time: '20h', label: 'Culto da Família' }],
+          1: [{ time: '09h', label: 'Intercessão da Manhã' }, { time: '19h', label: 'Intercessão Diária' }],
+          2: [{ time: '19h', label: 'Intercessão Diária' }, { time: '20h', label: 'Estudo Bíblico' }],
+          3: [{ time: '19h', label: 'Intercessão Diária' }],
+          4: [{ time: '19h', label: 'Intercessão Diária' }, { time: '19h', label: 'Círculo de Oração' }, { time: '20h', label: 'Varões' }, { time: '20h', label: 'Jovens' }],
+          5: [{ time: '19h', label: 'Intercessão Diária' }],
+          6: []
+        };
+        const monthNames = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+        const calendarRoot = document.getElementById('calendar2026');
+        const previewRoot = document.getElementById('calendar2027');
+        const view = document.getElementById('calendarMonthView');
+        const viewTitle = document.getElementById('calendarMonthTitle');
+        const viewContent = document.getElementById('calendarMonthContent');
+        const closeButton = document.getElementById('calendarMonthBack');
+
+        function makeMonthGrid(year, month) {
+          const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+          const firstDay = new Date(year, month, 1).getDay();
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          let cells = weekdays.map(day => `<div class="calendar-weekday">${day}</div>`).join('');
+          for (let blank = 0; blank < firstDay; blank++) cells += '<div class="calendar-day empty" aria-hidden="true"></div>';
+          for (let day = 1; day <= daysInMonth; day++) {
+            const date = new Date(year, month, day);
+            const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            const events = year === 2026 ? [...(recurringEvents[date.getDay()] || [])] : [];
+            if (key === '2026-12-31') events.push({ time: '22h', label: 'Culto da Virada', special: true });
+            const special = key === '2026-12-31';
+            const eventMarkup = events.map(event => {
+              const hour = Number.parseInt(event.time, 10);
+              const timeClass = event.special ? ' special-event' : (hour < 12 ? ' event-morning' : ' event-evening');
+              return `<span class="calendar-event${timeClass}">${event.time} ${event.label}</span>`;
+            }).join('');
+            cells += `<div class="calendar-day${special ? ' special-day' : ''}"${special ? ' aria-label="31 de dezembro: Culto da Virada às 22 horas"' : ''}><span class="day-number">${day}</span>${eventMarkup}</div>`;
+          }
+          return `<div class="calendar-grid">${cells}</div>`;
+        }
+
+        function openMonth(year, month) {
+          viewTitle.textContent = `${monthNames[month]} ${year}`;
+          viewContent.innerHTML = year === 2026
+            ? makeMonthGrid(year, month)
+            : '<div class="calendar-coming-soon">✨ A programação deste mês será divulgada em breve.</div>';
+          view.classList.add('open');
+          document.body.classList.add('calendar-month-open');
+          document.body.style.overflow = 'hidden';
+          closeButton.focus();
+        }
+        function closeMonth() {
+          view.classList.remove('open');
+          document.body.classList.remove('calendar-month-open');
+          document.body.style.overflow = '';
+        }
+        if (closeButton) closeButton.addEventListener('click', closeMonth);
+        if (view) view.addEventListener('click', event => { if (event.target === view) closeMonth(); });
+        document.addEventListener('keydown', event => { if (event.key === 'Escape' && view && view.classList.contains('open')) closeMonth(); });
+
+        if (calendarRoot) {
+          [10, 11].forEach(month => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'calendar-month';
+            const eventCount = month === 10 ? 'Encontros recorrentes' : 'Encontros + Culto da Virada';
+            button.innerHTML = `<strong>${monthNames[month]} 2026</strong><span>${eventCount} · Toque para abrir</span>`;
+            button.addEventListener('click', () => openMonth(2026, month));
+            calendarRoot.appendChild(button);
+          });
+        }
+        if (previewRoot) {
+          monthNames.forEach((month, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'calendar-mini-month';
+            button.innerHTML = `<strong>${month}</strong><span>Programação em breve</span>`;
+            button.addEventListener('click', () => openMonth(2027, index));
+            previewRoot.appendChild(button);
+          });
+        }
+      }
+
       function initApp() {
+        renderChurchCalendars();
         // Alternância da programação entre as congregações
         const avisoLocationButtons = document.querySelectorAll('[data-aviso-location]');
         const avisoPanels = document.querySelectorAll('[data-aviso-panel]');
