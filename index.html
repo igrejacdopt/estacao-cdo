@@ -427,6 +427,49 @@
       padding: 11px 12px;
     }
 
+    .palavra-share-box {
+      margin-top: 10px;
+      padding: 11px;
+      border: 1px solid var(--subtle-border);
+      border-radius: 10px;
+      background: var(--surface-soft);
+    }
+
+    .palavra-share-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 9px;
+    }
+
+    .palavra-share-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .palavra-share-btn {
+      flex: 1 1 190px;
+      min-height: 38px;
+      padding: 8px 11px;
+      border-radius: 9px;
+      border: 1px solid var(--accent-gold);
+      font-size: 0.73rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .palavra-share-btn.branded {
+      color: #fff;
+      background: var(--accent-gold-strong);
+    }
+
+    .palavra-share-btn.neutral {
+      color: var(--text-light);
+      background: var(--card-bg);
+      border-color: var(--border-color);
+    }
+
     .history-list {
       display: flex;
       flex-direction: column;
@@ -1282,6 +1325,15 @@
             <div class="palavra-block-label">🎯 Aplicação Pessoal</div>
             <p id="palavraApplication"></p>
           </div>
+
+          <div class="palavra-share-box">
+            <div class="palavra-block-label">📤 Compartilhar a Palavra do Dia</div>
+            <p class="palavra-share-hint">Escolha se deseja incluir a identificação da Casa de Oração na mensagem.</p>
+            <div class="palavra-share-actions">
+              <button type="button" class="palavra-share-btn branded" id="sharePalavraBrandedBtn">Compartilhar com identificação CDO</button>
+              <button type="button" class="palavra-share-btn neutral" id="sharePalavraNeutralBtn">Compartilhar sem identificação</button>
+            </div>
+          </div>
         </div>
 
         <div class="info-card">
@@ -2029,6 +2081,57 @@
         }
 
         renderSelectedWord();
+
+        // COMPARTILHAR A PALAVRA DO DIA COM OU SEM IDENTIFICAÇÃO DA CDO
+        async function shareDailyWord(includeBranding) {
+          const entry = getWordByDate(selectedDate);
+          if (!entry) return;
+
+          const dateLabel = formatDatePT(entry.date);
+          const neutralText =
+            `PALAVRA DO DIA\\n${dateLabel}\\n\\n` +
+            `${entry.tema}\\n\\n` +
+            `“${entry.trecho}”\\n— ${entry.ref}\\n\\n` +
+            `Meditação:\\n${entry.meditacao}\\n\\n` +
+            `Aplicação pessoal:\\n${entry.aplicacao}`;
+
+          const brandedText =
+            `${neutralText}\\n\\n` +
+            `🙏 Estação CDO — Casa de Oração para Todos os Povos\\n` +
+            `Acompanhe nossa programação: ${window.location.href}`;
+
+          const shareData = {
+            title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia',
+            text: includeBranding ? brandedText : neutralText
+          };
+
+          // O link do aplicativo só acompanha a versão identificada pela CDO.
+          if (includeBranding) shareData.url = window.location.href;
+
+          if (navigator.share) {
+            try {
+              await navigator.share(shareData);
+              return;
+            } catch (err) {
+              if (err && err.name === 'AbortError') return;
+            }
+          }
+
+          const whatsappText = encodeURIComponent(
+            (includeBranding ? brandedText : neutralText)
+          );
+          window.open(`https://wa.me/?text=${whatsappText}`, '_blank', 'noopener');
+        }
+
+        const sharePalavraBrandedBtn = document.getElementById('sharePalavraBrandedBtn');
+        const sharePalavraNeutralBtn = document.getElementById('sharePalavraNeutralBtn');
+
+        if (sharePalavraBrandedBtn) {
+          sharePalavraBrandedBtn.addEventListener('click', () => shareDailyWord(true));
+        }
+        if (sharePalavraNeutralBtn) {
+          sharePalavraNeutralBtn.addEventListener('click', () => shareDailyWord(false));
+        }
 
         // 4. AUDIO GRAPH & VISUALIZADOR
         function initAudioGraph() {
