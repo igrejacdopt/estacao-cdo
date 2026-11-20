@@ -1287,6 +1287,14 @@
     .prayer-post-category { font-size:.65rem; color:var(--text-muted); background:var(--surface-soft); border-radius:20px; padding:4px 8px; }
     .prayer-post-text { font-size:.82rem; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; }
     .prayer-post-meta { font-size:.65rem; color:var(--text-muted); }
+    .prayer-name-status { padding:9px 11px; border-radius:9px; background:var(--surface-soft); color:var(--text-muted); font-size:.72rem; line-height:1.4; margin-top:7px; }
+    .prayer-name-status.success { color:#167A3E; border:1px solid rgba(22,122,62,.25); background:rgba(22,122,62,.08); }
+    body.theme-dark .prayer-name-status.success { color:#86EFAC; }
+    .prayer-post-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:3px; }
+    .prayer-action-btn { border:1px solid var(--border-color); border-radius:20px; padding:8px 12px; background:var(--surface-soft); color:var(--text-light); font-size:.72rem; font-weight:800; cursor:pointer; }
+    .prayer-action-btn.active { background:var(--dock-active-bg); border-color:var(--accent-gold); color:var(--accent-gold-strong); }
+    .prayer-action-btn:disabled { opacity:.6; cursor:wait; }
+    .prayer-action-count { font-size:.68rem; color:var(--text-muted); }
     .prayer-section-title { font-size:.9rem; font-weight:800; color:var(--accent-gold-strong); }
   </style>
 </head>
@@ -1609,6 +1617,7 @@
             <p class="prayer-post-meta">Por padrão, seu nome salvo nas Definições será exibido. O mural é público e pode ser visto por qualquer visitante.</p>
             <button type="button" class="prayer-primary-btn" id="prayerPublishBtn">Publicar no mural</button>
             <div class="prayer-status" id="prayerPublishStatus" aria-live="polite">Para publicar, informe seu nome nas Definições do aplicativo.</div>
+            <button type="button" class="prayer-action-btn" id="prayerGoSettings" style="align-self:flex-start;">⚙️ Definir ou editar meu nome</button>
           </div>
         </div>
         <div class="info-card">
@@ -1652,7 +1661,7 @@
               <input id="cdoMemberName" type="text" maxlength="40" autocomplete="name" placeholder="Como deseja ser identificado?">
             </label>
             <button type="button" class="prayer-primary-btn" id="saveCdoMemberName" style="margin-top:9px;">Guardar meu nome</button>
-            <p class="prayer-post-meta" id="cdoMemberNameStatus" style="margin-top:7px;">O nome fica guardado neste dispositivo. Futuramente poderá ser associado a uma conta pessoal.</p>
+            <p class="prayer-name-status" id="cdoMemberNameStatus" role="status" aria-live="polite">O nome fica guardado neste dispositivo e pode ser editado sempre que quiser. As publicações antigas não serão alteradas.</p>
           </div>
 
           <div class="theme-switch-box">
@@ -2813,7 +2822,7 @@
   <script type="module">
     import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, Timestamp, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, Timestamp, serverTimestamp, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBx1Q7nBFcMypsF6huiTEvSToYo2IKg9AM",
@@ -2835,28 +2844,47 @@
     const publishStatus = $('prayerPublishStatus');
     const connectionStatus = $('prayerConnectionStatus');
     const postsList = $('prayerPostsList');
+    const goSettingsButton = $('prayerGoSettings');
     const NAME_KEY = 'cdo_member_display_name';
     const categories = {
       familia:'Família', saude:'Saúde', amigos:'Amigos e próximos', trabalho:'Trabalho e finanças',
       espiritual:'Vida espiritual', restauracao:'Libertação e restauração', agradecimentos:'Agradecimentos', outros:'Outros pedidos'
     };
     const kinds = { request:'🙏 Pedido de oração', thanks:'❤️ Agradecimento', glorify:'✨ Glorificar a Deus' };
-    let authUser = null;
+    const actionLabels = { request:'🙏 Interceder', thanks:'❤️ Celebrar', glorify:'✨ Glorificar' };
+    const reactionUnsubscribers = new Map();
+    let authUser = auth.currentUser || null;
+    let lastPosts = [];
 
     function savedName() { try { return (localStorage.getItem(NAME_KEY) || '').trim(); } catch (_) { return ''; } }
     function updateNameHints() {
       const name = savedName();
-      if (publishStatus) publishStatus.textContent = name ? `Você será identificado como “${name}”, salvo se escolher publicar anonimamente.` : 'Para publicar, informe seu nome nas Definições do aplicativo.';
       if (publishButton) publishButton.disabled = !name;
+      if (goSettingsButton) goSettingsButton.hidden = Boolean(name);
+      if (nameInput && nameInput.value !== name && document.activeElement !== nameInput) nameInput.value = name;
     }
     if (nameInput) nameInput.value = savedName();
+    if (savedName() && nameStatus) nameStatus.textContent = `✓ Seu nome atual é “${savedName()}”. Você pode editá-lo aqui quando quiser.`;
     updateNameHints();
+
     if (saveNameButton) saveNameButton.addEventListener('click', () => {
       const value = (nameInput?.value || '').trim().replace(/\s+/g, ' ');
-      if (value.length < 2) { if (nameStatus) nameStatus.textContent = 'Digite um nome com pelo menos 2 caracteres.'; return; }
-      try { localStorage.setItem(NAME_KEY, value); } catch (_) { if (nameStatus) nameStatus.textContent = 'Não foi possível guardar neste dispositivo.'; return; }
-      if (nameStatus) nameStatus.textContent = `Nome guardado neste dispositivo: ${value}.`;
+      if (value.length < 2) {
+        if (nameStatus) { nameStatus.classList.remove('success'); nameStatus.textContent = 'Digite um nome com pelo menos 2 caracteres.'; }
+        nameInput?.focus(); return;
+      }
+      try { localStorage.setItem(NAME_KEY, value); }
+      catch (_) { if (nameStatus) { nameStatus.classList.remove('success'); nameStatus.textContent = 'Não foi possível guardar neste dispositivo. Verifique as permissões do navegador.'; } return; }
+      if (nameStatus) { nameStatus.classList.add('success'); nameStatus.textContent = `✓ Nome guardado: “${value}”. Pode voltar aqui e editá-lo sempre que desejar.`; }
       updateNameHints();
+      if (publishStatus) publishStatus.textContent = `Pronto! As próximas publicações e interações aparecerão como “${value}”, salvo se escolher anonimato quando disponível.`;
+    });
+
+    if (goSettingsButton) goSettingsButton.addEventListener('click', () => {
+      const settingsTab = document.querySelector('[data-target="settings"]');
+      if (settingsTab) settingsTab.click();
+      else { const settingsPane = $('settings'); if (settingsPane) { document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active')); settingsPane.classList.add('active'); } }
+      setTimeout(() => nameInput?.focus(), 100);
     });
 
     function safeDate(value) {
@@ -2868,12 +2896,57 @@
       const date = safeDate(value);
       return date ? new Intl.DateTimeFormat('pt-PT', { dateStyle:'medium', timeStyle:'short' }).format(date) : 'Agora mesmo';
     }
+    function clearReactionListeners() {
+      reactionUnsubscribers.forEach(unsub => { try { unsub(); } catch (_) {} });
+      reactionUnsubscribers.clear();
+    }
+    function watchReactions(post, actionButton, countLabel) {
+      const reactionsRef = collection(db, 'prayerPosts', post.id, 'reactions');
+      const unsubscribe = onSnapshot(reactionsRef, snapshot => {
+        const count = snapshot.size;
+        const uid = auth.currentUser?.uid;
+        const mine = uid ? snapshot.docs.some(item => item.id === uid) : false;
+        actionButton.classList.toggle('active', mine);
+        actionButton.setAttribute('aria-pressed', mine ? 'true' : 'false');
+        actionButton.textContent = `${actionLabels[post.kind] || '🙏 Participar'}${mine ? ' ✓' : ''}`;
+        countLabel.textContent = count === 1 ? '1 participação' : `${count} participações`;
+      }, error => {
+        console.warn('Não foi possível atualizar as participações:', error);
+        countLabel.textContent = 'Participações indisponíveis';
+      });
+      reactionUnsubscribers.set(post.id, unsubscribe);
+    }
+    async function toggleReaction(post, button, countLabel) {
+      if (button.disabled) return;
+      const name = savedName();
+      if (name.length < 2) {
+        if (publishStatus) publishStatus.textContent = 'Antes de participar, defina seu nome nas Definições. Você poderá editá-lo quando quiser.';
+        goSettingsButton?.click(); return;
+      }
+      button.disabled = true;
+      try {
+        if (!auth.currentUser) await signInAnonymously(auth);
+        authUser = auth.currentUser;
+        const reactionRef = doc(db, 'prayerPosts', post.id, 'reactions', authUser.uid);
+        const existing = await getDoc(reactionRef);
+        if (existing.exists()) await deleteDoc(reactionRef);
+        else await setDoc(reactionRef, { action: post.kind, displayName: name, createdAt: serverTimestamp() });
+      } catch (error) {
+        console.error('Erro ao registar participação:', error);
+        if (publishStatus) publishStatus.textContent = error.code === 'permission-denied'
+          ? 'As regras do Firestore ainda não permitem registar participações. Aplique o ficheiro de regras atualizado.'
+          : 'Não foi possível registar sua participação. Tente novamente.';
+      } finally { button.disabled = false; }
+    }
     function renderPosts(snapshot) {
       if (!postsList) return;
+      clearReactionListeners();
       postsList.replaceChildren();
       const now = Date.now();
-      const active = snapshot.docs.map(doc => ({ id:doc.id, ...doc.data() }))
+      const active = snapshot.docs.map(item => ({ id:item.id, ...item.data() }))
         .filter(post => { const expiry = safeDate(post.expiresAt); return !expiry || expiry.getTime() > now; });
+      lastPosts = active;
+      if (connectionStatus) connectionStatus.textContent = '✓ Mural conectado. As publicações estão sincronizadas.';
       if (!active.length) {
         const empty = document.createElement('p'); empty.className = 'prayer-post-meta';
         empty.textContent = 'Ainda não há publicações no mural. Seja o primeiro a compartilhar.'; postsList.appendChild(empty); return;
@@ -2885,17 +2958,22 @@
         const category = document.createElement('span'); category.className = 'prayer-post-category'; category.textContent = categories[post.category] || 'Outros';
         head.append(kind, category);
         const body = document.createElement('p'); body.className = 'prayer-post-text'; body.textContent = post.text || '';
-        const author = document.createElement('p'); author.className = 'prayer-post-meta'; author.textContent = `${post.anonymous ? 'Pedido anônimo' : (post.authorName || 'Participante')} · ${formatPostDate(post.createdAt)}`;
-        card.append(head, body, author); postsList.appendChild(card);
+        const author = document.createElement('p'); author.className = 'prayer-post-meta'; author.textContent = `${post.anonymous ? 'Publicação anônima' : (post.authorName || 'Participante')} · ${formatPostDate(post.createdAt)}`;
+        const actions = document.createElement('div'); actions.className = 'prayer-post-actions';
+        const actionButton = document.createElement('button'); actionButton.type = 'button'; actionButton.className = 'prayer-action-btn'; actionButton.textContent = actionLabels[post.kind] || '🙏 Participar';
+        actionButton.addEventListener('click', () => toggleReaction(post, actionButton, countLabel));
+        const countLabel = document.createElement('span'); countLabel.className = 'prayer-action-count'; countLabel.textContent = 'A carregar participações…';
+        actions.append(actionButton, countLabel);
+        card.append(head, body, author, actions); postsList.appendChild(card);
+        watchReactions(post, actionButton, countLabel);
       });
     }
 
     onSnapshot(query(collection(db, 'prayerPosts'), orderBy('createdAt', 'desc'), limit(100)), renderPosts, error => {
       console.error('Erro ao carregar Mural de Oração:', error);
-      if (connectionStatus) connectionStatus.textContent = 'Não foi possível carregar o mural. Verifique as regras do Firestore.';
+      if (connectionStatus) connectionStatus.textContent = 'Não foi possível ligar ao mural. Verifique a ligação e as regras do Firestore.';
       if (postsList) postsList.textContent = 'O mural está temporariamente indisponível.';
     });
-    if (connectionStatus) connectionStatus.textContent = 'Ligação ao Firebase preparada. O mural ficará disponível após aplicar as regras de segurança.';
 
     if (publishButton) publishButton.addEventListener('click', async () => {
       const name = savedName();
@@ -2903,7 +2981,7 @@
       const kind = $('prayerKind')?.value || 'request';
       const category = $('prayerCategory')?.value || 'outros';
       const anonymous = Boolean($('prayerAnonymous')?.checked);
-      if (name.length < 2) { if (publishStatus) publishStatus.textContent = 'Antes de publicar, guarde seu nome nas Definições.'; return; }
+      if (name.length < 2) { if (publishStatus) publishStatus.textContent = 'Antes de publicar, guarde seu nome nas Definições.'; goSettingsButton?.click(); return; }
       if (text.length < 5) { if (publishStatus) publishStatus.textContent = 'Escreva uma mensagem um pouco mais completa (mínimo 5 caracteres).'; return; }
       if (text.length > 1200) { if (publishStatus) publishStatus.textContent = 'A mensagem ultrapassou o limite de 1.200 caracteres.'; return; }
       publishButton.disabled = true;
@@ -2924,13 +3002,13 @@
         });
         $('prayerText').value = '';
         if ($('prayerAnonymous')) $('prayerAnonymous').checked = false;
-        if (publishStatus) publishStatus.textContent = 'Publicação enviada. Obrigado por compartilhar com a comunidade!';
+        if (publishStatus) publishStatus.textContent = '✓ Publicação enviada. Obrigado por compartilhar com a comunidade!';
       } catch (error) {
         console.error('Erro ao publicar:', error);
         if (publishStatus) publishStatus.textContent = error.code === 'permission-denied'
-          ? 'O Firebase ainda está bloqueando gravações. Precisamos aplicar as regras de segurança.'
+          ? 'O Firebase bloqueou a publicação. Confira se as regras de segurança estão atualizadas.'
           : 'Não foi possível publicar agora. Confira a ligação e tente novamente.';
-      } finally { updateNameHints(); }
+      } finally { updateNameHints(); publishButton.disabled = !savedName(); }
     });
   </script>
 
