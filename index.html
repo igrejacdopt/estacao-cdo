@@ -2082,45 +2082,162 @@
 
         renderSelectedWord();
 
-        // COMPARTILHAR A PALAVRA DO DIA COM OU SEM IDENTIFICAÇÃO DA CDO
+        // COMPARTILHAR A PALAVRA DO DIA: CARTÃO VISUAL + TEXTO FORMATADO
+        function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+          const words = String(text || '').split(/\s+/);
+          let line = '';
+          let lines = 0;
+          for (let i = 0; i < words.length; i++) {
+            const testLine = line ? `${line} ${words[i]}` : words[i];
+            if (ctx.measureText(testLine).width > maxWidth && line) {
+              ctx.fillText(line, x, y);
+              y += lineHeight;
+              lines++;
+              line = words[i];
+              if (maxLines && lines >= maxLines - 1) {
+                let last = line;
+                while (ctx.measureText(`${last}…`).width > maxWidth && last.length > 3) last = last.slice(0, -1);
+                ctx.fillText(`${last}…`, x, y);
+                return y + lineHeight;
+              }
+            } else {
+              line = testLine;
+            }
+          }
+          if (line) {
+            ctx.fillText(line, x, y);
+            y += lineHeight;
+          }
+          return y;
+        }
+
+        async function createDailyWordShareImage(entry, includeBranding) {
+          const canvas = document.createElement('canvas');
+          canvas.width = 1080;
+          canvas.height = 1350;
+          const ctx = canvas.getContext('2d');
+          const bg = ctx.createLinearGradient(0, 0, 1080, 1350);
+          bg.addColorStop(0, '#fffdf8');
+          bg.addColorStop(1, '#f1eadc');
+          ctx.fillStyle = bg;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Moldura e detalhes visuais
+          ctx.strokeStyle = '#c59a42';
+          ctx.lineWidth = 5;
+          ctx.strokeRect(34, 34, 1012, 1282);
+          ctx.fillStyle = '#c59a42';
+          ctx.fillRect(80, 94, 90, 7);
+          ctx.fillRect(910, 94, 90, 7);
+
+          const dateLabel = formatDatePT(entry.date);
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#8a6827';
+          ctx.font = '700 34px Arial';
+          ctx.fillText('PALAVRA DO DIA', 540, 160);
+          ctx.font = '26px Arial';
+          ctx.fillStyle = '#6f6a60';
+          ctx.fillText(dateLabel, 540, 207);
+
+          ctx.font = '700 54px Arial';
+          ctx.fillStyle = '#252a31';
+          let titleY = wrapCanvasText(ctx, entry.tema, 540, 310, 850, 66, 2);
+
+          // Versículo em painel destacado
+          const verseTop = Math.max(390, titleY + 24);
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.roundRect(92, verseTop, 896, 250, 26);
+          ctx.fill();
+          ctx.fillStyle = '#b48a35';
+          ctx.fillRect(92, verseTop + 28, 8, 194);
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#30343a';
+          ctx.font = 'italic 34px Georgia';
+          let y = wrapCanvasText(ctx, `“${entry.trecho}”`, 132, verseTop + 78, 810, 46, 3);
+          ctx.font = '700 28px Arial';
+          ctx.fillStyle = '#8a6827';
+          ctx.fillText(`— ${entry.ref}`, 132, Math.min(verseTop + 218, y + 12));
+
+          // Meditação e aplicação
+          let sectionY = verseTop + 300;
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#8a6827';
+          ctx.font = '700 28px Arial';
+          ctx.fillText('MEDITAÇÃO', 110, sectionY);
+          ctx.fillStyle = '#35383d';
+          ctx.font = '27px Arial';
+          sectionY = wrapCanvasText(ctx, entry.meditacao, 110, sectionY + 48, 860, 38, 5) + 28;
+
+          ctx.fillStyle = '#8a6827';
+          ctx.font = '700 28px Arial';
+          ctx.fillText('APLICAÇÃO PESSOAL', 110, sectionY);
+          ctx.fillStyle = '#35383d';
+          ctx.font = '27px Arial';
+          wrapCanvasText(ctx, entry.aplicacao, 110, sectionY + 48, 860, 38, 4);
+
+          if (includeBranding) {
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#8a6827';
+            ctx.font = '700 25px Arial';
+            ctx.fillText('ESTAÇÃO CDO', 540, 1250);
+            ctx.font = '20px Arial';
+            ctx.fillStyle = '#68645c';
+            ctx.fillText('Casa de Oração para Todos os Povos', 540, 1282);
+          }
+
+          return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        }
+
         async function shareDailyWord(includeBranding) {
           const entry = getWordByDate(selectedDate);
           if (!entry) return;
 
           const dateLabel = formatDatePT(entry.date);
-          const neutralText =
-            `PALAVRA DO DIA\\n${dateLabel}\\n\\n` +
-            `${entry.tema}\\n\\n` +
-            `“${entry.trecho}”\\n— ${entry.ref}\\n\\n` +
-            `Meditação:\\n${entry.meditacao}\\n\\n` +
-            `Aplicação pessoal:\\n${entry.aplicacao}`;
+          const cleanText = [
+            `📖 *PALAVRA DO DIA*`,
+            `🗓️ ${dateLabel}`,
+            '',
+            `✨ *${entry.tema}*`,
+            '',
+            `“${entry.trecho}”`,
+            `📖 ${entry.ref}`,
+            '',
+            `💛 *MEDITAÇÃO*`,
+            entry.meditacao,
+            '',
+            `🙏 *APLICAÇÃO PESSOAL*`,
+            entry.aplicacao
+          ].join('\n');
 
-          const brandedText =
-            `${neutralText}\\n\\n` +
-            `🙏 Estação CDO — Casa de Oração para Todos os Povos\\n` +
-            `Acompanhe nossa programação: ${window.location.href}`;
+          const message = includeBranding
+            ? `${cleanText}\n\n━━━━━━━━━━━━━━\n⛪ *Estação CDO*\nCasa de Oração para Todos os Povos\n🌐 ${window.location.href}`
+            : cleanText;
 
-          const shareData = {
-            title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia',
-            text: includeBranding ? brandedText : neutralText
-          };
+          try {
+            const blob = await createDailyWordShareImage(entry, includeBranding);
+            const file = blob ? new File([blob], 'palavra-do-dia.png', { type: 'image/png' }) : null;
+            const shareData = { title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia', text: message };
 
-          // O link do aplicativo só acompanha a versão identificada pela CDO.
-          if (includeBranding) shareData.url = window.location.href;
-
-          if (navigator.share) {
-            try {
+            // Em celulares compatíveis, envia o cartão PNG junto com a mensagem.
+            if (file && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+              shareData.files = [file];
               await navigator.share(shareData);
               return;
-            } catch (err) {
-              if (err && err.name === 'AbortError') return;
             }
-          }
 
-          const whatsappText = encodeURIComponent(
-            (includeBranding ? brandedText : neutralText)
-          );
-          window.open(`https://wa.me/?text=${whatsappText}`, '_blank', 'noopener');
+            if (navigator.share) {
+              await navigator.share(shareData);
+              return;
+            }
+
+            // Alternativa para navegadores sem partilha nativa: abre o WhatsApp com quebras reais.
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+          } catch (err) {
+            if (err && err.name === 'AbortError') return;
+            const fallbackText = encodeURIComponent(message);
+            window.open(`https://wa.me/?text=${fallbackText}`, '_blank', 'noopener');
+          }
         }
 
         const sharePalavraBrandedBtn = document.getElementById('sharePalavraBrandedBtn');
