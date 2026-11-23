@@ -459,6 +459,9 @@
       gap: 8px;
     }
 
+    .palavra-share-group { margin-top: 10px; }
+    .palavra-share-group-title { font-size: .7rem; font-weight: 800; color: var(--text-light); margin-bottom: 6px; }
+
     .palavra-share-btn {
       flex: 1 1 190px;
       min-height: 38px;
@@ -469,6 +472,7 @@
       font-weight: 700;
       cursor: pointer;
     }
+    .palavra-share-btn:disabled { opacity: .6; cursor: wait; }
 
     .palavra-share-btn.branded {
       color: #fff;
@@ -1286,6 +1290,50 @@
     .calendar-preview-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; }
     .calendar-year-pill { border-radius:20px; padding:5px 9px; background:var(--dock-active-bg); color:var(--accent-gold-strong); font-size:.75rem; font-weight:800; }
     @media (max-width:360px) { .calendar-year-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .calendar-day { min-height:48px; } }
+    /* Calendário: seleção progressiva de mês e dia. */
+    .calendar-months { grid-template-columns:repeat(1,minmax(0,1fr)); }
+
+    .calendar-month-chooser { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+    .calendar-month-choice { min-height:86px; border:1px solid var(--border-color); border-radius:16px; padding:16px; background:var(--surface-soft); color:var(--text-color); text-align:left; cursor:pointer; transition:transform .16s ease,border-color .16s ease; }
+    .calendar-month-choice:hover { transform:translateY(-2px); border-color:var(--accent-gold); }
+    .calendar-month-choice strong { display:block; font-size:1.05rem; text-transform:capitalize; color:var(--accent-gold-strong); }
+    .calendar-month-choice span { display:block; margin-top:5px; color:var(--text-muted); font-size:.76rem; }
+    .calendar-month-screen[hidden], .calendar-month-chooser[hidden] { display:none !important; }
+    .calendar-month-screen { display:block; }
+    .calendar-month-screen .calendar-month-card { margin-top:12px; }
+    .calendar-month-screen-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; }
+    .calendar-month-screen-head h4 { margin:0; text-transform:capitalize; color:var(--accent-gold-strong); }
+    .calendar-month-back-list { border:1px solid var(--border-color); border-radius:20px; padding:8px 12px; background:var(--surface-soft); color:var(--text-color); font-weight:750; cursor:pointer; }
+    @media (max-width:420px) { .calendar-month-chooser { gap:8px; } .calendar-month-choice { min-height:76px; padding:12px; } }
+    .calendar-month-card { min-width:0; border:1px solid var(--border-color); border-radius:18px; padding:14px 10px; background:var(--surface-soft); }
+    .calendar-month-card h4 { margin:0 0 10px; color:var(--accent-gold-strong); font-size:1rem; text-transform:capitalize; }
+    .calendar-month-card .calendar-grid { gap:4px; }
+    .calendar-month-card .calendar-day { min-height:64px; cursor:pointer; text-align:left; display:block; width:100%; }
+    .calendar-month-card .calendar-day:focus-visible { outline:3px solid var(--accent-gold); outline-offset:2px; }
+    .calendar-month-card .calendar-day.empty { cursor:default; }
+    .calendar-month-card .calendar-day .day-number { font-size:.76rem; }
+    .calendar-month-card .calendar-event { font-size:.55rem; }
+    .calendar-day-panel { position:fixed; inset:0; z-index:1000001; display:none; align-items:center; justify-content:center; padding:12px; background:rgba(20,24,30,.58); }
+    .calendar-day-panel.open { display:flex; }
+    .calendar-day-panel-card { width:min(100%,680px); height:min(720px,calc(100dvh - 24px)); max-height:calc(100dvh - 24px); border-radius:20px; background:var(--surface-card,var(--background)); color:var(--text-color); border:1px solid var(--border-color); box-shadow:0 18px 55px rgba(0,0,0,.24); }
+    .calendar-day-panel .calendar-month-view-head { border-color:var(--border-color); }
+    .calendar-day-panel .calendar-month-view-head h3 { color:var(--accent-gold-strong); }
+    .calendar-day-subtitle { margin:4px 0 0; color:var(--text-muted); font-size:.82rem; }
+    .calendar-day-details { overflow:auto; padding:8px 2px 16px; }
+    .calendar-event-detail { display:flex; align-items:flex-start; gap:12px; padding:14px 12px; margin:8px 0; border:1px solid var(--border-color); border-radius:14px; background:var(--surface-soft); }
+    .calendar-event-time { flex:0 0 58px; font-weight:900; color:var(--accent-gold-strong); }
+    .calendar-event-name { font-weight:750; color:var(--text-color); }
+    .calendar-event-note { margin-top:4px; color:var(--text-muted); font-size:.82rem; line-height:1.45; }
+    .calendar-empty-day { padding:24px 14px; border:1px dashed var(--border-color); border-radius:14px; color:var(--text-muted); text-align:center; }
+    @media (max-width:520px) {
+      .calendar-month-card { padding:12px 6px; }
+      .calendar-month-card .calendar-grid { gap:2px; }
+      .calendar-month-card .calendar-day { min-height:54px; padding:3px 2px; border-radius:6px; }
+      .calendar-month-card .calendar-event { font-size:.45rem; }
+      .calendar-day-panel { padding:7px; }
+      .calendar-day-panel-card { width:100%; height:calc(100dvh - 14px); max-height:calc(100dvh - 14px); padding:12px 10px; }
+    }
+
 
     /* MURAL DE ORAÇÃO - primeira integração Firebase */
     .prayer-intro { line-height:1.45; color:var(--text-muted); font-size:.78rem; }
@@ -1307,7 +1355,8 @@
     .prayer-name-status.success { color:#167A3E; border:1px solid rgba(22,122,62,.25); background:rgba(22,122,62,.08); }
     body.theme-dark .prayer-name-status.success { color:#86EFAC; }
     .prayer-post-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:3px; }
-    .prayer-action-btn { border:1px solid var(--border-color); border-radius:20px; padding:8px 12px; background:var(--surface-soft); color:var(--text-light); font-size:.72rem; font-weight:800; cursor:pointer; }
+    .prayer-action-btn { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--border-color); border-radius:20px; padding:8px 12px; background:var(--surface-soft); color:var(--text-light); font-size:.72rem; font-weight:800; cursor:pointer; }
+    .prayer-action-btn .intercede-icon { width:22px; height:22px; flex:0 0 22px; stroke:#168653; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
     .prayer-action-btn.active { background:var(--dock-active-bg); border-color:var(--accent-gold); color:var(--accent-gold-strong); }
     .prayer-action-btn:disabled { opacity:.6; cursor:wait; }
     .prayer-action-count { border:0; background:transparent; padding:8px 4px; font-size:.68rem; color:var(--text-muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
@@ -1412,10 +1461,20 @@
 
           <div class="palavra-share-box">
             <div class="palavra-block-label">📤 Compartilhar a Palavra do Dia</div>
-            <p class="palavra-share-hint">Escolha se deseja incluir a identificação da Casa de Oração na mensagem.</p>
-            <div class="palavra-share-actions">
-              <button type="button" class="palavra-share-btn branded" id="sharePalavraBrandedBtn">Compartilhar com identificação CDO</button>
-              <button type="button" class="palavra-share-btn neutral" id="sharePalavraNeutralBtn">Compartilhar sem identificação</button>
+            <p class="palavra-share-hint">O texto e a arte são publicados separadamente. Assim, a imagem não será anexada automaticamente à mensagem.</p>
+            <div class="palavra-share-group">
+              <div class="palavra-share-group-title">Compartilhar somente o texto</div>
+              <div class="palavra-share-actions">
+                <button type="button" class="palavra-share-btn branded" id="sharePalavraBrandedBtn">Texto com identificação CDO</button>
+                <button type="button" class="palavra-share-btn neutral" id="sharePalavraNeutralBtn">Texto sem identificação</button>
+              </div>
+            </div>
+            <div class="palavra-share-group">
+              <div class="palavra-share-group-title">Publicar somente a imagem</div>
+              <div class="palavra-share-actions">
+                <button type="button" class="palavra-share-btn branded" id="sharePalavraImageBrandedBtn">Imagem com identificação CDO</button>
+                <button type="button" class="palavra-share-btn neutral" id="sharePalavraImageNeutralBtn">Imagem sem identificação</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1482,17 +1541,18 @@
         </div>
       </div>
 
-      <!-- Aba 4: Agenda -->
+      <!-- Aba 4: Calendário -->
       <div id="agenda" class="tab-pane">
         <section class="info-card church-calendar-section">
-          <h3 class="section-title">📅 Agenda da Igreja</h3>
+          <h3 class="section-title">📅 Calendário da Igreja</h3>
           <p>Confira os encontros recorrentes e as datas especiais da nossa comunidade.</p>
           <div class="calendar-legend">
             <span><i class="calendar-dot morning"></i> Manhã</span>
             <span><i class="calendar-dot evening"></i> Noite</span>
             <span><i class="calendar-dot special"></i> Evento especial</span>
           </div>
-          <div id="calendar2026" class="calendar-months" aria-label="Calendário de novembro e dezembro de 2026"></div>
+          <div id="calendarMonthChooser" class="calendar-month-chooser" aria-label="Escolha o mês"></div>
+          <div id="calendar2026" class="calendar-months calendar-month-screen" aria-label="Calendário do mês selecionado" hidden></div>
         </section>
         <section class="info-card church-calendar-section calendar-preview-section">
           <div class="calendar-preview-heading">
@@ -1505,13 +1565,13 @@
           <div id="calendar2027" class="calendar-year-grid" aria-label="Pré-calendário de 2027"></div>
         </section>
       </div>
-      <div id="calendarMonthView" class="calendar-month-view" role="dialog" aria-modal="true" aria-labelledby="calendarMonthTitle">
-        <div class="calendar-month-view-card">
+      <div id="calendarMonthView" class="calendar-month-view calendar-day-panel" role="dialog" aria-modal="true" aria-labelledby="calendarMonthTitle" aria-hidden="true">
+        <div class="calendar-month-view-card calendar-day-panel-card">
           <div class="calendar-month-view-head">
-            <h3 id="calendarMonthTitle">Mês</h3>
-            <button type="button" class="calendar-month-back" id="calendarMonthBack">← Voltar</button>
+            <div><h3 id="calendarMonthTitle">Eventos do dia</h3><p id="calendarDaySubtitle" class="calendar-day-subtitle"></p></div>
+            <button type="button" class="calendar-month-back" id="calendarMonthBack">✕ Fechar</button>
           </div>
-          <div id="calendarMonthContent"></div>
+          <div id="calendarMonthContent" class="calendar-day-details"></div>
         </div>
       </div>
 
@@ -1770,7 +1830,7 @@
       <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
-      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
       <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
@@ -1781,7 +1841,7 @@
       <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
-      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
       <button type="button" class="dock-radio-center active core-radio" id="radioCoreBtn" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
@@ -1792,7 +1852,7 @@
       <button type="button" class="dock-item" data-target="videos"><span class="dock-icon">📺</span><span>Vídeos</span></button>
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
-      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Agenda</span></button>
+      <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
       <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
@@ -1830,88 +1890,118 @@
     (function () {
       function renderChurchCalendars() {
         const recurringEvents = {
-          0: [{ time: '20h', label: 'Culto da Família' }],
-          1: [{ time: '09h', label: 'Intercessão da Manhã' }, { time: '19h', label: 'Intercessão Diária' }],
-          2: [{ time: '19h', label: 'Intercessão Diária' }, { time: '20h', label: 'Estudo Bíblico' }],
-          3: [{ time: '19h', label: 'Intercessão Diária' }],
-          4: [{ time: '19h', label: 'Intercessão Diária' }, { time: '19h', label: 'Círculo de Oração' }, { time: '20h', label: 'Varões' }, { time: '20h', label: 'Jovens' }],
-          5: [{ time: '19h', label: 'Intercessão Diária' }],
+          0: [{ time: '20h', label: 'Culto da Família', description: 'Encontro de comunhão e adoração da família da igreja.' }],
+          1: [{ time: '09h', label: 'Intercessão da Manhã', description: 'Momento de oração e intercessão.' }, { time: '19h', label: 'Intercessão Diária', description: 'Encontro de oração.' }],
+          2: [{ time: '19h', label: 'Intercessão Diária', description: 'Encontro de oração.' }, { time: '20h', label: 'Estudo Bíblico', description: 'Estudo e aprendizado da Palavra.' }],
+          3: [{ time: '19h', label: 'Intercessão Diária', description: 'Encontro de oração.' }],
+          4: [{ time: '19h', label: 'Intercessão Diária', description: 'Encontro de oração.' }, { time: '19h', label: 'Círculo de Oração', description: 'Momento de oração em conjunto.' }, { time: '20h', label: 'Varões', description: 'Encontro dos varões.' }, { time: '20h', label: 'Jovens', description: 'Encontro dos jovens.' }],
+          5: [{ time: '19h', label: 'Intercessão Diária', description: 'Encontro de oração.' }],
           6: []
         };
         const monthNames = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+        const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
         const calendarRoot = document.getElementById('calendar2026');
+        const chooserRoot = document.getElementById('calendarMonthChooser');
         const previewRoot = document.getElementById('calendar2027');
         const view = document.getElementById('calendarMonthView');
         const viewTitle = document.getElementById('calendarMonthTitle');
+        const viewSubtitle = document.getElementById('calendarDaySubtitle');
         const viewContent = document.getElementById('calendarMonthContent');
         const closeButton = document.getElementById('calendarMonthBack');
+        let previousBodyOverflow = '';
+
+        function eventsForDate(year, month, day) {
+          const date = new Date(year, month, day);
+          const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+          const events = year === 2026 ? [...(recurringEvents[date.getDay()] || [])] : [];
+          if (key === '2026-12-31') events.push({ time: '22h', label: 'Culto da Virada', description: 'Celebração especial de encerramento do ano e entrada de 2027.', special: true });
+          return events;
+        }
+
+        function openDay(year, month, day) {
+          const date = new Date(year, month, day);
+          const events = eventsForDate(year, month, day);
+          viewTitle.textContent = `${day} de ${monthNames[month]} de ${year}`;
+          viewSubtitle.textContent = date.toLocaleDateString('pt-BR', { weekday: 'long' });
+          viewContent.innerHTML = events.length
+            ? events.map(event => `<article class="calendar-event-detail${event.special ? ' special-day' : ''}"><div class="calendar-event-time">${event.time}</div><div><div class="calendar-event-name">${event.label}</div><div class="calendar-event-note">${event.description || 'Programação da Igreja.'}</div></div></article>`).join('')
+            : `<div class="calendar-empty-day">${year === 2027 ? 'A programação deste dia será divulgada em breve.' : 'Não há eventos programados para este dia.'}</div>`;
+          previousBodyOverflow = document.body.style.overflow;
+          view.classList.add('open');
+          view.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          closeButton.focus();
+        }
+
+        function closeDay() {
+          view.classList.remove('open');
+          view.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = previousBodyOverflow;
+        }
 
         function makeMonthGrid(year, month) {
-          const weekdays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
           const firstDay = new Date(year, month, 1).getDay();
           const daysInMonth = new Date(year, month + 1, 0).getDate();
           let cells = weekdays.map(day => `<div class="calendar-weekday">${day}</div>`).join('');
           for (let blank = 0; blank < firstDay; blank++) cells += '<div class="calendar-day empty" aria-hidden="true"></div>';
           for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(year, month, day);
-            const key = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-            const events = year === 2026 ? [...(recurringEvents[date.getDay()] || [])] : [];
-            if (key === '2026-12-31') events.push({ time: '22h', label: 'Culto da Virada', special: true });
-            const special = key === '2026-12-31';
+            const events = eventsForDate(year, month, day);
+            const special = year === 2026 && month === 11 && day === 31;
             const now = new Date();
             const isToday = year === now.getFullYear() && month === now.getMonth() && day === now.getDate();
-            const eventMarkup = events.map(event => {
+            const eventMarkup = events.slice(0, 2).map(event => {
               const hour = Number.parseInt(event.time, 10);
               const timeClass = event.special ? ' special-event' : (hour < 12 ? ' event-morning' : ' event-evening');
               return `<span class="calendar-event${timeClass}">${event.time} ${event.label}</span>`;
             }).join('');
             const dayClasses = `calendar-day${special ? ' special-day' : ''}${isToday ? ' today-day' : ''}`;
-            const ariaLabel = [isToday ? 'Hoje' : '', special ? '31 de dezembro: Culto da Virada às 22 horas' : ''].filter(Boolean).join('. ');
-            cells += `<div class="${dayClasses}"${ariaLabel ? ` aria-label="${ariaLabel}"` : ''}><span class="day-number">${day}</span>${eventMarkup}</div>`;
+            cells += `<button type="button" class="${dayClasses}" data-calendar-day="${day}" data-calendar-year="${year}" data-calendar-month="${month}" aria-label="${day} de ${monthNames[month]} de ${year}${events.length ? `, ${events.length} eventos` : ''}"><span class="day-number">${day}</span>${eventMarkup}${events.length > 2 ? `<span class="calendar-event">+${events.length - 2} eventos</span>` : ''}</button>`;
           }
-          return `<div class="calendar-grid">${cells}</div>`;
+          return `<div class="calendar-month-card"><div class="calendar-month-screen-head"><h4>${monthNames[month]} ${year}</h4><button type="button" class="calendar-month-back-list" data-calendar-back-months>← Meses</button></div><div class="calendar-grid">${cells}</div></div>`;
         }
 
-        function openMonth(year, month) {
-          viewTitle.textContent = `${monthNames[month]} ${year}`;
-          viewContent.innerHTML = year === 2026
-            ? makeMonthGrid(year, month)
-            : '<div class="calendar-coming-soon">✨ A programação deste mês será divulgada em breve.</div>';
-          view.classList.add('open');
-          document.body.classList.add('calendar-month-open');
-          document.body.style.overflow = 'hidden';
-          closeButton.focus();
+        function showMonth(year, month) {
+          if (chooserRoot) chooserRoot.hidden = true;
+          if (calendarRoot) {
+            calendarRoot.hidden = false;
+            calendarRoot.innerHTML = makeMonthGrid(year, month);
+          }
         }
-        function closeMonth() {
-          view.classList.remove('open');
-          document.body.classList.remove('calendar-month-open');
-          document.body.style.overflow = '';
+
+        function showMonthChooser() {
+          if (calendarRoot) { calendarRoot.hidden = true; calendarRoot.innerHTML = ''; }
+          if (chooserRoot) chooserRoot.hidden = false;
         }
-        if (closeButton) closeButton.addEventListener('click', closeMonth);
-        if (view) view.addEventListener('click', event => { if (event.target === view) closeMonth(); });
-        document.addEventListener('keydown', event => { if (event.key === 'Escape' && view && view.classList.contains('open')) closeMonth(); });
+
+        if (chooserRoot) {
+          chooserRoot.innerHTML = [10, 11].map(month => `<button type="button" class="calendar-month-choice" data-calendar-open-month="${month}"><strong>${monthNames[month]}</strong><span>Ver calendário do mês</span></button>`).join('');
+          chooserRoot.addEventListener('click', event => {
+            const button = event.target.closest('[data-calendar-open-month]');
+            if (button) showMonth(2026, Number(button.dataset.calendarOpenMonth));
+          });
+        }
 
         if (calendarRoot) {
-          [10, 11].forEach(month => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'calendar-month';
-            const eventCount = month === 10 ? 'Encontros recorrentes' : 'Encontros + Culto da Virada';
-            button.innerHTML = `<strong>${monthNames[month]} 2026</strong><span>${eventCount} · Toque para abrir</span>`;
-            button.addEventListener('click', () => openMonth(2026, month));
-            calendarRoot.appendChild(button);
+          calendarRoot.hidden = true;
+          calendarRoot.addEventListener('click', event => {
+            const backButton = event.target.closest('[data-calendar-back-months]');
+            if (backButton) { showMonthChooser(); return; }
+            const dayButton = event.target.closest('[data-calendar-day]');
+            if (dayButton) openDay(Number(dayButton.dataset.calendarYear), Number(dayButton.dataset.calendarMonth), Number(dayButton.dataset.calendarDay));
           });
         }
+
         if (previewRoot) {
-          monthNames.forEach((month, index) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'calendar-mini-month';
-            button.innerHTML = `<strong>${month}</strong><span>Programação em breve</span>`;
-            button.addEventListener('click', () => openMonth(2027, index));
-            previewRoot.appendChild(button);
+          previewRoot.innerHTML = monthNames.map((month, index) => `<button type="button" class="calendar-mini-month" data-calendar-preview-month="${index}"><strong>${month}</strong><span>Programação em breve</span></button>`).join('');
+          previewRoot.addEventListener('click', event => {
+            const button = event.target.closest('[data-calendar-preview-month]');
+            if (button) openDay(2027, Number(button.dataset.calendarPreviewMonth), 1);
           });
         }
+
+        if (closeButton) closeButton.addEventListener('click', closeDay);
+        if (view) view.addEventListener('click', event => { if (event.target === view) closeDay(); });
+        document.addEventListener('keydown', event => { if (event.key === 'Escape' && view && view.classList.contains('open')) closeDay(); });
       }
 
       function initApp() {
@@ -2351,10 +2441,9 @@
           return new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
         }
 
-        async function shareDailyWord(includeBranding) {
+        async function shareDailyWordText(includeBranding) {
           const entry = getWordByDate(selectedDate);
           if (!entry) return;
-
           const dateLabel = formatDatePT(entry.date);
           const cleanText = [
             `📖 *PALAVRA DO DIA*`,
@@ -2371,46 +2460,60 @@
             `🙏 *APLICAÇÃO PESSOAL*`,
             entry.aplicacao
           ].join('\n');
-
           const message = includeBranding
             ? `${cleanText}\n\n━━━━━━━━━━━━━━\n⛪ *Estação CDO*\nCasa de Oração para Todos os Povos\n🌐 ${window.location.href}`
             : cleanText;
-
           try {
-            const blob = await createDailyWordShareImage(entry, includeBranding);
-            const file = blob ? new File([blob], 'palavra-do-dia.png', { type: 'image/png' }) : null;
-            const shareData = { title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia', text: message };
-
-            // Em celulares compatíveis, envia o cartão PNG junto com a mensagem.
-            if (file && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
-              shareData.files = [file];
-              await navigator.share(shareData);
-              return;
-            }
-
             if (navigator.share) {
-              await navigator.share(shareData);
+              await navigator.share({ title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia', text: message });
               return;
             }
-
-            // Alternativa para navegadores sem partilha nativa: abre o WhatsApp com quebras reais.
             window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
           } catch (err) {
             if (err && err.name === 'AbortError') return;
-            const fallbackText = encodeURIComponent(message);
-            window.open(`https://wa.me/?text=${fallbackText}`, '_blank', 'noopener');
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+          }
+        }
+
+        async function shareDailyWordImage(includeBranding, button) {
+          const entry = getWordByDate(selectedDate);
+          if (!entry) return;
+          if (button) { button.disabled = true; button.dataset.originalText = button.textContent; button.textContent = 'Preparando imagem…'; }
+          try {
+            const blob = await createDailyWordShareImage(entry, includeBranding);
+            if (!blob) throw new Error('Não foi possível criar a imagem.');
+            const file = new File([blob], 'palavra-do-dia.png', { type: 'image/png' });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({ title: includeBranding ? 'Palavra do Dia | Estação CDO' : 'Palavra do Dia', files: [file] });
+            } else {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = 'palavra-do-dia.png';
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+              setTimeout(() => URL.revokeObjectURL(url), 1500);
+              alert('A imagem foi baixada. Agora você pode publicá-la separadamente no aplicativo desejado.');
+            }
+          } catch (err) {
+            if (err && err.name !== 'AbortError') {
+              console.error('Erro ao compartilhar a imagem da Palavra do Dia:', err);
+              alert('Não foi possível compartilhar a imagem. Tente novamente.');
+            }
+          } finally {
+            if (button) { button.disabled = false; button.textContent = button.dataset.originalText || 'Compartilhar imagem'; delete button.dataset.originalText; }
           }
         }
 
         const sharePalavraBrandedBtn = document.getElementById('sharePalavraBrandedBtn');
         const sharePalavraNeutralBtn = document.getElementById('sharePalavraNeutralBtn');
-
-        if (sharePalavraBrandedBtn) {
-          sharePalavraBrandedBtn.addEventListener('click', () => shareDailyWord(true));
-        }
-        if (sharePalavraNeutralBtn) {
-          sharePalavraNeutralBtn.addEventListener('click', () => shareDailyWord(false));
-        }
+        const sharePalavraImageBrandedBtn = document.getElementById('sharePalavraImageBrandedBtn');
+        const sharePalavraImageNeutralBtn = document.getElementById('sharePalavraImageNeutralBtn');
+        if (sharePalavraBrandedBtn) sharePalavraBrandedBtn.addEventListener('click', () => shareDailyWordText(true));
+        if (sharePalavraNeutralBtn) sharePalavraNeutralBtn.addEventListener('click', () => shareDailyWordText(false));
+        if (sharePalavraImageBrandedBtn) sharePalavraImageBrandedBtn.addEventListener('click', () => shareDailyWordImage(true, sharePalavraImageBrandedBtn));
+        if (sharePalavraImageNeutralBtn) sharePalavraImageNeutralBtn.addEventListener('click', () => shareDailyWordImage(false, sharePalavraImageNeutralBtn));
 
         // 4. AUDIO GRAPH & VISUALIZADOR
         function initAudioGraph() {
@@ -3175,7 +3278,12 @@
       espiritual:'Vida espiritual', restauracao:'Libertação e restauração', agradecimentos:'Agradecimentos', outros:'Outros pedidos'
     };
     const kinds = { request:'🙏 Pedido de oração', thanks:'❤️ Agradecimento', glorify:'✨ Glorificar a Deus' };
-    const actionLabels = { request:'🙏 Interceder', thanks:'❤️ Celebrar', glorify:'✨ Glorificar' };
+    const actionLabels = { request:'Interceder', thanks:'❤️ Celebrar', glorify:'✨ Glorificar' };
+    const intercedeIcon = '<svg class="intercede-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 12.7 14.8 11.6C11.5 8.7 9.2 6.7 9.2 4.2a3.7 3.7 0 0 1 6.8-2 3.7 3.7 0 0 1 6.8 2c0 2.5-2.3 4.5-5.6 7.4L16 12.7Z"/><path d="M11.2 29.2 9.9 25.4a3.4 3.4 0 0 0-1.7-2L5.4 22a1.7 1.7 0 0 1-.8-2.2 1.7 1.7 0 0 1 2.2-.8l4.1 1.8v-3.1a1.7 1.7 0 0 1 3.4 0v2.1-2.7a1.7 1.7 0 0 1 3.4 0v2.8-1.8a1.7 1.7 0 0 1 3.4 0v2.6-1a1.7 1.7 0 0 1 3.4 0v4.1a5.4 5.4 0 0 1-5.4 5.4h-5.2a3 3 0 0 1-2.7-2Z"/></svg>';
+    function setPrayerActionLabel(button, kind, active) {
+      if (kind === 'request') button.innerHTML = `${intercedeIcon}<span>Interceder${active ? ' ✓' : ''}</span>`;
+      else button.textContent = `${actionLabels[kind] || 'Participar'}${active ? ' ✓' : ''}`;
+    }
     const reactionUnsubscribers = new Map();
     const reactionSnapshots = new Map();
     let authUser = auth.currentUser || null;
@@ -3250,7 +3358,7 @@
         const mine = uid ? snapshot.docs.some(item => item.id === uid) : false;
         actionButton.classList.toggle('active', mine);
         actionButton.setAttribute('aria-pressed', mine ? 'true' : 'false');
-        actionButton.textContent = `${actionLabels[post.kind] || '🙏 Participar'}${mine ? ' ✓' : ''}`;
+        setPrayerActionLabel(actionButton, post.kind, mine);
         countLabel.textContent = count === 1 ? '1 participação' : `${count} participações`;
       }, error => {
         console.warn('Não foi possível atualizar as participações:', error);
@@ -3302,7 +3410,7 @@
         const body = document.createElement('p'); body.className = 'prayer-post-text'; body.textContent = post.text || '';
         const author = document.createElement('p'); author.className = 'prayer-post-meta'; author.textContent = `${post.anonymous ? 'Publicação anônima' : (post.authorName || 'Participante')} · ${formatPostDate(post.createdAt)}`;
         const actions = document.createElement('div'); actions.className = 'prayer-post-actions';
-        const actionButton = document.createElement('button'); actionButton.type = 'button'; actionButton.className = 'prayer-action-btn'; actionButton.textContent = actionLabels[post.kind] || '🙏 Participar';
+        const actionButton = document.createElement('button'); actionButton.type = 'button'; actionButton.className = 'prayer-action-btn'; setPrayerActionLabel(actionButton, post.kind, false);
         const countLabel = document.createElement('button'); countLabel.type = 'button'; countLabel.className = 'prayer-action-count'; countLabel.textContent = 'A carregar participações…';
         countLabel.setAttribute('aria-label', 'Ver quem participou');
         actionButton.addEventListener('click', event => { event.stopPropagation(); toggleReaction(post, actionButton, countLabel); });
