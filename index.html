@@ -1215,6 +1215,41 @@
       align-self: flex-start;
     }
 
+    .kids-main-card { min-height: 142px; justify-content: center; align-items: center; text-align: center; background-image: none !important; background: var(--kids-header-bg); }
+    .kids-main-card::after { display: none; }
+    .kids-main-card .kids-main-icon { font-size: 2.25rem; line-height: 1; margin-bottom: 9px; filter: drop-shadow(0 3px 5px rgba(0,0,0,.16)); }
+    .kids-main-card .kids-cat-info { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .kids-main-card .kids-cat-title { color: var(--kids-light); font-size: .9rem; }
+    .kids-main-card .kids-cat-sub { color: var(--text-muted); }
+    .kids-submenu-card {
+      min-height: 118px; border: 1px solid var(--kids-purple); border-radius: 14px;
+      padding: 14px; background: var(--kids-header-bg); color: var(--text-light);
+      text-align: left; display: flex; flex-direction: column; justify-content: space-between;
+      gap: 8px; box-shadow: var(--shadow-soft); cursor: pointer;
+    }
+    .kids-submenu-card strong { font-size: .88rem; color: var(--kids-light); }
+    .kids-submenu-card span { font-size: .7rem; color: var(--text-muted); line-height: 1.4; }
+
+    .kids-story-card { overflow:hidden; border:1px solid var(--kids-purple); border-radius:16px; background:var(--kids-header-bg); color:var(--text-light); text-align:left; padding:0; display:flex; flex-direction:column; cursor:pointer; box-shadow:var(--shadow-soft); }
+    .kids-story-art { width:100%; aspect-ratio:16/9; display:block; background:#dff2ff; }
+    .kids-story-card-body { padding:12px; display:flex; flex-direction:column; gap:6px; }
+    .kids-story-card strong { color:var(--kids-light); font-size:.88rem; }
+    .kids-story-card span { color:var(--text-muted); font-size:.7rem; line-height:1.45; }
+    .kids-story-ref { font-size:.64rem; font-weight:800; color:var(--kids-light); }
+    .kids-story-reader { grid-column:1/-1; border:1px solid var(--kids-purple); border-radius:16px; background:var(--kids-header-bg); padding:16px; color:var(--text-light); }
+    .kids-story-reader h4 { color:var(--kids-light); font-size:1.05rem; margin:12px 0 6px; }
+    .kids-story-reader p { font-size:.82rem; line-height:1.65; margin:8px 0; }
+    .kids-story-reader .kids-story-lesson { padding:12px; border-radius:12px; background:rgba(90,170,110,.13); border:1px solid rgba(90,170,110,.45); margin-top:12px; }
+    .kids-story-reader .kids-story-prayer { padding:12px; border-radius:12px; background:rgba(120,100,200,.12); margin-top:10px; }
+    .kids-story-back { margin-bottom:12px; border:1px solid var(--kids-light); border-radius:20px; padding:8px 13px; background:transparent; color:var(--kids-light); font-weight:800; cursor:pointer; }
+
+    .kids-development-notice { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 7px; padding: 16px 18px; margin-bottom: 4px; border: 1px solid var(--kids-light); border-radius: 16px; background: var(--kids-header-bg); color: var(--text-light); text-align: center; }
+    .kids-development-notice strong { font-size: .98rem; color: var(--kids-light); }
+    .kids-development-notice span { font-size: .84rem; line-height: 1.45; }
+    .kids-coming-soon { border-style: dashed; opacity: .92; }
+    .kids-coming-soon em { font-size: .62rem; font-style: normal; font-weight: 800; color: var(--kids-light); }
+    .kids-player-area.active { display: flex; }
+
     .church-calendar-section { margin-bottom: 12px; }
     .calendar-legend { display:flex; flex-wrap:wrap; gap:12px; margin:12px 0; font-size:.7rem; color:var(--text-muted); }
     .calendar-legend span { display:flex; align-items:center; gap:5px; }
@@ -1390,7 +1425,7 @@
     .visualizer-launch-row{display:flex;justify-content:center;margin:10px 0 2px}
     .visualizer-launch-btn,.eq-reset-btn{border:1px solid var(--border-color);border-radius:999px;padding:9px 15px;background:var(--surface-soft);color:var(--text-color);font-weight:800;cursor:pointer}
     .visualizer-launch-btn{color:var(--accent-gold-strong);border-color:var(--accent-gold-strong);min-width:190px;letter-spacing:.2px}
-    .visualizer-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(4,7,16,.96);display:none;flex-direction:column;padding: max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));color:#fff}
+    .visualizer-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(4,7,16,.96);display:none;flex-direction:column;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));color:#fff}
     .visualizer-overlay.open{display:flex}
     body.visualizer-open{overflow:hidden}
     body.visualizer-open .bottom-dock{visibility:hidden;pointer-events:none}
@@ -1398,9 +1433,18 @@
     .visualizer-head strong{font-size:1rem;color:#f5cf72}
     .visualizer-controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
     .visualizer-controls select,.visualizer-controls button{background:#171d2b;color:#fff;border:1px solid #49536a;border-radius:9px;padding:8px 10px;font-weight:700}
-    .visualizer-stage{position:relative;flex:1;min-height:220px;border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:#050812}
+    .visualizer-stage{position:relative;flex:1;min-height:220px;border:1px solid rgba(255,255,255,.14);border-radius:14px;overflow:hidden;background:#050812;touch-action:manipulation}
     #visualizerCanvas{display:block;width:100%;height:100%}
     .visualizer-foot{text-align:center;color:#b7bfd0;font-size:.72rem;padding-top:8px}
+    .visualizer-overlay.fullscreen-clean{padding:0;background:#050812}
+    .visualizer-overlay.fullscreen-clean .visualizer-head,.visualizer-overlay.fullscreen-clean .visualizer-foot{display:none!important}
+    .visualizer-overlay.fullscreen-clean .visualizer-stage{position:absolute;inset:0;border:0;border-radius:0;min-height:0}
+    .visualizer-overlay.fullscreen-clean.controls-visible .visualizer-head{display:flex!important;position:absolute;z-index:3;top:max(10px,env(safe-area-inset-top));left:10px;right:10px;margin:0;padding:10px;border-radius:12px;background:rgba(8,12,22,.88);backdrop-filter:blur(10px)}
+    .visualizer-overlay.fullscreen-clean.controls-visible .visualizer-foot{display:block!important;position:absolute;z-index:3;bottom:max(8px,env(safe-area-inset-bottom));left:10px;right:10px;padding:8px;background:rgba(8,12,22,.72);border-radius:10px}
+    .visualizer-overlay.fullscreen-clean.controls-visible .visualizer-stage{inset:0}
+    .visualizer-overlay.fullscreen-clean:not(.controls-visible){cursor:none}
+    .visualizer-overlay.fullscreen-clean .visualizer-head strong{display:none}
+
     .eq-reset-row{display:flex;justify-content:center;margin-top:12px}
     @media(max-width:420px){.visualizer-controls{width:100%}.visualizer-controls select{flex:1;min-width:0}.visualizer-head{align-items:flex-start}}
 </style>
@@ -1494,46 +1538,45 @@
           <p style="font-size: 0.7rem; color: var(--text-muted);">Escolha uma categoria abaixo:</p>
         </div>
 
-        <div id="kidsMenu" class="kids-grid">
-          <button type="button" class="kids-cat-btn" data-kids="palavrinhas" style="background-image: url('3palavrinhas.jpg');">
-            <div class="kids-cat-info">
-              <div class="kids-cat-title">🎵 3 Palavrinhas</div>
-              <div class="kids-cat-sub">Escolha um volume</div>
-            </div>
+        <div id="kidsMainMenu" class="kids-grid">
+          <button type="button" class="kids-cat-btn kids-main-card" data-kids-section="stories">
+            <div class="kids-main-icon" aria-hidden="true">📖</div>
+            <div class="kids-cat-info"><div class="kids-cat-title">Histórias</div><div class="kids-cat-sub">Histórias bíblicas para descobrir</div></div>
           </button>
-
-          <button type="button" class="kids-cat-btn" data-kids="desenhos" style="background-image: url('jesus.jpg');">
-            <div class="kids-cat-info">
-              <div class="kids-cat-title">🎬 Desenhos Bíblicos</div>
-              <div class="kids-cat-sub">Clássicos de Richard Rich</div>
-            </div>
+          <button type="button" class="kids-cat-btn kids-main-card" data-kids-section="games">
+            <div class="kids-main-icon" aria-hidden="true">🎮</div>
+            <div class="kids-cat-info"><div class="kids-cat-title">Minigames</div><div class="kids-cat-sub">Brincar e aprender</div></div>
           </button>
-
-          <button type="button" class="kids-cat-btn" data-kids="krozz" style="background-image: url('krozz.jpg');">
-            <div class="kids-cat-info">
-              <div class="kids-cat-title">🚀 Krozz</div>
-              <div class="kids-cat-sub">História Completa</div>
-            </div>
+          <button type="button" class="kids-cat-btn kids-main-card" data-kids-section="watch">
+            <div class="kids-main-icon" aria-hidden="true">🎬</div>
+            <div class="kids-cat-info"><div class="kids-cat-title">Vídeos Infantis</div><div class="kids-cat-sub">Músicas, desenhos e histórias em vídeo</div></div>
           </button>
-
-          <button type="button" class="kids-cat-btn" data-kids="missaoharpa" style="background-image: url('missaoharpa.jpg');">
-            <div class="kids-cat-info">
-              <div class="kids-cat-title">🎻 Missão Harpa</div>
-              <div class="kids-cat-sub">História da Harpa</div>
-            </div>
+          <button type="button" class="kids-cat-btn kids-main-card" data-kids-section="create">
+            <div class="kids-main-icon" aria-hidden="true">🎨</div>
+            <div class="kids-cat-info"><div class="kids-cat-title">Criatividade</div><div class="kids-cat-sub">Desenhar e criar</div></div>
           </button>
-
-          <button type="button" class="kids-cat-btn" data-kids="minhavida" style="background-image: url('minhavida.jpg');">
-            <div class="kids-cat-info">
-              <div class="kids-cat-title">🌍 Minha vida é uma viagem</div>
-              <div class="kids-cat-sub">Volumes 1 ao 5</div>
-            </div>
+          <button type="button" class="kids-cat-btn kids-main-card" data-kids-section="learn">
+            <div class="kids-main-icon" aria-hidden="true">💡</div>
+            <div class="kids-cat-info"><div class="kids-cat-title">Aprender</div><div class="kids-cat-sub">Descobertas e conhecimento</div></div>
           </button>
         </div>
 
+        <section id="kidsSubmenu" class="kids-player-area" aria-live="polite">
+          <div class="kids-nav-row"><button type="button" class="kids-back-btn" id="kidsBackMainBtn">← Menu Kids</button></div>
+          <h3 id="kidsSubmenuTitle" class="section-title" style="color: var(--kids-light);"></h3>
+          <div id="kidsSubmenuContent" class="kids-grid"></div>
+        </section>
+
+        <section id="kidsWatchArea" class="kids-player-area" aria-live="polite">
+          <div class="kids-nav-row"><button type="button" class="kids-back-btn" id="kidsBackWatchMainBtn">← Menu Kids</button></div>
+          <h3 class="section-title" style="color: var(--kids-light);">🎬 Vídeos Infantis</h3>
+          <p style="font-size:.75rem;color:var(--text-muted);margin-bottom:8px;">Escolha um canal para assistir.</p>
+          <div id="kidsMenu" class="kids-grid"></div>
+        </section>
+
         <div id="kidsPlayerArea" class="kids-player-area">
           <div class="kids-nav-row">
-            <button type="button" class="kids-back-btn" id="kidsBackBtn">← Voltar às Categorias</button>
+            <button type="button" class="kids-back-btn" id="kidsBackBtn">← Voltar a Assistir</button>
             <button type="button" class="kids-back-btn" id="kidsBackVolumesBtn" style="display: none;">← Voltar aos Volumes</button>
           </div>
           <h3 id="kidsCategoryTitle" class="section-title" style="color: var(--kids-light);"></h3>
@@ -2902,6 +2945,16 @@
             visualizerFrame=requestAnimationFrame(drawVisualizer);
           }
         }
+        async function keepRadioAudioAlive(){
+          // Abrir o visualizador não deve tocar no elemento de áudio nem trocar sua URL.
+          // Se o navegador suspender o Web Audio ao mudar para tela cheia, tenta retomá-lo.
+          if (isPlaying && audio && audio.paused) {
+            try { await audio.play(); } catch (err) { console.warn('A transmissão precisa de uma nova interação para continuar.', err); }
+          }
+          if (isPlaying && audioCtx && audioCtx.state !== 'running') {
+            try { await audioCtx.resume(); } catch (err) { console.warn('Não foi possível retomar o contexto de áudio.', err); }
+          }
+        }
         function openVisualizers(){
           if(!visualizerOverlay || visualizerRunning) return;
           visualizerOverlay.classList.add('open');
@@ -2910,15 +2963,14 @@
           fitVisualizerCanvas();
           cancelAnimationFrame(visualizerFrame);
           visualizerFrame=requestAnimationFrame(drawVisualizer);
+          keepRadioAudioAlive();
         }
         function closeVisualizers(){
-          // Primeiro interrompe o loop para impedir que ele se reagende.
           visualizerRunning=false;
           cancelAnimationFrame(visualizerFrame);
           visualizerFrame=0;
-          visualizerOverlay?.classList.remove('open');
+          visualizerOverlay?.classList.remove('open','fullscreen-clean','controls-visible');
           document.body.classList.remove('visualizer-open');
-          // Restaura o estado gráfico do canvas e libera a superfície grande de GPU.
           if(visualizerCtx && visualizerCanvas){
             visualizerCtx.setTransform(1,0,0,1,0,0);
             visualizerCtx.globalAlpha=1;
@@ -2929,21 +2981,42 @@
             visualizerCanvas.width=320;
             visualizerCanvas.height=220;
           }
-          // Se foi fechado durante tela cheia, devolve o app à janela normal.
           if(document.fullscreenElement && document.fullscreenElement===visualizerOverlay){
             document.exitFullscreen?.().catch(()=>{});
           }
           document.getElementById('openVisualizersBtn')?.focus({preventScroll:true});
+          keepRadioAudioAlive();
         }
         document.getElementById('openVisualizersBtn')?.addEventListener('click',openVisualizers);
         document.getElementById('closeVisualizersBtn')?.addEventListener('click',closeVisualizers);
         document.getElementById('randomVisualizerBtn')?.addEventListener('click',()=>{if(visualizerSelect){const current=visualizerSelect.selectedIndex;let next=Math.floor(Math.random()*visualizerNames.length);if(next===current)next=(next+1)%visualizerNames.length;visualizerSelect.value=visualizerNames[next];}});
-        document.getElementById('fullscreenVisualizerBtn')?.addEventListener('click',async()=>{try{if(!document.fullscreenElement)await visualizerOverlay?.requestFullscreen();else await document.exitFullscreen();fitVisualizerCanvas();}catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}});
+        document.getElementById('fullscreenVisualizerBtn')?.addEventListener('click',async()=>{
+          try{
+            if(!document.fullscreenElement){
+              await visualizerOverlay?.requestFullscreen();
+              visualizerOverlay?.classList.add('fullscreen-clean');
+              visualizerOverlay?.classList.remove('controls-visible');
+            }else{
+              await document.exitFullscreen();
+              visualizerOverlay?.classList.remove('fullscreen-clean','controls-visible');
+            }
+            fitVisualizerCanvas();
+            await keepRadioAudioAlive();
+          }catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}
+        });
+        visualizerOverlay?.addEventListener('click',(e)=>{
+          if(!visualizerOverlay.classList.contains('fullscreen-clean')) return;
+          if(e.target.closest('.visualizer-head, .visualizer-controls')) return;
+          visualizerOverlay.classList.toggle('controls-visible');
+        });
         window.addEventListener('resize',()=>{if(visualizerRunning && visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();});
-        document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement && visualizerRunning && visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();});
+        document.addEventListener('fullscreenchange',()=>{
+          if(!document.fullscreenElement){visualizerOverlay?.classList.remove('fullscreen-clean','controls-visible');}
+          if(visualizerRunning && visualizerOverlay?.classList.contains('open'))fitVisualizerCanvas();
+          keepRadioAudioAlive();
+        });
         window.addEventListener('pagehide',()=>{visualizerRunning=false;cancelAnimationFrame(visualizerFrame);});
-        visualizerOverlay?.addEventListener('click',(e)=>{if(e.target===visualizerOverlay)closeVisualizers();});
-        document.addEventListener('keydown',(e)=>{if(e.key==='Escape')closeVisualizers();});
+        document.addEventListener('keydown',(e)=>{if(e.key==='Escape' && visualizerRunning)closeVisualizers();});
 
         // 8. COMPARTILHAR
         if (shareBtn) {
@@ -3061,11 +3134,37 @@
         let currentKidsCategoryKey = null;
 
         const menuEl = document.getElementById('kidsMenu');
+        const mainMenuEl = document.getElementById('kidsMainMenu');
+        const submenuEl = document.getElementById('kidsSubmenu');
+        const submenuTitleEl = document.getElementById('kidsSubmenuTitle');
+        const submenuContentEl = document.getElementById('kidsSubmenuContent');
+        const backMainBtn = document.getElementById('kidsBackMainBtn');
         const playerAreaEl = document.getElementById('kidsPlayerArea');
         const titleEl = document.getElementById('kidsCategoryTitle');
         const listEl = document.getElementById('kidsVideoList');
         const backVolumesBtn = document.getElementById('kidsBackVolumesBtn');
         const kidsBackBtn = document.getElementById('kidsBackBtn');
+        const watchAreaEl = document.getElementById('kidsWatchArea');
+        const backWatchMainBtn = document.getElementById('kidsBackWatchMainBtn');
+        if (menuEl) menuEl.style.display = 'grid';
+        if (submenuEl) submenuEl.classList.remove('active');
+        if (mainMenuEl) mainMenuEl.style.display = 'grid';
+        if (menuEl) {
+          const channelMeta = {
+            palavrinhas: ['🎵', 'Músicas infantis'],
+            desenhos: ['🎬', 'Desenhos e histórias bíblicas'],
+            krozz: ['🚀', 'Aventuras'],
+            missaoharpa: ['🎻', 'Música e história'],
+            minhavida: ['🌍', 'Aprendizado e valores']
+          };
+          menuEl.innerHTML = Object.entries(kidsCatalog).map(([key, category]) => {
+            const meta = channelMeta[key] || ['▶️', 'Vídeos para assistir'];
+            return `<button type="button" class="kids-cat-btn" data-kids="${key}">
+              <div class="kids-main-icon" aria-hidden="true">${meta[0]}</div>
+              <div class="kids-cat-info"><div class="kids-cat-title">${category.titulo.replace(/^[^ ]+\s*/, '')}</div><div class="kids-cat-sub">${meta[1]}</div></div>
+            </button>`;
+          }).join('');
+        }
 
         function buildVideoCardHtml(video) {
           const numBadge = video.num ? `<span class="kids-track-num">${video.num}</span>` : '';
@@ -3133,6 +3232,7 @@
 
           currentKidsCategoryKey = catKey;
           if (menuEl) menuEl.style.display = 'none';
+          if (watchAreaEl) watchAreaEl.classList.remove('active');
           if (backVolumesBtn) backVolumesBtn.style.display = 'none';
           titleEl.innerText = `${category.titulo} — ${category.subtitulo || 'Escolha um volume'}`;
 
@@ -3180,30 +3280,133 @@
           renderKidsVolumeContent(volume);
         }
 
+        const genesisStories = [
+          {title:'Deus criou o mundo',ref:'Gênesis 1:1–2:3',art:'🌞🌳🌊',summary:'Deus criou os céus, a terra, os animais e as pessoas com sabedoria e amor.',text:['No começo, não havia as coisas bonitas que vemos hoje. Então Deus criou os céus e a terra. Deus fez a luz e separou o dia da noite. Depois formou o céu, a terra seca e os mares.','Deus fez as plantas, as árvores, o Sol, a Lua e as estrelas. Criou os peixes, as aves e os animais. Por fim, criou o ser humano à sua imagem. Quando terminou, Deus viu que tudo era muito bom. Ele descansou no sétimo dia, mostrando que esse dia era especial.'],lesson:'A criação nos ensina que Deus é poderoso e cuidadoso. Podemos agradecer pela natureza, cuidar dos animais, economizar água e não estragar aquilo que Deus criou.',question:'O que você pode fazer hoje para cuidar da criação de Deus?',prayer:'Senhor Deus, obrigado pelo mundo tão bonito. Ajuda-me a cuidar da natureza e agradecer por tudo. Amém.'},
+          {title:'Adão, Eva e o jardim',ref:'Gênesis 2:4–3:24',art:'🌳🐍🍎',summary:'Deus preparou um jardim e ensinou o primeiro casal a obedecer à sua palavra.',text:['Deus formou o homem do pó da terra e lhe deu vida. Depois preparou um lindo jardim chamado Éden, cheio de árvores e alimento. Deus colocou Adão ali para cuidar do jardim.','Deus criou Eva para ser companheira de Adão. Eles tinham liberdade para aproveitar o jardim, mas receberam uma orientação clara: não deveriam comer do fruto da árvore do conhecimento do bem e do mal. A serpente enganou Eva, e Adão também desobedeceu. Eles sentiram vergonha e tentaram se esconder.','A desobediência trouxe consequências e os afastou daquele jardim. Mesmo assim, Deus cuidou deles e lhes deu roupas. A história mostra que nossas escolhas têm consequências e que precisamos ouvir a orientação de Deus.'],lesson:'Quando erramos, não devemos esconder a verdade nem culpar os outros. Devemos reconhecer o erro, pedir perdão e procurar fazer o que é certo.',question:'Por que é importante obedecer mesmo quando ninguém está olhando?',prayer:'Deus, ajuda-me a ouvir tua Palavra, escolher o que é certo e ter coragem para pedir perdão quando eu errar. Amém.'},
+          {title:'Noé e a grande arca',ref:'Gênesis 6–9',art:'🚢🌧️🕊️',summary:'Noé confiou em Deus, construiu a arca e cuidou dos animais durante o dilúvio.',text:['A Bíblia conta que a maldade havia aumentado muito na terra. Noé, porém, era um homem que buscava andar com Deus. Deus avisou que viria um grande dilúvio e orientou Noé a construir uma arca.','Noé obedeceu e trabalhou na construção. Ele, sua família e os animais entraram na arca, conforme Deus havia ordenado. Choveu durante muitos dias, mas Deus não se esqueceu deles. Quando as águas baixaram, Noé saiu da arca e agradeceu ao Senhor.','Deus colocou o arco-íris nas nuvens como sinal de sua aliança. A história nos lembra que Deus é fiel e que a obediência de Noé foi demonstrada por suas atitudes.'],lesson:'Ser obediente é fazer o que é correto mesmo quando dá trabalho. Também podemos cuidar dos animais e agradecer a Deus por sua fidelidade.',question:'Qual tarefa boa você pode fazer com dedicação, como Noé fez?',prayer:'Senhor, dá-me um coração obediente e fiel. Obrigado porque tu cuidas de nós. Amém.'},
+          {title:'A torre de Babel',ref:'Gênesis 11:1–9',art:'🏗️🧱🌤️',summary:'As pessoas quiseram construir uma torre para exaltar o próprio nome, mas esqueceram de honrar a Deus.',text:['Depois do dilúvio, muitas pessoas passaram a viver juntas e falavam a mesma língua. Elas decidiram construir uma cidade e uma torre muito alta. Queriam tornar seu próprio nome famoso.','Deus viu que o orgulho estava guiando aquele projeto. Então confundiu a língua das pessoas, e elas deixaram de se entender. O trabalho foi interrompido e os grupos se espalharam pela terra. A cidade ficou conhecida como Babel.'],lesson:'Nossos talentos e conquistas devem ser usados com humildade. Em vez de querer ser melhor que todos, podemos trabalhar juntos, respeitar as diferenças e dar a Deus a honra.',question:'Como você pode colaborar com alguém em vez de querer fazer tudo sozinho?',prayer:'Deus, ensina-me a ser humilde, respeitar as pessoas e usar meus talentos para fazer o bem. Amém.'},
+          {title:'Deus chama Abrão',ref:'Gênesis 12:1–9',art:'🌌⛺🚶',summary:'Abrão confiou na promessa de Deus e partiu para uma terra que ainda não conhecia.',text:['Deus falou com Abrão e pediu que ele deixasse sua terra e sua parentela para ir a um lugar que o Senhor lhe mostraria. Deus prometeu abençoá-lo e fazer dele uma grande nação.','Abrão não conhecia todos os detalhes da viagem, mas confiou em Deus. Ele partiu com Sarai, sua família e seus bens. Ao chegar à terra de Canaã, edificou um altar e adorou ao Senhor.'],lesson:'Confiar em Deus não significa saber tudo o que vai acontecer. Significa buscar sua orientação e dar o próximo passo correto. Crianças também podem confiar em Deus nas mudanças e novidades.',question:'Em que situação você precisa pedir a Deus coragem e orientação?',prayer:'Senhor, ajuda-me a confiar em ti e a fazer o que é certo, mesmo quando algo é novo para mim. Amém.'},
+          {title:'A promessa das estrelas',ref:'Gênesis 15:1–6; 17:1–8',art:'✨🌠⛺',summary:'Deus prometeu uma família numerosa a Abraão, mesmo quando parecia impossível.',text:['Abrão já era idoso e ainda não tinha o filho que tanto desejava. Deus falou com ele e prometeu que sua descendência seria muito numerosa.','Deus levou Abrão para fora da tenda e pediu que olhasse para o céu e contasse as estrelas, se pudesse. Assim seria sua descendência. Abrão creu no Senhor. Mais tarde, Deus mudou seu nome para Abraão e confirmou sua aliança.'],lesson:'Podemos conversar com Deus sobre aquilo que esperamos. Nem sempre recebemos tudo no nosso tempo, mas podemos aprender a confiar e continuar fazendo o bem.',question:'Qual pedido você gostaria de apresentar a Deus em oração?',prayer:'Pai, obrigado porque posso falar contigo. Ajuda-me a confiar em tuas promessas e esperar com paciência. Amém.'},
+          {title:'O nascimento de Isaque',ref:'Gênesis 18:1–15; 21:1–7',art:'👶👨‍👩‍👦☀️',summary:'Deus cumpriu sua promessa e Sara recebeu com alegria o filho Isaque.',text:['Abraão e Sara já eram muito idosos. Um dia, Deus confirmou que Sara teria um filho. Sara achou difícil acreditar, pois parecia impossível por causa da idade. Mas nada é difícil demais para Deus.','No tempo anunciado, Sara teve um filho. Abraão lhe deu o nome de Isaque, como Deus havia orientado. Sara ficou muito feliz e reconheceu que Deus lhe havia dado motivo para sorrir.'],lesson:'A história ensina que Deus é fiel. Também nos lembra de tratar cada criança como um presente precioso, com amor, cuidado e respeito.',question:'Como você pode demonstrar alegria e gratidão por sua família?',prayer:'Deus, obrigado por tua fidelidade e pelo cuidado com nossa família. Ensina-nos a amar uns aos outros. Amém.'},
+          {title:'O sonho de Jacó',ref:'Gênesis 28:10–22',art:'🌙🪜👼',summary:'Durante uma viagem, Jacó sonhou com uma escada e recebeu a promessa de que Deus estaria com ele.',text:['Jacó estava viajando e passou a noite ao ar livre. Usou uma pedra como apoio para a cabeça e dormiu. Então teve um sonho: havia uma escada apoiada na terra, cujo topo chegava ao céu, e anjos de Deus subiam e desciam por ela.','O Senhor falou com Jacó e reafirmou as promessas feitas a Abraão e Isaque. Deus prometeu estar com ele e guardá-lo por onde fosse. Ao acordar, Jacó reconheceu que aquele lugar era especial e fez um voto ao Senhor.'],lesson:'Mesmo quando estamos longe de casa ou sentimos medo, podemos lembrar que Deus vê nossa vida. Podemos orar e procurar agir com honestidade e bondade.',question:'O que você pode fazer quando sentir medo ou estiver em um lugar novo?',prayer:'Senhor, obrigado porque posso buscar tua presença em qualquer lugar. Dá-me coragem e um coração fiel. Amém.'},
+          {title:'José e a túnica especial',ref:'Gênesis 37:1–11',art:'👕🌈🌾',summary:'José recebeu uma túnica especial de seu pai, mas seus irmãos ficaram com inveja.',text:['José era filho de Jacó. Seu pai lhe deu uma túnica especial, e isso aumentou a inveja que alguns de seus irmãos já sentiam. José também contou sonhos que teve, e seus irmãos ficaram ainda mais irritados.','A Bíblia mostra que a inveja e o favoritismo causaram tristeza naquela família. Os irmãos de José passaram a tratá-lo mal. A história começa uma jornada difícil, mas Deus continuaria cuidando de José.'],lesson:'Não devemos sentir inveja quando alguém recebe algo especial. Cada pessoa tem valor. Podemos celebrar a alegria dos outros e conversar com respeito quando algo nos entristecer.',question:'Como você pode demonstrar alegria quando um amigo recebe algo que você também gostaria de ter?',prayer:'Deus, tira do meu coração a inveja. Ajuda-me a tratar meus irmãos e amigos com amor e justiça. Amém.'},
+          {title:'José escolhe perdoar',ref:'Gênesis 45:1–15; 50:15–21',art:'🤝🌾❤️',summary:'Depois de muitas dificuldades, José reencontrou seus irmãos e escolheu perdoá-los.',text:['José passou por momentos muito difíceis no Egito, mas Deus esteve com ele. Com o tempo, José se tornou governador e ajudou a guardar alimento para os anos de fome. Seus irmãos viajaram ao Egito para comprar comida e não reconheceram José.','Quando José revelou quem era, seus irmãos ficaram com medo. Mas José chorou, abraçou-os e disse que Deus havia usado aquela situação para preservar vidas. Ele não fingiu que o mal não aconteceu, mas escolheu não se vingar e ajudou sua família.'],lesson:'Perdoar não significa dizer que uma atitude errada foi boa. Significa não escolher a vingança. Se alguém machucar você, conte a um adulto de confiança e peça ajuda; perdão não exige esconder violência nem aceitar que ela continue.',question:'Qual é a diferença entre perdoar e permitir que alguém continue fazendo algo errado?',prayer:'Senhor, ensina-me a perdoar e também a procurar ajuda quando alguém fizer algo errado. Amém.'}
+        ];
+
+        const kidsSectionInfo = {
+          stories: { title: '📖 Bíblia Ilustrada — Gênesis', cards: [] },
+          games: { title: '🎮 Minigames', cards: [['🧩 Jogos bíblicos', 'Desafios leves de memória e conhecimento bíblico.', 'Em preparação', 'soon'], ['🔎 Encontre e descubra', 'Atividades de observação para crianças.', 'Em preparação', 'soon']] },
+          create: { title: '🎨 Criatividade', cards: [['🖍️ Cantinho do desenho', 'Ideias para desenhar personagens e cenas bíblicas.', 'Em preparação', 'soon'], ['✂️ Atividades criativas', 'Atividades manuais para fazer com a família.', 'Em preparação', 'soon']] },
+          learn: { title: '🌟 Aprender', cards: [['📚 Aprender com a Bíblia', 'Pequenas descobertas e ensinamentos da Palavra.', 'Em preparação', 'soon'], ['🔤 Aprender brincando', 'Letras, números, memória e curiosidades.', 'Em preparação', 'soon']] }
+        };
+
+        const genesisExtras = [
+          {verse:'Gênesis 1:1',verseText:'A Bíblia começa nos ensinando que Deus criou os céus e a terra.',curiosity:'A narrativa da criação apresenta Deus organizando e preenchendo a criação: luz, céu, terra, astros, animais e seres humanos.',challenge:'Agradeça a Deus por três coisas da natureza e cuide de uma delas hoje.',quiz:'Quem criou os céus e a terra?',answer:'Deus. (Gênesis 1:1)'},
+          {verse:'Gênesis 2:16–17; 3:11',verseText:'Deus deu uma orientação a Adão, e a história mostra a importância de obedecer.',curiosity:'O jardim do Éden é descrito como um lugar preparado por Deus, onde Adão recebeu a tarefa de cuidar.',challenge:'Pratique ouvir uma orientação importante de seus pais ou responsáveis e converse com respeito se tiver dúvida.',quiz:'O que Adão recebeu de Deus no jardim?',answer:'Uma tarefa para cuidar do jardim e uma orientação sobre a árvore.'},
+          {verse:'Gênesis 6:22',verseText:'Noé fez conforme Deus lhe havia ordenado.',curiosity:'A arca foi construída conforme as instruções que Deus deu a Noé. A Bíblia também conta que os animais entraram nela.',challenge:'Escolha uma tarefa de casa e faça com dedicação, sem desistir no meio.',quiz:'Como Noé respondeu à orientação de Deus?',answer:'Ele obedeceu e construiu a arca conforme Deus ordenou.'},
+          {verse:'Gênesis 11:4',verseText:'As pessoas queriam tornar famoso o próprio nome.',curiosity:'Babel ficou conhecida na narrativa pela confusão das línguas e pela dispersão das pessoas.',challenge:'Faça uma atividade em equipe hoje e valorize a contribuição de cada pessoa.',quiz:'Qual atitude guiava o projeto da torre?',answer:'O orgulho e o desejo de tornar o próprio nome famoso.'},
+          {verse:'Gênesis 12:1–2',verseText:'Deus chamou Abrão e prometeu abençoá-lo.',curiosity:'Abrão saiu de sua terra e foi para Canaã, confiando na direção de Deus.',challenge:'Quando algo novo parecer difícil, converse com Deus e peça ajuda a um adulto de confiança.',quiz:'Para onde Abrão deveria ir?',answer:'Para a terra que Deus lhe mostraria.'},
+          {verse:'Gênesis 15:5–6',verseText:'Abrão creu no Senhor, e isso lhe foi atribuído como justiça.',curiosity:'Deus usou a imagem das estrelas para mostrar a Abrão que sua descendência seria numerosa.',challenge:'Conte a Deus algo que você espera e pratique a paciência enquanto faz o que é correto.',quiz:'O que Abrão fez diante da promessa de Deus?',answer:'Ele creu no Senhor.'},
+          {verse:'Gênesis 21:1–3',verseText:'O Senhor cumpriu o que havia prometido a Sara e Abraão.',curiosity:'O nome Isaque está relacionado ao riso, lembrando a alegria que marcou o anúncio de seu nascimento.',challenge:'Demonstre carinho por alguém da sua família com uma palavra ou atitude gentil.',quiz:'Qual foi o nome do filho de Abraão e Sara?',answer:'Isaque.'},
+          {verse:'Gênesis 28:15',verseText:'Deus prometeu estar com Jacó e guardá-lo por onde fosse.',curiosity:'A escada do sonho de Jacó ligava a terra ao céu, e anjos de Deus subiam e desciam por ela.',challenge:'Se sentir medo em uma situação nova, faça uma oração e procure alguém de confiança para conversar.',quiz:'O que Jacó viu em seu sonho?',answer:'Uma escada apoiada na terra, cujo topo chegava ao céu, e anjos subindo e descendo.'},
+          {verse:'Gênesis 37:4',verseText:'Os irmãos de José ficaram com inveja e não conseguiam falar com ele pacificamente.',curiosity:'A túnica especial e os sonhos de José aparecem no início de uma história que continua por vários capítulos.',challenge:'Quando um amigo receber algo especial, tente parabenizá-lo em vez de comparar.',quiz:'Que sentimento tomou conta dos irmãos de José?',answer:'A inveja.'},
+          {verse:'Gênesis 50:20',verseText:'José reconheceu que Deus transformou aquela situação em oportunidade para preservar vidas.',curiosity:'José chegou a uma posição de autoridade no Egito e ajudou a guardar alimento durante os anos de fome.',challenge:'Se alguém fizer algo errado contra você, converse com um adulto de confiança. Não se vingue nem esconda uma situação perigosa.',quiz:'Perdoar significa dizer que o mal foi correto?',answer:'Não. José não chamou o mal de bom; ele escolheu não se vingar e ajudou sua família.'}
+        ];
+        function getKidsStoryProgress(){try{return JSON.parse(localStorage.getItem('cdoKidsGenesisProgress')||'[]')}catch(e){return []}}
+        function markKidsStoryRead(index){try{const done=getKidsStoryProgress();if(!done.includes(index)){done.push(index);localStorage.setItem('cdoKidsGenesisProgress',JSON.stringify(done))}}catch(e){}}
+        function renderGenesisStories() {
+          if (!submenuContentEl) return;
+          const artColors = ['#b8e7ff','#d5efb2','#a9d9f4','#f8d9a5','#d8c9ff','#18294d','#ffd9a8','#c5d8ff','#f7c7a0','#c6edc7'];
+          const done=getKidsStoryProgress();
+          const artSvg = (story, i) => `<svg class="kids-story-art" viewBox="0 0 640 360" role="img" aria-label="Ilustração infantil: ${story.title}" xmlns="http://www.w3.org/2000/svg"><rect width="640" height="360" fill="${artColors[i]}"/><circle cx="520" cy="70" r="42" fill="#fff4a8" opacity=".95"/><path d="M0 270 Q150 210 300 270 T640 260 V360 H0Z" fill="#79b978"/><path d="M0 310 Q170 270 330 315 T640 300 V360 H0Z" fill="#4f9b72"/><g font-family="sans-serif" font-size="104" text-anchor="middle"><text x="320" y="220">${story.art}</text></g><g fill="#fff" opacity=".75"><circle cx="90" cy="65" r="7"/><circle cx="145" cy="105" r="5"/><circle cx="410" cy="40" r="5"/></g><path d="M40 330 Q320 300 600 330" stroke="#fff" stroke-width="5" opacity=".5" fill="none"/></svg>`;
+          submenuContentEl.innerHTML = `<div class="kids-development-notice"><strong>🌱 Nossa Bíblia Ilustrada começa em Gênesis!</strong><span>Leia, converse, responda e pratique. ${done.length} de ${genesisStories.length} histórias concluídas neste aparelho.</span></div>` + genesisStories.map((story,i)=>`<button type="button" class="kids-story-card" data-story-index="${i}">${artSvg(story,i)}<div class="kids-story-card-body"><strong>${done.includes(i)?'✓ ':''}${i+1}. ${story.title}</strong><span>${story.summary}</span><em class="kids-story-ref">${story.ref}</em><span>📖 Ler história</span></div></button>`).join('');
+          submenuContentEl.querySelectorAll('[data-story-index]').forEach(btn=>btn.addEventListener('click',()=>openGenesisStory(Number(btn.dataset.storyIndex))));
+        }
+        function openGenesisStory(index) {
+          const story=genesisStories[index], extra=genesisExtras[index]; if(!story || !extra || !submenuContentEl) return;
+          const paragraphs=story.text.map(p=>`<p>${p}</p>`).join('');
+          const safeTitle=story.title.replace(/'/g,"\'");
+          submenuContentEl.innerHTML=`<article class="kids-story-reader"><button type="button" class="kids-story-back" id="kidsStoryBack">← Todas as histórias</button><div class="kids-story-art" style="display:flex;align-items:center;justify-content:center;font-size:clamp(3rem,15vw,6rem);background:linear-gradient(145deg,#d9efff,#f8e6b7);">${story.art}</div><h4>${story.title}</h4><div class="kids-story-ref">Leitura bíblica: ${story.ref}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button type="button" class="kids-story-back" id="kidsStoryListen">🔊 Ouvir história</button><button type="button" class="kids-story-back" id="kidsStoryStop">⏹ Parar áudio</button></div>${paragraphs}<div class="kids-story-lesson"><strong>💚 O que aprendemos?</strong><p>${story.lesson}</p></div><div class="kids-story-prayer"><strong>📖 Versículo para guardar — ${extra.verse}</strong><p>${extra.verseText}</p><small>Leia o versículo completo na Bíblia com um adulto.</small></div><h4>🔎 Você sabia?</h4><p>${extra.curiosity}</p><div class="kids-story-lesson"><strong>🌟 Meu desafio com Deus</strong><p>${extra.challenge}</p></div><h4>💬 Vamos conversar?</h4><p>${story.question}</p><details style="margin:10px 0;padding:12px;border-radius:12px;background:var(--surface-soft);"><summary style="font-weight:800;cursor:pointer">🧠 Vamos ver o que aprendemos?</summary><p>${extra.quiz}</p><p><strong>Resposta:</strong> ${extra.answer}</p></details><div class="kids-story-prayer"><strong>🙏 Vamos orar?</strong><p>${story.prayer}</p></div><button type="button" class="kids-story-back" id="kidsStoryDone">✓ Marcar como lida</button><p style="font-size:.68rem;color:var(--text-muted);margin-top:14px;">Leia a passagem na Bíblia com um adulto. Esta narrativa é uma adaptação infantil resumida; a Bíblia é a referência principal. A narração usa a voz disponível no próprio aparelho e não baixa arquivos de áudio.</p></article>`;
+          document.getElementById('kidsStoryBack')?.addEventListener('click',()=>{if(window.speechSynthesis)window.speechSynthesis.cancel();renderGenesisStories()});
+          document.getElementById('kidsStoryListen')?.addEventListener('click',()=>{if(!('speechSynthesis' in window)){alert('A narração não está disponível neste navegador.');return;}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(story.title+'. '+story.text.join(' ')+' O que aprendemos? '+story.lesson+' Meu desafio com Deus: '+extra.challenge+' Vamos orar? '+story.prayer);utterance.lang='pt-BR';utterance.rate=.9;window.speechSynthesis.speak(utterance)});
+          document.getElementById('kidsStoryStop')?.addEventListener('click',()=>{if(window.speechSynthesis)window.speechSynthesis.cancel()});
+          document.getElementById('kidsStoryDone')?.addEventListener('click',()=>{markKidsStoryRead(index);const b=document.getElementById('kidsStoryDone');if(b){b.textContent='✓ História concluída';b.disabled=true}});
+        }
+
+        function showKidsMainMenu() {
+          if (mainMenuEl) mainMenuEl.style.display = 'grid';
+          if (submenuEl) submenuEl.classList.remove('active');
+          if (playerAreaEl) playerAreaEl.classList.remove('active');
+          if (watchAreaEl) watchAreaEl.classList.remove('active');
+          if (menuEl) menuEl.style.display = 'grid';
+          if (listEl) listEl.innerHTML = '';
+          if (backVolumesBtn) backVolumesBtn.style.display = 'none';
+          currentKidsCategoryKey = null;
+        }
+
+        function openKidsSubmenu(sectionKey) {
+          if (sectionKey === 'watch') {
+            if (mainMenuEl) mainMenuEl.style.display = 'none';
+            if (submenuEl) submenuEl.classList.remove('active');
+            if (watchAreaEl) watchAreaEl.classList.add('active');
+            if (playerAreaEl) playerAreaEl.classList.remove('active');
+            if (menuEl) menuEl.style.display = 'grid';
+            return;
+          }
+          const section = kidsSectionInfo[sectionKey];
+          if (!section || !submenuContentEl || !submenuTitleEl) return;
+          if (mainMenuEl) mainMenuEl.style.display = 'none';
+          if (menuEl) menuEl.style.display = 'none';
+          if (playerAreaEl) playerAreaEl.classList.remove('active');
+          if (watchAreaEl) watchAreaEl.classList.remove('active');
+          submenuTitleEl.textContent = section.title;
+          if (sectionKey === 'stories') { renderGenesisStories(); if (submenuEl) submenuEl.classList.add('active'); return; }
+          submenuContentEl.innerHTML = `
+            <div class="kids-development-notice" role="status">
+              <strong>🚧 Área em desenvolvimento</strong>
+              <span>Estamos preparando este conteúdo com carinho. Estará liberado em breve!</span>
+            </div>
+            ${section.cards.map(card => `
+              <article class="kids-submenu-card kids-coming-soon">
+                <strong>${card[0]}</strong><span>${card[1]}</span>
+                <em>🔒 Em desenvolvimento • Liberado em breve</em>
+              </article>`).join('')}`;
+          if (submenuEl) submenuEl.classList.add('active');
+        }
+
+        if (mainMenuEl) {
+          mainMenuEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-kids-section]');
+            if (!btn) return;
+            e.preventDefault(); e.stopPropagation();
+            openKidsSubmenu(btn.getAttribute('data-kids-section'));
+          });
+        }
+
         if (menuEl) {
           menuEl.addEventListener('click', (e) => {
             const btn = e.target.closest('.kids-cat-btn');
             if (!btn) return;
-            e.preventDefault();
-            e.stopPropagation();
-
+            e.preventDefault(); e.stopPropagation();
             const catKey = btn.getAttribute('data-kids');
             const category = kidsCatalog[catKey];
             if (!category) return;
-
             if (Array.isArray(category.volumes) && category.volumes.length > 0) {
               openKidsVolumes(catKey);
               return;
             }
-
             currentKidsCategoryKey = null;
             menuEl.style.display = 'none';
+            if (watchAreaEl) watchAreaEl.classList.remove('active');
             if (backVolumesBtn) backVolumesBtn.style.display = 'none';
             if (titleEl) titleEl.innerText = category.titulo;
             renderKidsVideoCards(category.videos || []);
             if (playerAreaEl) playerAreaEl.classList.add('active');
           });
         }
+
+        if (backMainBtn) backMainBtn.addEventListener('click', showKidsMainMenu);
+        if (backWatchMainBtn) backWatchMainBtn.addEventListener('click', showKidsMainMenu);
 
         if (backVolumesBtn) {
           backVolumesBtn.addEventListener('click', (e) => {
@@ -3223,6 +3426,7 @@
             if (listEl) listEl.innerHTML = '';
             if (backVolumesBtn) backVolumesBtn.style.display = 'none';
             if (playerAreaEl) playerAreaEl.classList.remove('active');
+            if (watchAreaEl) watchAreaEl.classList.add('active');
             if (menuEl) menuEl.style.display = 'grid';
           });
         }
