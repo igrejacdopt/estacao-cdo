@@ -2027,7 +2027,8 @@
 
         const streamUrl = "https://stream.zeno.fm/x44ldfhxjghvv";
         const audio = document.getElementById('radioStream');
-        if (audio) audio.volume = 0.8;
+        // O volume é controlado pelo GainNode (mais confiável no Safari/iOS).
+        if (audio) audio.volume = 1;
 
         const playBtn = document.getElementById('playBtn');
         const statusText = document.getElementById('statusText');
@@ -2036,9 +2037,11 @@
         const shareBtn = document.getElementById('shareBtn');
 
         let isPlaying = false;
+        let isConnecting = false;
         let audioCtx = null;
         let analyser = null;
         let sourceNode = null;
+        let gainNode = null;
         let bassFilter = null;
         let midFilter = null;
         let highFilter = null;
@@ -2418,7 +2421,14 @@
 
             sourceNode = audioCtx.createMediaElementSource(audio);
             analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 1024;
+            analyser.fftSize = 2048;
+            analyser.smoothingTimeConstant = 0.78;
+            analyser.minDecibels = -90;
+            analyser.maxDecibels = -25;
+
+            gainNode = audioCtx.createGain();
+            const initialVolume = volumeSlider ? parseFloat(volumeSlider.value) : 0.8;
+            gainNode.gain.value = Number.isFinite(initialVolume) ? initialVolume : 0.8;
 
             bassFilter = audioCtx.createBiquadFilter();
             bassFilter.type = "lowshelf";
@@ -2443,7 +2453,14 @@
             bassFilter.connect(midFilter);
             midFilter.connect(highFilter);
             highFilter.connect(analyser);
-            analyser.connect(audioCtx.destination);
+            analyser.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            // Safari pode suspender/interromper o contexto ao alternar telas.
+            audioCtx.addEventListener('statechange', () => {
+              if (isPlaying && audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(err => console.warn('Não foi possível retomar o áudio:', err));
+              }
+            });
           } catch (e) {
             console.warn("Web Audio API restrita — a usar modo visual dinâmico:", e);
           }
@@ -2488,7 +2505,12 @@
           const highGain = highFilter ? highFilter.gain.value : 0;
 
           for (let i = 0; i < numCols; i++) {
-            let rawVal = dataArray[i * 2] || 25;
+            // Distribuição logarítmica: inclui graves, médios e agudos sem
+            // concentrar todas as colunas nos primeiros bins (problema visível no Safari).
+            const usableBins = Math.max(1, Math.floor(dataArray.length * 0.82));
+            const binIndex = Math.min(usableBins - 1,
+              Math.floor(Math.pow(i / Math.max(1, numCols - 1), 1.85) * (usableBins - 1)));
+            let rawVal = dataArray[binIndex] || 10;
 
             if (i < 4) {
               rawVal *= (1 + (bassGain / 12));
@@ -2539,53 +2561,116 @@
         if (playBtn) {
           playBtn.addEventListener('click', () => {
             if (!audio) return;
-            if (!isPlaying) {
-              if (statusText) statusText.innerText = "A sintonizar a Estação CDO...";
-              initAudioGraph();
-              if (audioCtx && audioCtx.state === 'suspended') {
-                audioCtx.resume();
-              }
 
-              audio.src = streamUrl + "?t=" + Date.now();
-              audio.play().then(() => {
-                playBtn.innerText = "⏸";
-                if (statusText) statusText.innerText = "🔴 AO VIVO — Estação CDO";
-                isPlaying = true;
-              }).catch((err) => {
-                console.error("Erro ao reproduzir:", err);
-                if (statusText) statusText.innerText = "Toque novamente para iniciar o áudio.";
-              });
+            // Evita que toques repetidos durante a conexão pausem a rádio.
+            if (isConnecting) return;
+
+            if (!isPlaying) {
+              isConnecting = true;
+              playBtn.disabled = true;
+              playBtn.innerText = "…";
+              playBtn.setAttribute('aria-label', 'Conectando à rádio');
+              if (statusText) statusText.innerText = "Conectando à Estação CDO… aguarde alguns instantes.";
+              initAudioGraph();
+
+              // Safari pode criar o AudioContext suspenso. Retomar dentro do
+              // gesto do usuário antes de iniciar o elemento de áudio.
+              const startPlayback = async () => {
+                try {
+                  if (audioCtx && audioCtx.state !== 'running') {
+                    await audioCtx.resume();
+                  }
+                  audio.volume = 1; // volume efetivo passa pelo GainNode
+                  audio.src = streamUrl + "?t=" + Date.now();
+                  await audio.play();
+                  // O estado de conexão só termina no evento 'playing'.
+                } catch (err) {
+                  console.error("Erro ao reproduzir:", err);
+                  isConnecting = false;
+                  isPlaying = false;
+                  playBtn.disabled = false;
+                  playBtn.innerText = "▶";
+                  playBtn.setAttribute('aria-label', 'Reproduzir rádio');
+                  if (statusText) statusText.innerText = "Não foi possível conectar. Toque para tentar novamente.";
+                }
+              };
+              startPlayback();
             } else {
               audio.pause();
               audio.src = "";
               playBtn.innerText = "▶";
+              playBtn.setAttribute('aria-label', 'Reproduzir rádio');
               if (statusText) statusText.innerText = "Rádio pausada";
               isPlaying = false;
             }
           });
         }
 
-        // 6. VOLUME & MUTE
+        // 6. VOLUME & MUTE — GainNode funciona também no Safari/iOS.
+        let lastRadioVolume = volumeSlider ? parseFloat(volumeSlider.value) : 0.8;
+        function setRadioVolume(value) {
+          const val = Math.max(0, Math.min(1, Number(value)));
+          if (val > 0) lastRadioVolume = val;
+          if (gainNode && audioCtx) {
+            gainNode.gain.setTargetAtTime(val, audioCtx.currentTime, 0.015);
+          } else if (audio) {
+            // Fallback para navegadores sem Web Audio.
+            audio.volume = val;
+          }
+          if (muteBtn) muteBtn.innerText = val === 0 ? "🔇" : "🔊";
+          if (volumeSlider) volumeSlider.value = String(val);
+        }
+
         if (volumeSlider) {
           volumeSlider.addEventListener('input', (e) => {
-            const val = e.target.value;
-            if (audio) audio.volume = val;
-            if (muteBtn) muteBtn.innerText = (val == 0) ? "🔇" : "🔊";
+            setRadioVolume(e.target.value);
+            if (audio && audio.muted) audio.muted = false;
           });
         }
 
         if (muteBtn) {
           muteBtn.addEventListener('click', () => {
-            if (!audio) return;
-            if (audio.muted) {
-              audio.muted = false;
-              muteBtn.innerText = "🔊";
-              if (volumeSlider) volumeSlider.value = audio.volume;
-            } else {
-              audio.muted = true;
-              muteBtn.innerText = "🔇";
-              if (volumeSlider) volumeSlider.value = 0;
+            const current = gainNode ? gainNode.gain.value : (audio ? audio.volume : 0.8);
+            const muted = current > 0;
+            setRadioVolume(muted ? 0 : (lastRadioVolume || 0.8));
+          });
+        }
+
+        // Mantém o estado visual sincronizado com interrupções/falhas reais do stream.
+        if (audio) {
+          audio.addEventListener('playing', () => {
+            isConnecting = false;
+            isPlaying = true;
+            if (playBtn) {
+              playBtn.disabled = false;
+              playBtn.innerText = "⏸";
+              playBtn.setAttribute('aria-label', 'Pausar rádio');
             }
+            if (statusText) statusText.innerText = "🔴 AO VIVO — Estação CDO";
+          });
+          audio.addEventListener('waiting', () => {
+            if (isConnecting && statusText) {
+              statusText.innerText = "Estabelecendo conexão… aguarde, a rádio já vai começar.";
+            }
+          });
+          audio.addEventListener('pause', () => {
+            if (audio.src && isPlaying) {
+              isPlaying = false;
+              if (playBtn) {
+                playBtn.innerText = "▶";
+                playBtn.setAttribute('aria-label', 'Reproduzir rádio');
+              }
+            }
+          });
+          audio.addEventListener('error', () => {
+            isConnecting = false;
+            isPlaying = false;
+            if (playBtn) {
+              playBtn.disabled = false;
+              playBtn.innerText = "▶";
+              playBtn.setAttribute('aria-label', 'Tentar conectar à rádio');
+            }
+            if (statusText) statusText.innerText = "Falha na transmissão. Toque para tentar novamente.";
           });
         }
 
