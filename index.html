@@ -659,6 +659,12 @@
 
     .volume-control-box {
       display: flex;
+      flex-wrap: nowrap;
+      min-height: 44px;
+      width: 100%;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      touch-action: manipulation;
       align-items: center;
       justify-content: center;
       gap: 10px;
@@ -672,6 +678,12 @@
     }
 
     .volume-btn {
+      display: inline-flex;
+      flex: 0 0 44px;
+      min-width: 44px;
+      min-height: 40px;
+      align-items: center;
+      justify-content: center;
       background: transparent;
       border: none;
       color: var(--accent-gold-strong);
@@ -679,6 +691,11 @@
       cursor: pointer;
       padding: 2px;
       pointer-events: auto;
+      -webkit-appearance: none;
+      appearance: none;
+      position: relative;
+      z-index: 2;
+      touch-action: manipulation;
     }
 
     body.theme-dark .volume-btn {
@@ -686,13 +703,29 @@
     }
 
     .volume-slider {
-      width: 180px;
-      height: 8px;
+      display: block !important;
+      flex: 1 1 180px;
+      min-width: 110px;
+      max-width: 260px;
+      width: 100%;
+      height: 32px;
+      margin: 0;
+      padding: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
       accent-color: var(--accent-gold);
       cursor: pointer;
       border-radius: 4px;
       pointer-events: auto;
+      position: relative;
+      z-index: 2;
+      touch-action: pan-y;
     }
+    .volume-slider::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: var(--border-color); }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -7px; border-radius: 50%; background: var(--accent-gold); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+    .volume-slider::-moz-range-track { height: 6px; border-radius: 99px; background: var(--border-color); }
+    .volume-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent-gold); border: 2px solid #fff; }
 
     .status-text {
       font-size: 0.75rem;
@@ -2660,6 +2693,16 @@
           if (analyser && isPlaying && audioCtx && audioCtx.state === 'running') {
             try {
               analyser.getByteFrequencyData(dataArray);
+              // Em alguns iPhones/Safari, o stream toca normalmente, mas o
+              // analisador recebe apenas zeros por restrições CORS do servidor.
+              // Nesse caso mantemos o espectro animado em vez de exibir barras mortas.
+              let peak = 0;
+              for (let i = 0; i < dataArray.length; i++) if (dataArray[i] > peak) peak = dataArray[i];
+              if (peak < 3) {
+                for (let i = 0; i < dataArray.length; i++) {
+                  dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 155 + i * 0.7) * 145 + Math.random() * 75));
+                }
+              }
             } catch (err) {
               for (let i = 0; i < dataArray.length; i++) {
                 dataArray[i] = Math.floor(Math.abs(Math.sin(Date.now() / 180 + i) * 140 + Math.random() * 60));
@@ -2753,6 +2796,7 @@
                   if (audioCtx && audioCtx.state !== 'running') {
                     await audioCtx.resume();
                   }
+                  if (gainNode && volumeSlider) gainNode.gain.value = Math.max(0, Math.min(1, Number(volumeSlider.value)));
                   audio.volume = 1; // volume efetivo passa pelo GainNode
                   audio.src = streamUrl + "?t=" + Date.now();
                   await audio.play();
@@ -2782,30 +2826,44 @@
         // 6. VOLUME & MUTE — GainNode funciona também no Safari/iOS.
         let lastRadioVolume = volumeSlider ? parseFloat(volumeSlider.value) : 0.8;
         function setRadioVolume(value) {
-          const val = Math.max(0, Math.min(1, Number(value)));
+          const parsed = Number(value);
+          const val = Math.max(0, Math.min(1, Number.isFinite(parsed) ? parsed : 0.8));
           if (val > 0) lastRadioVolume = val;
+          // O volume da transmissão passa pelo GainNode quando o grafo existe.
+          // No Safari/iOS, audio.volume pode ser somente leitura; por isso não
+          // dependemos dele depois que o contexto de áudio foi inicializado.
           if (gainNode && audioCtx) {
-            gainNode.gain.setTargetAtTime(val, audioCtx.currentTime, 0.015);
-          } else if (audio) {
-            // Fallback para navegadores sem Web Audio.
-            audio.volume = val;
+            const now = audioCtx.currentTime;
+            try { gainNode.gain.cancelScheduledValues(now); gainNode.gain.setTargetAtTime(val, now, 0.01); }
+            catch (_) { gainNode.gain.value = val; }
+          } else if (audio && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            try { audio.volume = val; } catch (_) {}
           }
-          if (muteBtn) muteBtn.innerText = val === 0 ? "🔇" : "🔊";
+          if (muteBtn) {
+            muteBtn.innerText = val === 0 ? "🔇" : (val < 0.35 ? "🔉" : "🔊");
+            muteBtn.setAttribute('aria-label', val === 0 ? 'Ativar som' : 'Silenciar rádio');
+            muteBtn.setAttribute('aria-pressed', val === 0 ? 'true' : 'false');
+          }
           if (volumeSlider) volumeSlider.value = String(val);
         }
 
         if (volumeSlider) {
-          volumeSlider.addEventListener('input', (e) => {
+          const handleVolumeInput = (e) => {
+            // O primeiro toque pode ocorrer antes da inicialização do grafo.
+            if (!audioCtx && audio && isPlaying) initAudioGraph();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
             setRadioVolume(e.target.value);
-            if (audio && audio.muted) audio.muted = false;
-          });
+          };
+          volumeSlider.addEventListener('input', handleVolumeInput, { passive: true });
+          volumeSlider.addEventListener('change', handleVolumeInput, { passive: true });
         }
 
         if (muteBtn) {
           muteBtn.addEventListener('click', () => {
-            const current = gainNode ? gainNode.gain.value : (audio ? audio.volume : 0.8);
-            const muted = current > 0;
-            setRadioVolume(muted ? 0 : (lastRadioVolume || 0.8));
+            if (!audioCtx && audio && isPlaying) initAudioGraph();
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+            const current = gainNode ? gainNode.gain.value : (volumeSlider ? Number(volumeSlider.value) : lastRadioVolume);
+            setRadioVolume(current > 0.001 ? 0 : (lastRadioVolume || 0.8));
           });
         }
 
@@ -2902,7 +2960,11 @@
         function readVisualizerAudio(){
           if(analyser && isPlaying && audioCtx && audioCtx.state==='running'){
             if(visualizerData.length!==analyser.frequencyBinCount) visualizerData=new Uint8Array(analyser.frequencyBinCount);
-            try{analyser.getByteFrequencyData(visualizerData);return visualizerData;}catch(e){}
+            try{
+              analyser.getByteFrequencyData(visualizerData);
+              let peak=0; for(let i=0;i<visualizerData.length;i++) if(visualizerData[i]>peak) peak=visualizerData[i];
+              if(peak>2) return visualizerData;
+            }catch(e){}
           }
           const n=visualizerData.length;
           for(let i=0;i<n;i++) visualizerData[i]=isPlaying?Math.max(8,Math.min(255,Math.round(35+Math.abs(Math.sin(visualizerTick*.035+i*.19))*150+Math.random()*35))):8;
