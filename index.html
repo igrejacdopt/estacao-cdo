@@ -218,7 +218,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px));
+      /* Margens elásticas: permitem que o primeiro/último ícone também encaixe inteiro no centro. */
+      padding: 6px max(14px, calc((100% - 74px) / 2)) calc(6px + env(safe-area-inset-bottom, 0px));
+      scroll-padding-inline: max(14px, calc((100% - 74px) / 2));
       overflow-x: auto;
       overflow-y: hidden;
       scroll-snap-type: x mandatory;
@@ -329,6 +331,54 @@
       pointer-events: none;
       white-space: nowrap;
     }
+
+
+    /* ABA SOBRE — identidade acolhedora da igreja */
+    .about-page {
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: var(--card-bg);
+      box-shadow: var(--shadow-soft);
+    }
+    .about-hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: 30px 22px 28px;
+      text-align: center;
+      color: #fffaf0;
+      background: radial-gradient(ellipse at 15% 15%, rgba(255,255,255,.24), transparent 38%),
+                  radial-gradient(ellipse at 88% 85%, rgba(255,205,112,.25), transparent 40%),
+                  linear-gradient(135deg, #263a36 0%, #49614f 48%, #9b713b 100%);
+    }
+    .about-hero::before, .about-hero::after {
+      content: ""; position: absolute; z-index: -1; border: 1px solid rgba(255,255,255,.17); border-radius: 50%;
+    }
+    .about-hero::before { width: 230px; height: 230px; top: -145px; right: -55px; }
+    .about-hero::after { width: 170px; height: 170px; bottom: -120px; left: -45px; }
+    .about-hero-mark { font-size: 1.55rem; color: #f6d79a; margin-bottom: 7px; }
+    .about-eyebrow, .about-kicker { display: block; font-size: .62rem; font-weight: 800; letter-spacing: .19em; }
+    .about-eyebrow { color: #f4dcae; }
+    .about-hero h2 { margin: 10px 0 8px; font-family: Georgia, serif; font-size: clamp(1.45rem, 5vw, 2rem); line-height: 1.14; font-weight: 600; }
+    .about-hero > p { color: rgba(255,250,240,.86); font-size: .78rem; line-height: 1.5; }
+    .about-content { padding: 20px 17px 18px; }
+    .about-section { padding: 0 0 17px; margin: 0 0 17px; border-bottom: 1px solid var(--subtle-border); }
+    .about-kicker { color: var(--accent-gold-strong); margin-bottom: 6px; }
+    body.theme-dark .about-kicker { color: var(--accent-gold); }
+    .about-section h3 { color: var(--text-light); font-family: Georgia, serif; font-size: 1.08rem; margin-bottom: 8px; }
+    .about-section p { color: var(--text-muted); font-size: .82rem; line-height: 1.65; margin-top: 7px; }
+    .about-section strong { color: var(--text-light); }
+    .about-mission { margin-bottom: 14px; }
+    .about-signature { text-align: center; color: var(--accent-gold-strong); font-family: Georgia, serif; font-weight: 700; font-size: .95rem; padding: 2px 0 15px; }
+    body.theme-dark .about-signature { color: var(--accent-gold); }
+    .about-details { display: grid; gap: 10px; padding: 13px; border-radius: 12px; background: var(--surface-soft); }
+    .about-details div { display: grid; gap: 4px; }
+    .about-details span { color: var(--text-muted); font-size: .58rem; font-weight: 800; letter-spacing: .12em; }
+    .about-details strong, .about-details a { color: var(--text-light); font-size: .75rem; line-height: 1.45; overflow-wrap: anywhere; }
+    .about-details a { text-decoration: none; }
+    .about-details a:hover { text-decoration: underline; }
+    @media (min-width: 640px) { .about-content { padding: 24px; } .about-details { grid-template-columns: 1fr 1fr; } }
 
     /* CARDS DE CONTEÚDO */
     .info-card {
@@ -1866,10 +1916,38 @@
 
       <!-- Aba 8: Sobre -->
       <div id="sobre" class="tab-pane">
-        <div class="info-card">
-          <h3 class="section-title">⛪ Quem Somos</h3>
-          <p>A <strong>Casa de Oração para Todos os Povos (CDO)</strong> é um ministério dedicado a proclamar o Evangelho, acolher famílias e propagar o louvor e a Palavra de Deus sem fronteiras.</p>
-          <p style="margin-top: 4px;">A nossa rádio web nasce com o propósito de levar edificação 24 horas por dia até ao seu telemóbulo ou computador.</p>
+        <div class="about-page">
+          <div class="about-hero">
+            <div class="about-hero-mark" aria-hidden="true">✦</div>
+            <span class="about-eyebrow">FÉ • ORAÇÃO • COMUNHÃO</span>
+            <h2>Casa de Oração<br>para Todos os Povos</h2>
+            <p>Uma casa aberta à oração, à comunhão e à presença de Deus.</p>
+          </div>
+          <div class="about-content">
+            <section class="about-section">
+              <span class="about-kicker">NOSSA HISTÓRIA</span>
+              <h3>Uma casa de fé e acolhimento</h3>
+              <p>A <strong>Casa de Oração para Todos os Povos</strong> nasceu em dezembro de 2017, a partir de um propósito de servir a Deus, anunciar a Sua Palavra e compartilhar o amor de Jesus Cristo. Sua fundação foi conduzida pelos pastores <strong>Antônio Joaquim Lage Valério e Izabel Rosa Goulart Valério</strong>, que assumiram a liderança dessa caminhada com o desejo de construir uma comunidade firmada na fé, na oração e na comunhão.</p>
+              <p>Mais do que um espaço de reuniões, a igreja é um lugar de encontro com Deus, acolhimento e crescimento espiritual. Uma comunidade formada por pessoas que, apesar de suas histórias e experiências diferentes, compartilham a fé em Cristo e o desejo de viver segundo os ensinamentos do Evangelho.</p>
+            </section>
+            <section class="about-section">
+              <span class="about-kicker">AQUILO EM QUE CREMOS</span>
+              <h3>Firmados na Palavra</h3>
+              <p>Cremos em Deus e na Sua Palavra como fundamento para a nossa fé e conduta. Cremos em Jesus Cristo, nosso Senhor e Salvador, e no poder transformador do Evangelho. Cremos na oração como expressão de comunhão com Deus, na importância de vivermos em amor e na responsabilidade de levar esperança ao próximo.</p>
+              <p>Acreditamos que a igreja é chamada a acolher, ensinar, servir e anunciar a mensagem de Cristo. Um lugar onde vidas podem ser fortalecidas, famílias edificadas e pessoas encorajadas a desenvolver um relacionamento verdadeiro com Deus.</p>
+            </section>
+            <section class="about-section about-mission">
+              <span class="about-kicker">NOSSA MISSÃO</span>
+              <h3>Servir e compartilhar esperança</h3>
+              <p>Seguir anunciando o Evangelho, cultivando a comunhão e servindo às pessoas com amor, fé e dedicação. Queremos que cada pessoa encontre na Casa de Oração para Todos os Povos um ambiente de acolhimento, aprendizado e fortalecimento espiritual.</p>
+              <p>Desde dezembro de 2017, seguimos construindo essa história, confiando que Deus continuará conduzindo cada passo dessa jornada.</p>
+            </section>
+            <div class="about-signature">Casa de Oração para Todos os Povos</div>
+            <div class="about-details">
+              <div><span>LIDERANÇA FUNDADORA</span><strong>Pastores Antônio Joaquim Lage Valério e Izabel Rosa Goulart Valério</strong></div>
+              <div><span>CONTATO</span><a href="mailto:casadeoracaoferreiras@gmail.com">casadeoracaoferreiras@gmail.com</a></div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1886,18 +1964,6 @@
             </label>
             <button type="button" class="prayer-primary-btn" id="saveCdoMemberName" style="margin-top:9px;">Guardar meu nome</button>
             <p class="prayer-name-status" id="cdoMemberNameStatus" role="status" aria-live="polite">O nome fica guardado neste dispositivo e pode ser editado sempre que quiser. As publicações antigas não serão alteradas.</p>
-          </div>
-
-          <div class="eq-panel" id="kidsNarrationVoicePanel" style="margin-top:12px;">
-            <div class="eq-title">🗣️ Voz das histórias infantis</div>
-            <p style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin:6px 0 10px;">Escolha uma das vozes disponibilizadas pelo navegador ou pelo aparelho. As opções podem variar entre dispositivos.</p>
-            <label class="prayer-field" for="kidsNarrationVoiceSelect">Voz da narração
-              <select id="kidsNarrationVoiceSelect" style="width:100%;margin-top:6px;">
-                <option value="">Voz padrão do aparelho</option>
-              </select>
-            </label>
-            <button type="button" class="prayer-primary-btn" id="kidsNarrationVoiceTest" style="margin-top:9px;">▶ Ouvir voz de teste</button>
-            <p class="prayer-name-status" id="kidsNarrationVoiceStatus" role="status" aria-live="polite">A escolha fica guardada neste dispositivo. A voz masculina só aparecerá se estiver disponível no aparelho.</p>
           </div>
 
           <div class="theme-switch-box">
@@ -1946,7 +2012,7 @@
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
       <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
-      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🏠</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
       <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
@@ -1957,7 +2023,7 @@
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
       <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
-      <button type="button" class="dock-radio-center active core-radio" id="radioCoreBtn" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-radio-center active core-radio" id="radioCoreBtn" data-target="radio"><span class="dock-icon">🏠</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
       <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
@@ -1968,7 +2034,7 @@
       <button type="button" class="dock-item" data-target="palavra"><span class="dock-icon">📖</span><span>Palavra</span></button>
       <button type="button" class="dock-item" data-target="kids"><span class="dock-icon">👶</span><span>Kids</span></button>
       <button type="button" class="dock-item" data-target="agenda"><span class="dock-icon">📅</span><span>Calendário</span></button>
-      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🎙️</span><span>Rádio</span></button>
+      <button type="button" class="dock-radio-center active" data-target="radio"><span class="dock-icon">🏠</span><span>Rádio</span></button>
       <button type="button" class="dock-item" data-target="oracao"><span class="dock-icon">🙏</span><span>Oração</span></button>
       <button type="button" class="dock-item" data-target="comunidade"><span class="dock-icon">🌐</span><span>Comunidade</span></button>
       <button type="button" class="dock-item" data-target="sobre"><span class="dock-icon">⛪</span><span>Sobre</span></button>
@@ -2265,18 +2331,58 @@
           });
         }
 
-        // 2. LOOP INFINITO INSTANTÂNEO NO SCROLL DO DOCK
+        // 2. DOCK CIRCULAR COM ENCAIXE MAGNÉTICO SUAVE
         if (bottomDock) {
-          bottomDock.addEventListener('scroll', () => {
+          let dockSnapTimer = null;
+          let dockIsSnapping = false;
+
+          function keepDockInLoop() {
             const singleBlockWidth = bottomDock.scrollWidth / 3;
-            if (singleBlockWidth > 0) {
-              if (bottomDock.scrollLeft < singleBlockWidth * 0.5) {
-                bottomDock.scrollLeft += singleBlockWidth;
-              } else if (bottomDock.scrollLeft > singleBlockWidth * 2.5) {
-                bottomDock.scrollLeft -= singleBlockWidth;
-              }
+            if (singleBlockWidth <= 0) return;
+            if (bottomDock.scrollLeft < singleBlockWidth * 0.5) {
+              bottomDock.scrollLeft += singleBlockWidth;
+            } else if (bottomDock.scrollLeft > singleBlockWidth * 2.5) {
+              bottomDock.scrollLeft -= singleBlockWidth;
             }
-          });
+          }
+
+          function magnetizeDock() {
+            if (dockIsSnapping) return;
+            const items = Array.from(bottomDock.children);
+            if (!items.length) return;
+            const dockRect = bottomDock.getBoundingClientRect();
+            const centerX = dockRect.left + dockRect.width / 2;
+            let nearest = null;
+            let nearestDistance = Infinity;
+            items.forEach(item => {
+              const rect = item.getBoundingClientRect();
+              const distance = Math.abs((rect.left + rect.width / 2) - centerX);
+              if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearest = item;
+              }
+            });
+            if (!nearest) return;
+            const itemRect = nearest.getBoundingClientRect();
+            const delta = (itemRect.left + itemRect.width / 2) - centerX;
+            if (Math.abs(delta) < 1) return;
+            dockIsSnapping = true;
+            bottomDock.scrollTo({ left: bottomDock.scrollLeft + delta, behavior: 'smooth' });
+            window.setTimeout(() => { dockIsSnapping = false; keepDockInLoop(); }, 420);
+          }
+
+          function scheduleDockSnap() {
+            window.clearTimeout(dockSnapTimer);
+            dockSnapTimer = window.setTimeout(magnetizeDock, 170);
+          }
+
+          bottomDock.addEventListener('scroll', () => {
+            keepDockInLoop();
+            if (!dockIsSnapping) scheduleDockSnap();
+          }, { passive: true });
+          bottomDock.addEventListener('pointerup', scheduleDockSnap, { passive: true });
+          bottomDock.addEventListener('touchend', scheduleDockSnap, { passive: true });
+          bottomDock.addEventListener('scrollend', magnetizeDock, { passive: true });
 
           bottomDock.addEventListener('click', (e) => {
             const btn = e.target.closest('[data-target]');
@@ -3518,63 +3624,6 @@
           while (node && node !== document.body) { node.scrollTop = 0; node = node.parentElement; }
           if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
         }
-        // Preferência local da voz usada somente na narração das histórias infantis.
-        const kidsNarrationVoiceStorageKey = 'cdoKidsNarrationVoiceURI';
-        function getKidsNarrationVoices() {
-          if (!('speechSynthesis' in window)) return [];
-          return window.speechSynthesis.getVoices().filter(voice => /^pt([_-]|$)/i.test(voice.lang || ''));
-        }
-        function getSelectedKidsNarrationVoice() {
-          const selectedURI = localStorage.getItem(kidsNarrationVoiceStorageKey) || '';
-          return getKidsNarrationVoices().find(voice => voice.voiceURI === selectedURI) || null;
-        }
-        function refreshKidsNarrationVoiceOptions() {
-          const select = document.getElementById('kidsNarrationVoiceSelect');
-          if (!select) return;
-          const savedURI = localStorage.getItem(kidsNarrationVoiceStorageKey) || '';
-          const voices = getKidsNarrationVoices();
-          select.innerHTML = '<option value="">Voz padrão do aparelho</option>';
-          voices.forEach(voice => {
-            const option = document.createElement('option');
-            option.value = voice.voiceURI;
-            option.textContent = `${voice.name} (${voice.lang})`;
-            select.appendChild(option);
-          });
-          select.value = voices.some(voice => voice.voiceURI === savedURI) ? savedURI : '';
-          const status = document.getElementById('kidsNarrationVoiceStatus');
-          if (status) {
-            status.textContent = voices.length
-              ? 'Escolha uma voz em português e use o botão para ouvi-la. A disponibilidade depende do aparelho.'
-              : 'Nenhuma voz em português foi identificada ainda. O navegador pode carregá-las alguns instantes depois.';
-          }
-        }
-        function setupKidsNarrationVoiceSettings() {
-          if (!('speechSynthesis' in window)) {
-            const status = document.getElementById('kidsNarrationVoiceStatus');
-            if (status) status.textContent = 'A seleção de voz não está disponível neste navegador.';
-            return;
-          }
-          refreshKidsNarrationVoiceOptions();
-          window.speechSynthesis.addEventListener?.('voiceschanged', refreshKidsNarrationVoiceOptions);
-          document.getElementById('kidsNarrationVoiceSelect')?.addEventListener('change', event => {
-            try { localStorage.setItem(kidsNarrationVoiceStorageKey, event.target.value); } catch (error) {}
-            const status = document.getElementById('kidsNarrationVoiceStatus');
-            if (status) status.textContent = event.target.value
-              ? 'Voz selecionada e guardada neste dispositivo.'
-              : 'Será usada a voz padrão do aparelho.';
-          });
-          document.getElementById('kidsNarrationVoiceTest')?.addEventListener('click', () => {
-            window.speechSynthesis.cancel();
-            const sample = new SpeechSynthesisUtterance('Olá! Esta é uma demonstração da voz das histórias da Estação CDO.');
-            sample.lang = 'pt-BR';
-            sample.rate = .9;
-            const selectedVoice = getSelectedKidsNarrationVoice();
-            if (selectedVoice) sample.voice = selectedVoice;
-            window.speechSynthesis.speak(sample);
-          });
-        }
-        setupKidsNarrationVoiceSettings();
-
         function openGenesisStory(index) {
           const story=bibleStories[index], extra=bibleExtras[index];
           if(!story || !extra || !submenuContentEl) return;
@@ -3588,8 +3637,6 @@
             window.speechSynthesis.cancel();
             const utterance=new SpeechSynthesisUtterance(story.title+'. '+story.text.join(' '));
             utterance.lang='pt-BR'; utterance.rate=.9;
-            const selectedVoice = getSelectedKidsNarrationVoice();
-            if (selectedVoice) utterance.voice = selectedVoice;
             window.speechSynthesis.speak(utterance);
           });
           document.getElementById('kidsStoryStop')?.addEventListener('click',()=>{if(window.speechSynthesis)window.speechSynthesis.cancel()});
