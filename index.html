@@ -1888,6 +1888,18 @@
             <p class="prayer-name-status" id="cdoMemberNameStatus" role="status" aria-live="polite">O nome fica guardado neste dispositivo e pode ser editado sempre que quiser. As publicações antigas não serão alteradas.</p>
           </div>
 
+          <div class="eq-panel" id="kidsNarrationVoicePanel" style="margin-top:12px;">
+            <div class="eq-title">🗣️ Voz das histórias infantis</div>
+            <p style="font-size:.78rem;color:var(--text-muted);line-height:1.5;margin:6px 0 10px;">Escolha uma das vozes disponibilizadas pelo navegador ou pelo aparelho. As opções podem variar entre dispositivos.</p>
+            <label class="prayer-field" for="kidsNarrationVoiceSelect">Voz da narração
+              <select id="kidsNarrationVoiceSelect" style="width:100%;margin-top:6px;">
+                <option value="">Voz padrão do aparelho</option>
+              </select>
+            </label>
+            <button type="button" class="prayer-primary-btn" id="kidsNarrationVoiceTest" style="margin-top:9px;">▶ Ouvir voz de teste</button>
+            <p class="prayer-name-status" id="kidsNarrationVoiceStatus" role="status" aria-live="polite">A escolha fica guardada neste dispositivo. A voz masculina só aparecerá se estiver disponível no aparelho.</p>
+          </div>
+
           <div class="theme-switch-box">
             <div class="eq-title" style="margin-bottom: 0;">🎨 Estilo Visual do App</div>
             <div class="theme-options">
@@ -3506,6 +3518,63 @@
           while (node && node !== document.body) { node.scrollTop = 0; node = node.parentElement; }
           if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
         }
+        // Preferência local da voz usada somente na narração das histórias infantis.
+        const kidsNarrationVoiceStorageKey = 'cdoKidsNarrationVoiceURI';
+        function getKidsNarrationVoices() {
+          if (!('speechSynthesis' in window)) return [];
+          return window.speechSynthesis.getVoices().filter(voice => /^pt([_-]|$)/i.test(voice.lang || ''));
+        }
+        function getSelectedKidsNarrationVoice() {
+          const selectedURI = localStorage.getItem(kidsNarrationVoiceStorageKey) || '';
+          return getKidsNarrationVoices().find(voice => voice.voiceURI === selectedURI) || null;
+        }
+        function refreshKidsNarrationVoiceOptions() {
+          const select = document.getElementById('kidsNarrationVoiceSelect');
+          if (!select) return;
+          const savedURI = localStorage.getItem(kidsNarrationVoiceStorageKey) || '';
+          const voices = getKidsNarrationVoices();
+          select.innerHTML = '<option value="">Voz padrão do aparelho</option>';
+          voices.forEach(voice => {
+            const option = document.createElement('option');
+            option.value = voice.voiceURI;
+            option.textContent = `${voice.name} (${voice.lang})`;
+            select.appendChild(option);
+          });
+          select.value = voices.some(voice => voice.voiceURI === savedURI) ? savedURI : '';
+          const status = document.getElementById('kidsNarrationVoiceStatus');
+          if (status) {
+            status.textContent = voices.length
+              ? 'Escolha uma voz em português e use o botão para ouvi-la. A disponibilidade depende do aparelho.'
+              : 'Nenhuma voz em português foi identificada ainda. O navegador pode carregá-las alguns instantes depois.';
+          }
+        }
+        function setupKidsNarrationVoiceSettings() {
+          if (!('speechSynthesis' in window)) {
+            const status = document.getElementById('kidsNarrationVoiceStatus');
+            if (status) status.textContent = 'A seleção de voz não está disponível neste navegador.';
+            return;
+          }
+          refreshKidsNarrationVoiceOptions();
+          window.speechSynthesis.addEventListener?.('voiceschanged', refreshKidsNarrationVoiceOptions);
+          document.getElementById('kidsNarrationVoiceSelect')?.addEventListener('change', event => {
+            try { localStorage.setItem(kidsNarrationVoiceStorageKey, event.target.value); } catch (error) {}
+            const status = document.getElementById('kidsNarrationVoiceStatus');
+            if (status) status.textContent = event.target.value
+              ? 'Voz selecionada e guardada neste dispositivo.'
+              : 'Será usada a voz padrão do aparelho.';
+          });
+          document.getElementById('kidsNarrationVoiceTest')?.addEventListener('click', () => {
+            window.speechSynthesis.cancel();
+            const sample = new SpeechSynthesisUtterance('Olá! Esta é uma demonstração da voz das histórias da Estação CDO.');
+            sample.lang = 'pt-BR';
+            sample.rate = .9;
+            const selectedVoice = getSelectedKidsNarrationVoice();
+            if (selectedVoice) sample.voice = selectedVoice;
+            window.speechSynthesis.speak(sample);
+          });
+        }
+        setupKidsNarrationVoiceSettings();
+
         function openGenesisStory(index) {
           const story=bibleStories[index], extra=bibleExtras[index];
           if(!story || !extra || !submenuContentEl) return;
@@ -3519,6 +3588,8 @@
             window.speechSynthesis.cancel();
             const utterance=new SpeechSynthesisUtterance(story.title+'. '+story.text.join(' '));
             utterance.lang='pt-BR'; utterance.rate=.9;
+            const selectedVoice = getSelectedKidsNarrationVoice();
+            if (selectedVoice) utterance.voice = selectedVoice;
             window.speechSynthesis.speak(utterance);
           });
           document.getElementById('kidsStoryStop')?.addEventListener('click',()=>{if(window.speechSynthesis)window.speechSynthesis.cancel()});
